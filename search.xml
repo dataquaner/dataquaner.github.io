@@ -4,13 +4,25 @@
   
     
     <entry>
-      <title>first_blog</title>
+      <title>第一篇测试博客</title>
       <link href="/2019/11/11/first_blog/"/>
       <url>/2019/11/11/first_blog/</url>
       
-        <content type="html"><![CDATA[<p>title:第一篇测试博客<br>date:2019.11.11<br>tags:Hexo<br>categories:Hexo<br>keywords:博客<br>description:搭建博客<br>top_img:<br>comments<br>cover:<br>toc:<br>toc_number:<br>copyright: </p>]]></content>
+        <content type="html"><![CDATA[]]></content>
       
       
+      <categories>
+          
+          <category> Hexo </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+        </tags>
       
     </entry>
     

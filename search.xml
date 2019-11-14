@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>LightGBM算法基础系列之基础理论篇（1）</title>
+      <link href="/2019/11/14/LightGBM%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80%E7%B3%BB%E5%88%97%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA%E7%AF%87%EF%BC%881%EF%BC%89/"/>
+      <url>/2019/11/14/LightGBM%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80%E7%B3%BB%E5%88%97%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA%E7%AF%87%EF%BC%881%EF%BC%89/</url>
+      
+        <content type="html"><![CDATA[<p>这是lightgbm算法基础系列的第一篇，讲述lightgbm基础理论。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> MachineLearning </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> LightGBM </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>第一篇测试博客</title>
       <link href="/2019/11/11/first_blog/"/>
       <url>/2019/11/11/first_blog/</url>
@@ -23,19 +48,6 @@
             <tag> Hexo </tag>
             
         </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>第一篇blog</title>
-      <link href="/2019/11/10/%E7%AC%AC%E4%B8%80%E7%AF%87blog/"/>
-      <url>/2019/11/10/%E7%AC%AC%E4%B8%80%E7%AF%87blog/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
       
     </entry>
     

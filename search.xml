@@ -13,15 +13,18 @@
       
       <categories>
           
-          <category> -- 数据存储
--- MySQL </category>
+          <category> 数据存储 </category>
+          
+          <category> MySQL </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> --  mysql --  体系结构 </tag>
+            <tag> mysql </tag>
+            
+            <tag> 体系结构 </tag>
             
         </tags>
       

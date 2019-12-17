@@ -120,7 +120,6 @@ function activateLightMode(){
 <p><strong>信息增益=信息熵-条件熵，越大说明熵的变化越大，熵的变化越大越有利于分类</strong></p>
 </blockquote>
 <p>下面我们给出信息增益的算法。</p>
-<blockquote>
 <p>首先对数据做一些介绍：</p>
 <ul>
 <li>假设我们有一个训练集 D，训练集的总的样本个数即样本容量为 |D|，最后的结果有 K 个类别，每个类别表示为 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=C_k" class="lazyload"> ， <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%7CC_k%7C" class="lazyload"> 为属于这个类的样本的个数，很显然 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Csum_%7Bk%3D1%7D%5EK+%7CC_k%7C+%3D+%7CD%7C" class="lazyload"> 。</li>
@@ -136,18 +135,13 @@ function activateLightMode(){
 <p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=H%28D%7CA%29+%3D+%5Csum_%7Bi%3D1%7D%5En+%5Cfrac%7B%7CD_i%7C%7D%7B%7CD%7C%7D+H%28D_i%29+%3D+-+%5Csum_%7Bi%3D1%7D%5En+%5Cfrac%7B%7CD_i%7C%7D%7B%7CD%7C%7D+%5Csum_%7Bk%3D1%7D%5EK+%5Cfrac%7B%7CD_%7Bik%7D%7C%7D%7B%7CD_i%7C%7D+%5Clog_2+%5Cfrac%7B%7CD_%7Bik%7D%7C%7D%7B%7CD_i%7C%7D" class="lazyload"></p>
 <p>\3. 计算信息增益 g(D, A)：</p>
 <p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=g%28D%2C+A%29+%3D+H%28D%29+-+H%28D%7CA%29" class="lazyload"></p>
-</blockquote>
 <h2 id="3-信息增益比"><a href="#3-信息增益比" class="headerlink" title="3.信息增益比"></a>3.信息增益比</h2><p>看到这个小标题，可能有人会问，信息增益我知道了，信息增益比又是个什么玩意儿？</p>
 <p>按照经验来看，【<strong>以信息增益准则来选择划分数据集的特征，其实倾向于选择有更多取值的特征，而有时这种倾向会在决策树的构造时带来一定的误差</strong>】。</p>
 <p><strong>ps：信息增益体现了特征的重要性，信息增益越大说明特征越重要。</strong>类别越多代表特征越不确定，即熵越多，类别的信息增益越小。</p>
 <p>为了校正这一误差，我们引入了【<strong>信息增益比（information gain ratio）</strong>】，又叫做信息增益率，它的定义如下：</p>
-<blockquote>
 <p>特征 A 对训练数据集 D 的信息增益比 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=g_R%28D%2C+A%29" class="lazyload"> 定义为其信息增益 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=g%28D%2C+A%29" class="lazyload"> 与训练数据集 D 关于特征 A 的值的熵 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=H_A%28D%29" class="lazyload"> 之比。</p>
-</blockquote>
-<blockquote>
 <p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=g_R%28D%2C+A%29+%3D+%5Cfrac%7Bg%28D%2C+A%29%7D%7BH_A%28D%29%7D" class="lazyload"></p>
 <p>其中， <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=H_A%28D%29+%3D+-%5Csum_%7Bi%3D1%7D%5En+%5Cfrac%7B%7CD_i%7C%7D%7B%7CD%7C%7D+%5Clog_2+%5Cfrac%7B%7CD_i%7C%7D%7B%7CD%7C%7D" class="lazyload"> ，n 是 A 取值的个数。</p>
-</blockquote>
 <p>两个经典的决策树算法 ID3 算法和 C4.5 算法，分别会采用信息增益和信息增益比作为特征选择的依据。</p>
 <h2 id="4-ID3-：-最大信息增益"><a href="#4-ID3-：-最大信息增益" class="headerlink" title="4. ID3 ： 最大信息增益"></a>4. ID3 ： 最大信息增益</h2><blockquote>
 <p>ID3以信息增益为准则来选择最优划分属性</p>

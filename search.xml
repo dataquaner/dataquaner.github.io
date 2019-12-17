@@ -13,14 +13,16 @@
       
       <categories>
           
-          <category> -- MachineLearning -- DecisionTree </category>
+          <category> MachineLearning </category>
+          
+          <category> DecisionTree </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> -- 决策树 </tag>
+            <tag> 决策树 </tag>
             
         </tags>
       

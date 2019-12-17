@@ -1,0 +1,115 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><title>极客时间《数据分析45讲总结》 | DataQuaner</title><meta name="description" content="数据分析"><meta name="keywords" content="Data Analysis"><meta name="author" content="Leon"><meta name="copyright" content="Leon"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="preconnect" href="//cdn.jsdelivr.net"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="极客时间《数据分析45讲总结》"><meta name="twitter:description" content="数据分析"><meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png"><meta property="og:type" content="article"><meta property="og:title" content="极客时间《数据分析45讲总结》"><meta property="og:url" content="https://dataquaner.github.io/2019/12/17/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4%E3%80%8A%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%9045%E8%AE%B2%E6%80%BB%E7%BB%93%E3%80%8B/"><meta property="og:site_name" content="DataQuaner"><meta property="og:description" content="数据分析"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>const autoChangeMode = 'false'
+var t = Cookies.get("theme");
+if (autoChangeMode == '1'){
+const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+const isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+const isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+if (t === undefined){
+  if (isLightMode) activateLightMode()
+  else if (isDarkMode) activateDarkMode()
+  else if (isNotSpecified || hasNoSupport){
+    console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+    now = new Date();
+    hour = now.getHours();
+    isNight = hour < 6 || hour >= 18
+    isNight ? activateDarkMode() : activateLightMode()
+}
+} else if (t == 'light') activateLightMode()
+else activateDarkMode()
+
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="https://dataquaner.github.io/2019/12/17/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4%E3%80%8A%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%9045%E8%AE%B2%E6%80%BB%E7%BB%93%E3%80%8B/"><link rel="next" title="机器学习系列之决策树算法（01）：决策树特征选择" href="https://dataquaner.github.io/2019/12/17/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8801%EF%BC%89%EF%BC%9A%E5%86%B3%E7%AD%96%E6%A0%91%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"cookieDomain":"https://xxx/","msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  highlight_copy: 'true',
+  highlight_lang: 'true',
+  highlight_shrink: 'false',
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    title: 'Snackbar.bookmark.title',
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  copyright: undefined,
+  copy_copyright_js: false,
+  ClickShowText: undefined,
+  medium_zoom: 'false',
+  Snackbar: undefined
+  
+}</script><link rel="alternate" href="/atom.xml" title="DataQuaner" type="application/atom+xml">
+</head><body><div id="header"> <div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">DataQuaner</a></span><i class="fa fa-bars fa-fw toggle-menu pull_right close" aria-hidden="true"></i><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 类别</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> 小憩</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> 电影</span></a></li></ul></div></div></span><span class="pull_right" id="search_button"></span></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="lazyload avatar_img" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/Photo/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'"></div><div class="mobile_post_data"><div class="mobile_data_item is_center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">5</div></a></div></div><div class="mobile_data_item is_center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">6</div></a></div></div><div class="mobile_data_item is_center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">7</div></a></div></div></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 类别</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> 小憩</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> 电影</span></a></li></ul></div></div></div><div id="mobile-sidebar-toc"><div class="toc_mobile_headline">目录</div><ol class="toc_mobile_items"><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#1-前言"><span class="toc_mobile_items-number">1.</span> <span class="toc_mobile_items-text">1.前言</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#2-数据采集："><span class="toc_mobile_items-number">2.</span> <span class="toc_mobile_items-text">2.数据采集：</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#3-数据挖掘："><span class="toc_mobile_items-number">3.</span> <span class="toc_mobile_items-text">3.数据挖掘：</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#4-数据可视化"><span class="toc_mobile_items-number">4.</span> <span class="toc_mobile_items-text">4.数据可视化</span></a></li></ol></div></div><div id="body-wrap"><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true">     </i><div class="auto_open" id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-前言"><span class="toc-number">1.</span> <span class="toc-text">1.前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-数据采集："><span class="toc-number">2.</span> <span class="toc-text">2.数据采集：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-数据挖掘："><span class="toc-number">3.</span> <span class="toc-text">3.数据挖掘：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-数据可视化"><span class="toc-number">4.</span> <span class="toc-text">4.数据可视化</span></a></li></ol></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png)"><div id="post-info"><div id="post-title"><div class="posttitle">极客时间《数据分析45讲总结》</div></div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 发表于 2019-12-17<span class="post-meta__separator">|</span><i class="fa fa-history" aria-hidden="true"></i> 更新于 2019-12-17</time><span class="post-meta__separator mobile_hidden">|</span><span class="mobile_hidden"><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Learning-Path/">Learning Path</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Learning-Path/Data-Analysis/">Data Analysis</a></span><div class="post-meta-wordcount"><i class="fa fa-file-word-o post-meta__icon" aria-hidden="true"></i><span>字数总计: </span><span class="word-count">1.1k</span><span class="post-meta__separator">|</span><i class="fa fa-clock-o post-meta__icon" aria-hidden="true"></i><span>阅读时长: 3 分钟</span><span class="post-meta__separator">|</span><i class="fa fa-eye post-meta__icon" aria-hidden="true">       </i><span>阅读量: </span><span id="busuanzi_value_page_pv"></span></div></div></div></div><div class="layout layout_post" id="content-inner">   <article id="post"><div class="article-container" id="post-content"><h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1.前言"></a>1.前言</h2><p>该讲主要引导读者从全局去了解什么是数据分析？为什么做数据分析？怎么去做数据分析？答案就是：掌握数据，就是掌握规律。当你了解了市场数据，对它进行分析，就可以得到市场规律。当你掌握了产品自身的数据，对它进行分析，就可以了解产品的用户来源、用户画像等等。所以说数据是个全新的视角。数据分析如此重要，它不仅是新时代的“数据结构 + 算法”，也更是企业争夺人才的高地。 谈到数据分析，我们一般都会从3个方面入手：</p>
+<blockquote>
+<p>数据采集 – 数据源，我们要用的原材料</p>
+<p>数据挖掘 – 它可以说是最“高大上”的部分，也是整个商业价值所在。之所以要进行数据分析，就是要找到其中的规律，来指导我们的业务。因此数据挖掘的核心是挖掘数据的商业价值（所谓的商业智能BI）</p>
+<p>数据的可视化 – 数据领域中的万金油，直观了解数据分析结构</p>
+</blockquote>
+<p>　　数据分析的三驾马车的关系如下：</p>
+<p>　　<img alt="img" data-src="https://img2018.cnblogs.com/blog/1169428/201901/1169428-20190119101700106-215720167.png" class="lazyload"></p>
+<p>　　下面来大致认识下这三驾马车：</p>
+<h2 id="2-数据采集："><a href="#2-数据采集：" class="headerlink" title="2.数据采集："></a>2.数据采集：</h2><p>数据的采集，主要是和数据打交道，用工具对数据进行采集，常用的数据源，如何获取它们。在专栏里，后续会将介绍如何掌握“八爪鱼”这个自动抓取的神器，它可以帮你抓取 99% 的页面源。也会教读者如何编写 Python 爬虫。掌握 Python 爬虫的乐趣是无穷的。它不仅能让你获取微博上的热点评论，自动下载例如“王祖贤”的海报，还能自动给微博加粉丝，让你掌握自动化的快感。</p>
+<p>　　<img alt="img" data-src="https://img2018.cnblogs.com/blog/1169428/201901/1169428-20190119102510649-1229981320.png" class="lazyload"></p>
+<h2 id="3-数据挖掘："><a href="#3-数据挖掘：" class="headerlink" title="3.数据挖掘："></a>3.数据挖掘：</h2><p>数据挖掘，它可以说是知识型的工程，相当于整个专栏中的“算法”部分。首先你要知道它的基本流程、十大算法、以及背后的数学基础。</p>
+<p>掌握了数据挖掘，就好比手握水晶球一样，它会通过历史数据，告诉你未来会发生什么。当然它也会告诉你这件事发生的置信度是怎样的。</p>
+<p>　　<img alt="img" data-src="https://img2018.cnblogs.com/blog/1169428/201901/1169428-20190119102828928-1543716662.png" class="lazyload"></p>
+<h2 id="4-数据可视化"><a href="#4-数据可视化" class="headerlink" title="4.数据可视化"></a>4.数据可视化</h2><p> 　为什么说数据要可视化，因为数据往往是隐性的，尤其是当数据量大的时候很难感知，可视化可以帮我们很好地理解这些数据的结构，以及分析结果的呈现。这是一个非常重要的步骤，也是我们特别感兴趣的一个步骤。</p>
+<p> 数据可视化的两种方法：</p>
+<ul>
+<li><p>　Python ：在 Python 对数据进行清洗、挖掘的过程中，很多的库可以使用，像 Matplotlib、Seaborn 等第三方库进行呈现。</p>
+</li>
+<li><p>　第三方工具：如果你已经生成了 csv 格式文件，想要采用所见即所得的方式进行呈现，可以采用微图、DataV、Data GIF Maker 等第三方工具，它们可以很方便地对数据进行处理，还可以帮你制作呈现的效果。</p>
+<p>　<img alt="img" data-src="https://img2018.cnblogs.com/blog/1169428/201901/1169428-20190119103259753-1199946581.png" class="lazyload"></p>
+</li>
+</ul>
+<p>数据分析包括数据采集、数据挖掘、数据可视化这三个部分。乍看你可能觉得东西很多，无从下手，或者感觉数据挖掘涉及好多算法，有点“高深莫测”，掌握起来是不是会吃力。其实这些都是不必要的烦恼。个人觉得只要内心笃定，认为自己一定能做成，学成，其他一切都是“纸老虎”哈。</p>
+<p>再说下，陈博在文章中提到的如何来快速掌握数据分析，核心就是<strong>认知</strong>。我们只有把知识转化为自己的语言，它才真正变成了我们自己的东西。这个转换的过程就是认知升级的过程。</p>
+<p>　　<img alt="img" data-src="https://img2018.cnblogs.com/blog/1169428/201901/1169428-20190119103852266-1630283111.png" class="lazyload"></p>
+<p>　　我本人也是很赞同这种说法，简单一句就是“知行合一”</p>
+<p>　　<strong>总结</strong></p>
+<ul>
+<li><strong>记录下你每天的认知</strong>　　</li>
+<li><strong>这些认知对应工具的哪些操作</strong></li>
+<li><strong>做更多练习来巩固你的认知</strong></li>
+</ul>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined" target="_blank" rel="noopener">Leon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://dataquaner.github.io/2019/12/17/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4%E3%80%8A%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%9045%E8%AE%B2%E6%80%BB%E7%BB%93%E3%80%8B/">https://dataquaner.github.io/2019/12/17/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4%E3%80%8A%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%9045%E8%AE%B2%E6%80%BB%E7%BB%93%E3%80%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://dataquaner.github.io">DataQuaner</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Data-Analysis/">Data Analysis    </a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/js/social-share.min.js"></script></div></div><div class="post-reward"><a class="reward-button"><i class="fa fa-qrcode"></i> 打赏<div class="reward-main"><ul class="reward-all"><li class="reward-item"><img class="lazyload post-qr-code__img" src="/img/wechat.jpg"><div class="post-qr-code__desc">微信</div></li><li class="reward-item"><img class="lazyload post-qr-code__img" src="/img/alipay.jpg"><div class="post-qr-code__desc">支付宝</div></li></ul></div></a></div><nav class="pagination_post" id="pagination"><div class="next-post pull-full"><a href="/2019/12/17/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8801%EF%BC%89%EF%BC%9A%E5%86%B3%E7%AD%96%E6%A0%91%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9/"><img class="next_cover lazyload" data-src="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png" onerror="onerror=null;src='/img/404.jpg'"><div class="label">下一篇</div><div class="next_info"><span>机器学习系列之决策树算法（01）：决策树特征选择</span></div></a></div></nav><hr><div id="post-comment"><div class="comment_headling"><i class="fa fa-comments fa-fw" aria-hidden="true"></i><span> 评论</span></div><div id="disqus_thread"></div><script>var unused = null;
+var disqus_config = function () {
+  this.page.url = 'https://dataquaner.github.io/2019/12/17/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4%E3%80%8A%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%9045%E8%AE%B2%E6%80%BB%E7%BB%93%E3%80%8B/';
+  this.page.identifier = '2019/12/17/极客时间《数据分析45讲总结》/';
+  this.page.title = '极客时间《数据分析45讲总结》';
+}
+var d = document, s = d.createElement('script');
+s.src = "https://" + 'dataquaner' +".disqus.com/embed.js";
+s.setAttribute('data-timestamp', '' + +new Date());
+(d.head || d.body).appendChild(s);</script></div></div></div><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2019 By Leon</div><div class="framework-info"><span>驱动 </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://dataquaner.github.io/">blog</a>!</div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="阅读模式"></i><i class="fa fa-plus" id="font_plus" title="放大字体"></i><i class="fa fa-minus" id="font_minus" title="缩小字体"></i><a class="translate_chn_to_cht" id="translateLink" href="javascript:translatePage();" title="简繁转换" target="_self">繁</a><i class="darkmode fa fa-moon-o" id="darkmode" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><a id="to_comment" href="#post-comment" title="直达评论"><i class="scroll_to_comment fa fa-comments">  </i></a><i class="fa fa-list-ul close" id="mobile-toc-button" title="目录" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/baidupush.js"> </script><script src="/js/tw_cn.js"></script><script>translateInitilization()
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@latest/lazysizes.min.js" async=""></script></body></html>

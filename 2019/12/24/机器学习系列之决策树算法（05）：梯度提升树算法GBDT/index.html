@@ -1,0 +1,249 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><title>机器学习系列之决策树算法（05）：梯度提升树算法GBDT | DataQuaner</title><meta name="description" content="GBDT"><meta name="keywords" content="GBDT"><meta name="author" content="Leon"><meta name="copyright" content="Leon"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="preconnect" href="//cdn.jsdelivr.net"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="机器学习系列之决策树算法（05）：梯度提升树算法GBDT"><meta name="twitter:description" content="GBDT"><meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png"><meta property="og:type" content="article"><meta property="og:title" content="机器学习系列之决策树算法（05）：梯度提升树算法GBDT"><meta property="og:url" content="https://dataquaner.github.io/2019/12/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8805%EF%BC%89%EF%BC%9A%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91%E7%AE%97%E6%B3%95GBDT/"><meta property="og:site_name" content="DataQuaner"><meta property="og:description" content="GBDT"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>const autoChangeMode = 'false'
+var t = Cookies.get("theme");
+if (autoChangeMode == '1'){
+const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+const isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+const isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+if (t === undefined){
+  if (isLightMode) activateLightMode()
+  else if (isDarkMode) activateDarkMode()
+  else if (isNotSpecified || hasNoSupport){
+    console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+    now = new Date();
+    hour = now.getHours();
+    isNight = hour < 6 || hour >= 18
+    isNight ? activateDarkMode() : activateLightMode()
+}
+} else if (t == 'light') activateLightMode()
+else activateDarkMode()
+
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="https://dataquaner.github.io/2019/12/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8805%EF%BC%89%EF%BC%9A%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91%E7%AE%97%E6%B3%95GBDT/"><link rel="next" title="机器学习系列之决策树算法（09）：ID3、C4.5、CART、随机森林、bagging、boosting、Adaboost、GBDT、xgboost算法总结" href="https://dataquaner.github.io/2019/12/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8809%EF%BC%89%EF%BC%9AID3%E3%80%81C4.5%E3%80%81CART%E3%80%81%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E3%80%81bagging%E3%80%81boosting%E3%80%81Adaboost%E3%80%81GBDT%E3%80%81xgboost%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"cookieDomain":"https://xxx/","msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  highlight_copy: 'true',
+  highlight_lang: 'true',
+  highlight_shrink: 'false',
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    title: 'Snackbar.bookmark.title',
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  copyright: undefined,
+  copy_copyright_js: false,
+  ClickShowText: undefined,
+  medium_zoom: 'false',
+  Snackbar: undefined
+  
+}</script><link rel="alternate" href="/atom.xml" title="DataQuaner" type="application/atom+xml">
+</head><body><div id="header"> <div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">DataQuaner</a></span><i class="fa fa-bars fa-fw toggle-menu pull_right close" aria-hidden="true"></i><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 类别</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> 小憩</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> 电影</span></a></li></ul></div></div></span><span class="pull_right" id="search_button"></span></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="lazyload avatar_img" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/Photo/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'"></div><div class="mobile_post_data"><div class="mobile_data_item is_center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">9</div></a></div></div><div class="mobile_data_item is_center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">7</div></a></div></div><div class="mobile_data_item is_center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">10</div></a></div></div></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 类别</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> 小憩</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> 电影</span></a></li></ul></div></div></div><div id="mobile-sidebar-toc"><div class="toc_mobile_headline">目录</div><ol class="toc_mobile_items"><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#1-前言"><span class="toc_mobile_items-number">1.</span> <span class="toc_mobile_items-text">1 前言</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#2-什么是GBDT"><span class="toc_mobile_items-number">2.</span> <span class="toc_mobile_items-text">2 什么是GBDT</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#3-GBDT算法原理"><span class="toc_mobile_items-number">3.</span> <span class="toc_mobile_items-text">3 GBDT算法原理</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#4-负梯度拟合"><span class="toc_mobile_items-number">4.</span> <span class="toc_mobile_items-text">4 负梯度拟合</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#5-提升树的生成过程"><span class="toc_mobile_items-number">5.</span> <span class="toc_mobile_items-text">5 提升树的生成过程</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#6-回归算法"><span class="toc_mobile_items-number">6.</span> <span class="toc_mobile_items-text">6 回归算法</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#7-分类算法"><span class="toc_mobile_items-number">7.</span> <span class="toc_mobile_items-text">7 分类算法</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#7-1-二元分类算法"><span class="toc_mobile_items-number">7.1.</span> <span class="toc_mobile_items-text">7.1 二元分类算法</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#7-2-多元分类算法"><span class="toc_mobile_items-number">7.2.</span> <span class="toc_mobile_items-text">7.2 多元分类算法</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#8-正则化"><span class="toc_mobile_items-number">8.</span> <span class="toc_mobile_items-text">8 正则化</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#9-总结"><span class="toc_mobile_items-number">9.</span> <span class="toc_mobile_items-text">9 总结</span></a></li></ol></div></div><div id="body-wrap"><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true">     </i><div class="auto_open" id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-前言"><span class="toc-number">1.</span> <span class="toc-text">1 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-什么是GBDT"><span class="toc-number">2.</span> <span class="toc-text">2 什么是GBDT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-GBDT算法原理"><span class="toc-number">3.</span> <span class="toc-text">3 GBDT算法原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-负梯度拟合"><span class="toc-number">4.</span> <span class="toc-text">4 负梯度拟合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-提升树的生成过程"><span class="toc-number">5.</span> <span class="toc-text">5 提升树的生成过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-回归算法"><span class="toc-number">6.</span> <span class="toc-text">6 回归算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-分类算法"><span class="toc-number">7.</span> <span class="toc-text">7 分类算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-二元分类算法"><span class="toc-number">7.1.</span> <span class="toc-text">7.1 二元分类算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-多元分类算法"><span class="toc-number">7.2.</span> <span class="toc-text">7.2 多元分类算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-正则化"><span class="toc-number">8.</span> <span class="toc-text">8 正则化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-总结"><span class="toc-number">9.</span> <span class="toc-text">9 总结</span></a></li></ol></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png)"><div id="post-info"><div id="post-title"><div class="posttitle">机器学习系列之决策树算法（05）：梯度提升树算法GBDT</div></div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 发表于 2019-12-24<span class="post-meta__separator">|</span><i class="fa fa-history" aria-hidden="true"></i> 更新于 2019-12-24</time><span class="post-meta__separator mobile_hidden">|</span><span class="mobile_hidden"><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Machine-Learning/">Machine Learning</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Machine-Learning/GBDT/">GBDT</a></span><div class="post-meta-wordcount"><i class="fa fa-file-word-o post-meta__icon" aria-hidden="true"></i><span>字数总计: </span><span class="word-count">4.1k</span><span class="post-meta__separator">|</span><i class="fa fa-clock-o post-meta__icon" aria-hidden="true"></i><span>阅读时长: 12 分钟</span><span class="post-meta__separator">|</span><i class="fa fa-eye post-meta__icon" aria-hidden="true">       </i><span>阅读量: </span><span id="busuanzi_value_page_pv"></span></div></div></div></div><div class="layout layout_post" id="content-inner">   <article id="post"><div class="article-container" id="post-content"><h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h2><p>前面讲述了<a href="https://dataquaner.github.io/2019/12/17/机器学习系列之决策树算法（01）：决策树特征选择/">《决策树的特征选择》</a>、<a href="https://dataquaner.github.io/2019/12/19/机器学习系列之决策树算法（02）：决策树的生成/">《决策树的生成》</a>、<a href="https://dataquaner.github.io/2019/12/19/机器学习系列之决策树算法（03）：决策树的剪枝/">《决策树的剪枝》</a>，熟悉了单棵决策树的的实现细节，在实际应用时，往往采用多棵决策树组合的形式完成目标任务。那么如何组合单棵决策树可以使得模型效果更优呢？目前主要有两种思想：<strong>bagging</strong>和<strong>boosting</strong>，分别对应的典型算法<strong>随机森林</strong>和<strong>Adaboost</strong>、<strong>GBDT</strong>等。</p>
+<blockquote>
+<p><strong>Bagging</strong>的思想比较简单，即每一次从原始数据中根据<strong>均匀概率分布有放回的抽取和原始数据大小相同的样本集合</strong>，样本点可能出现重复，然后对每一次产生的训练集构造一个分类器，再对分类器进行组合。典型实现算法<strong>随机森林</strong></p>
+<p><strong>boosting</strong>的每一次抽样的<strong>样本分布都是不一样的</strong>。每一次迭代，都根据上一次迭代的结果，<strong>增加被错误分类的样本的权重</strong>，使得模型能在之后的迭代中更加注意到难以分类的样本，这是一个<strong>不断学习的过程，也是一个不断提升</strong>的过程，这也就是boosting思想的本质所在。迭代之后，将每次迭代的基分类器进行集成。那么如何进行样本权重的调整和分类器的集成是我们需要考虑的关键问题。典型实现算法是<strong>GBDT</strong></p>
+</blockquote>
+<p>boosting的思想如下图：</p>
+<p><img alt="boosting思想" data-src="https://pic4.zhimg.com/80/v2-aca3644ddd56abe1e47c0f45601587c3_hd.jpg" class="lazyload"></p>
+<p>基于boosting思想的经典算法是<strong>Adaboost</strong>和<strong>GBDT</strong>。关于Adaboost的介绍可以参考《Adaboost算法》，本文重点介绍GBDT。</p>
+<h2 id="2-什么是GBDT"><a href="#2-什么是GBDT" class="headerlink" title="2 什么是GBDT"></a>2 什么是GBDT</h2><blockquote>
+<p>GBDT(Gradient Boosting Decision Tree) 是一种迭代的决策树算法，是<strong>回归树</strong>，而不是分类树。该算法由多棵决策树组成，所有树的结论累加起来做最终答案。它在被提出之初就和SVM一起被认为是泛化能力较强的算法。</p>
+<p>GBDT的思想使其具有天然优势可以发现多种有区分性的特征以及特征组合。业界中，Facebook使用其来自动发现有效的特征、特征组合，来作为LR模型中的特征，以提高 CTR预估（Click-Through Rate Prediction）的准确性。</p>
+</blockquote>
+<p>GBDT用来做回归预测，调整后也可以用于分类。Boost是”提升”的意思，一般Boosting算法都是一个迭代的过程，每一次新的训练都是为了改进上一次的结果。具体训练过程如下图示意：</p>
+<p><img alt="GBDT训练过程" data-src="https://pic2.zhimg.com/80/v2-4713a5b63da71ef5afba3fcd3a65299d_hd.jpg" class="lazyload"></p>
+<h2 id="3-GBDT算法原理"><a href="#3-GBDT算法原理" class="headerlink" title="3 GBDT算法原理"></a>3 GBDT算法原理</h2><p>GBDT算法的核心思想</p>
+<blockquote>
+<p>GBDT的核心就在于：<strong>每一棵树学的是之前所有树结论和的残差</strong>，这个残差就是一个加预测值后能得真实值的累加量。即所有弱分类器相加等于预测值，下一个弱分类器去拟合误差函数对预测值的梯度。</p>
+</blockquote>
+<blockquote>
+<p>GBDT加入了简单的<strong>数值优化</strong>思想。</p>
+<p><strong>Xgboost</strong>更加有效应用了数值优化。相比于gbdt，最重要是对损失函数变得更复杂。目标函数依然是所有树想加等于预测值。损失函数引入了一阶导数，二阶导数。</p>
+<p>不同于随机森林所有树的预测求均值，GBDT所有的树的预测值加起来是最终的预测值，可以不断接近真实值。</p>
+</blockquote>
+<p>GBDT也是集成学习Boosting家族的成员，但是却和传统的Adaboost有很大的不同。回顾下Adaboost，是利用前一轮迭代弱学习器的误差率来更新训练集的权重，这样一轮轮的迭代下去。GBDT也是迭代，使用了前向分布算法，但是弱学习器限定了只能使用CART回归树模型，同时迭代思路和Adaboost也有所不同。</p>
+<p>在GBDT的迭代中，假设我们前一轮迭代得到的强学习器是ft−1(x), 损失函数是L(y,ft−1(x)), 我们本轮迭代的目标是找到一个CART回归树模型的弱学习器ht(x)，让本轮的损失损失L(y,ft(x)=L(y,ft−1(x)+ht(x))最小。也就是说，本轮迭代找到决策树，要让样本的损失尽量变得更小。</p>
+<p>GBDT的思想的通俗解释</p>
+<blockquote>
+<p>假如有个人30岁，</p>
+<p>第一棵树，我们首先用20岁去拟合，发现损失有10岁，</p>
+<p>第二颗，这时我们用6岁去拟合剩下的损失，发现差距还有4岁，</p>
+<p>第三颗，我们用3岁拟合剩下的差距，差距就只有一岁了。</p>
+<p><strong>三棵树加起来为29岁，距离30最近。</strong></p>
+</blockquote>
+<p>从上面的例子看这个思想还是蛮简单的，但是有个问题是这个损失的拟合不好度量，损失函数各种各样，怎么找到一种通用的拟合方法呢？</p>
+<h2 id="4-负梯度拟合"><a href="#4-负梯度拟合" class="headerlink" title="4 负梯度拟合"></a>4 <strong>负梯度拟合</strong></h2><p>在上一节中，我们介绍了GBDT的基本思路，但是没有解决<strong>损失函数拟合方法</strong>的问题。针对这个问题，大牛<strong>Freidman</strong>提出了用损失函数的负梯度来拟合本轮损失的近似值，进而拟合一个CART回归树。第t轮的第i个样本的损失函数的负梯度表示为</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyMP27fEskIYa0Y00VyUqTGZLvXic6rwLTApiaqawpGBqoY1b4zNNTGwAw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>利用(xi,rti)(i=1,2,..m),我们可以拟合一颗CART回归树，得到了第t颗回归树，其对应的叶节点区域Rtj,j=1,2,…,J。其中J为叶子节点的个数。</p>
+<p>针对每一个叶子节点里的样本，我们求出使损失函数最小，也就是拟合叶子节点最好的的输出值ctj如下：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyCHtHNTNtpZHNxboDKqMzy43MyLicZFOt8A46iajZMSHbEAW4UEMeoIhw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>这样就得到了本轮的决策树拟合函数如下：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8ly8Wty7SEqX3Z7MNpiaArS5uNYUu53sb4dp7TsHQMe5Rraw2ZjtbmH84g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>从而本轮最终得到的强学习器的表达式如下：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyOz13MCp5uicnZkqmXQpMubJAuFndxSJ7fzycvBicyZdwnDgoez4ZXbBQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>通过损失函数的负梯度来拟合，找到了一种通用的拟合损失误差的办法，这样无轮是分类问题还是回归问题，我们通过其损失函数的负梯度的拟合，就可以用GBDT来解决我们的分类回归问题。区别仅仅在于损失函数不同导致的负梯度不同而已。</p>
+<p>传统模型中，我们定义一个固定结构的函数，然后通过样本训练拟合更新该函数的参数，获得最后的最优函数。</p>
+<p>GBDT提升树并非如此。它是加法模型，是不定结构的函数，通过不断加入新的子函数来使得模型能更加拟合训练数据，直到最优。函数更新的迭代方式可以写作：<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOHhkSYuFVakKkzs8bV1G1x0kTAtekib1cxFnKxQ6Kic59f53ckjEnM8MQ/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">)。所以如果要更快逼近最优的函数，我们就需要在正确的方向上添加子函数，这个“正确的方向”当然就是损失减少最快的方向。所以我们需要用损失函数<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOvzmypoOy2AgFtciavA7xoa2n0JWZd5X30lGibWLBSYHR4Mp3vQXc24xA/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">)对函数<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOq82zrPJcdR69oOdqjadV52MHoDXRUA3ickHfwRPMLwD8DJINtj20Fpg/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">)求导（注意不是对x求导），求得的导数，就是接下来<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOq82zrPJcdR69oOdqjadV52MHoDXRUA3ickHfwRPMLwD8DJINtj20Fpg/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">)需要弥补的方向。在上式中<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOwoQiciaNbtJwTJcKw0EcEwuEwkBAnh9cp72mIAFhOfXM5Wk86ywWorYg/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">就是表示导数的拟合。</p>
+<p>导数值跟损失函数的选择有关系。如果选择平方损失误差<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOS3I0b3IJ8V0xxjVob1ol6YvFKklAOsnqa1HlIdFicbPuzsnFfd9hPDg/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">，那么它的导数就是：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOh5pz5Hy4euGM4ohUKWRQAAQn3z1l3QE7I1OCfrqGnbPo0rGBic8L2Vw/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>令人惊喜的是这正是真实值和估计值之间的残差！ 这就是为什么谈到GBDT的时候，很多文章都提到“残差”的拟合，却没有说“梯度”的拟合。其实它们在平方损失误差条件下是一个意思！BTW，上面之所以用了<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOu0blrBa87g5KTo3JKNJG3bISFc303NjWothbmK3SsSs5ibIUn3nIH9g/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">是为了计算方便，常数项并不会影响平方损失误差，以及残差的比较。</p>
+<p>现在让我们重新理解这个式子：<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOHhkSYuFVakKkzs8bV1G1x0kTAtekib1cxFnKxQ6Kic59f53ckjEnM8MQ/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>1）先求取一个拟合函数Fm-1(x)</p>
+<p>2）用Fm-1(x)进行预测，计算预测值和实际值的残差</p>
+<p>3）为了弥补上面的残差，用一个函数△F(x)来拟合这个残差</p>
+<p>4）这样最终的函数就变成了<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOHhkSYuFVakKkzs8bV1G1x0kTAtekib1cxFnKxQ6Kic59f53ckjEnM8MQ/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">)，其中Fm-1(x)用来拟合原数据，△F(x)用来拟合残差</p>
+<p>5）如果目前还有较大的残差，则循环2)~4)，更新函数到Fm+1(x) , Fm+2(x), …..直到残差满足条件。</p>
+<p>针对以上流程，我们用实例来说明</p>
+<h2 id="5-提升树的生成过程"><a href="#5-提升树的生成过程" class="headerlink" title="5 提升树的生成过程"></a><strong>5 提升树的生成过程</strong></h2><p>有以下数据需要用回归，并要求平方损失误差小于0.2（这0.2就是我们人为设置的最优条件，否则训练可能会无休止地进行下去）时，可以停止建树：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcO5GxKf7OxmtUG46swUJwHNyUFv8VOOpj0ShaibKVlPciaPk7lk6O9l4DA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p><strong>第一棵树</strong></p>
+<p><strong>1） 遍历各个切分点s=1.5,2.5,…,9.5找到平方损失误差最小值的切分点：</strong></p>
+<p>比如s=1.5,分割成了两个子集：<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOQeodYeygMxPDwt2E8fP7ic0rwiatLYvcag6VOas4WOvDxeA7H0bxHxiag/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"> 通过公式<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOXTFAGhmwVnVjIAib047xJn00uibicmZcZjxq5YKy6olDr62Eac625L0tA/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">求平方损失误差</p>
+<p>而其中<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOAvj5NaNw2gmlQ76SqdDOFpTycMKHRr3cyFlpMnWaJT3eF6HpHE54pQ/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">)为各自子集的平均值<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcO8o2CmsIo8IgPBCRHeMeibaUsrWlfYUn1E72DQOdbq86GibuXhBRQJW2w/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">时，可以使得每个子集的平方损失误差最小。</p>
+<p>求平均值为：<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOiaYE1zAZnMhO7xiayKZvQmDWFrepYQWftLc2NB5b6LuXpd289gvQOGFw/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">)，进而求得平方损失误差为<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOZ1zYYIfBrETSG24JJyLwUYqWqVeIz7TV0l1Rn5DtQCfiaMiaBQUfkjuA/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>同样的方法求得其它切分点的平方损失误差，列表入下：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOvkj8fRtjicJNMdXIKRDpUawqevqdwWQSYgiamJTY2hcT7KESYOlW8EnA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>可见，当s=6.5时,<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOxveLkvcSxckAMlbqx4I6xtfnEOd8EL9IjZE8DXwCkpqWicR1aAf1MEw/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">为所有切分点里平方损失误差最小的</p>
+<p><strong>2) 选择切分点s=6.5构建第一颗回归树，各分支数值使用</strong></p>
+<p><em><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOCng6RAzOkxCibd02ZnfLXHapLY1rxGWJiaXIA1vVyB5VvtBibiadZCvibkw/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">：</em></p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcO0sGV4htSbcmYA79VtOVKIick610xGZfoOyIWePX3FOT75yn6j551Uog/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p><strong>第一轮</strong>过后，我们提升树为:</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOsDfeU5cr9IsT5c1rgN8mnibodsaT6KkiaPB67thj2dZrvvCm7828ocjA/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p><strong>3) 求提升树拟合数据的残差和平方损失误差：</strong></p>
+<p>提升树拟合数据的残差计算：<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOTRzru4dDaCMSFjszEicw3ibPgTKobG5jQL71BISIUeiciasnFUicqKic4E0A/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>各个点的计算结果：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOQYbumw3ZlTVFWP9ZzXcMkoazH2F75AoQZYWxkdPtpfh8IE9uPibRV4g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>提升树拟合数据的平方损失误差计算：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcO3M9WFJP7O5lJsyW8F5ajrLeOiak5iaRsBylu9NT3uIhSNqC6FRw80rqQ/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>大于0.2，则还需要继续建树。</p>
+<p><strong>第二棵树</strong></p>
+<p><strong>4) 确定需要拟合的训练数据为上一棵树的残差：</strong></p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOQYbumw3ZlTVFWP9ZzXcMkoazH2F75AoQZYWxkdPtpfh8IE9uPibRV4g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p><strong>5） 遍历各个切分点s=1.5,2.5,…,9.5找到平方损失误差最小值的切分点：</strong></p>
+<p>同样的方法求得其它切分点的平方损失误差，列表入下：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOAnbNhuZUsHQHo0F7GVl0GU3Michbmyia3b8iatic03xJ4mOdMIouPqmRyg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>可见，当s=3.5时,<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOX0uGb3louwe22OkRoQdbd3nk722bLU9WuNnFscqq5H3TlXxrjkfhVg/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">为所有切分点里平方损失误差最小的</p>
+<p><strong>6) 选择切分点s=3.5构建第二颗回归树，各分支数值使用</strong></p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOjJLm5bHOFULrY4xFYZZzWlfnENVicnxhQYOiaTd3hOWJJjIgt4cXibPwA/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOamWhe3GALv8PnuCOca6w70P1lzYjY25KRYrWjVMwY6Pxn11QSwH6fg/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>第二轮过后，我们提升树为:</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOYeITOyhABGetdc4z7STdupyzS9fuFa6v95NjpP5he9nzecPDVKOVLA/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p><strong>7) 求提升树拟合数据的残差和平方损失误差：</strong></p>
+<p>提升树拟合数据的残差计算：<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOlmY5ic3Nfg5VPRFVSeup8xjGudqGdAzI3j5bNWslcRR62AxV2XRYKqQ/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>各个点的计算结果，同时对比初始值和上一颗树的残差：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOt6HhibiciaSQazVLKP3lv4kLvzLF5wfaV2nuCYohOJEU2VkI4WgnZC74w/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>可以看见，随着树的增多，残差一直在减少。</p>
+<p>到目前为止，提升树拟合数据的平方损失误差计算：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcO5Rzh6ibyicU5VfBHyhsePVC2wQ8LlJeDn8jWcWicKNiarRWtzSF5uprFhg/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>多说一句，这里是从全局提升树的角度去计算损失，其实和上面第5）步中从最后一颗树的角度去计算损失，结果是一样的</p>
+<p>目前损失大于0.2的阈值，还需要继续建树</p>
+<p>… </p>
+<p>… </p>
+<p><strong>第六棵树</strong></p>
+<p>到第六颗树的时候，我们已经累计获得了：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOsh5duEdgszicGk8UbiafAta5NnHyMNVLYOAiaT0Ju4DLGKibDYPteXYBUA/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">     <img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOUVO2SLfYFcibbOuMyHjICibYBh2EJrIict8lrtBTZWmfCaBFVE628Lypw/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOr1ChtQiaO9CXxNCCGSjUDHrz1iayesKv8vMSCGiavrcJhsRXfSyCicJ30A/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">     <img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcODicRF1aptDuvhgKNadZHkhGOsIre4xibUuG60I4miaUkw5LNfo71gS9xw/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>此时提升树为：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOv42KBJrAXur7luickhNHjCagFicZAiaTspyoEaibwhNRz2vr5EjibCjSctg/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>此时用<img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOiaxnBL9gfbJ7zfDblcMKKgbwsm6iaTbnfR1MGsva6fJ6ypBUkT9poxUw/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">拟合训练数据的平方损失误差为：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOQR444ODwtuSps7BDcbJGPXg70DVN6u5kHLojyQ9qprb27slQnbDV9A/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>平方损失误差小于0.2的阈值，停止建树。</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/mqaP0ypnYKjPEIdtO1Jevr25pRyOXYcOiaxnBL9gfbJ7zfDblcMKKgbwsm6iaTbnfR1MGsva6fJ6ypBUkT9poxUw/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload">为我们最终所求的提升树。</p>
+<h2 id="6-回归算法"><a href="#6-回归算法" class="headerlink" title="6 回归算法"></a>6 回归算法</h2><p><strong>输入：</strong> 最大迭代次数T, 损失函数L，训练样本集</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyodcqQg8f6LDBSria8Wa2zKKrJ313X0ulTbVHBx2cCNwBqdaQWWrT5ug/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p><strong>输出：</strong> 强学习器f(x)</p>
+<p><strong>1）</strong> 初始化弱学习器</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyNt6z0iafAWflN2BF8dBd4nlZNC5icuhiaoyAeqQxmur7BN4SEp7cN3k1w/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p><strong>2）</strong>对迭代轮数t=1,2,…T有：</p>
+<p>　  <strong>a)</strong> 对样本i=1,2，…m，计算负梯度</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyMP27fEskIYa0Y00VyUqTGZLvXic6rwLTApiaqawpGBqoY1b4zNNTGwAw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>　  <strong>b)</strong> 利用(xi,rti)(i=1,2,..m), 拟合一颗CART回归树,得到第t颗回归树，其对应的叶子节点区域为Rtj,j=1,2,…,J。其中J为回归树t的叶子节点的个数。</p>
+<p>　 <strong>c)</strong> 对叶子区域j =1,2,..J,计算最佳拟合值</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyobJ7nYicsGlUQibywvuCuXXYEIo2XNIVF6Qtz5FeQFaMGFCqYnSnYcSQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>   <strong>(d)</strong> 更新强学习器</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyOz13MCp5uicnZkqmXQpMubJAuFndxSJ7fzycvBicyZdwnDgoez4ZXbBQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p><strong>3）</strong> 得到强学习器f(x)的表达式</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyB0YrMT8hPj4HkNiacdM1iaBIXQgRP1YKxibibgMcCht1hSJooCuIfxMEfg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<h2 id="7-分类算法"><a href="#7-分类算法" class="headerlink" title="7 分类算法"></a>7 分类算法</h2><p>GBDT的分类算法从思想上和GBDT的回归算法没有区别，但是由于样本输出不是连续的值，而是离散的类别，导致我们无法直接从输出类别去拟合类别输出的误差。</p>
+<p>为了解决这个问题，主要有两个方法，</p>
+<p><strong>1）一个是用指数损失函数，此时GBDT退化为Adaboost算法。</strong></p>
+<p><strong>2）另一种方法是用类似于逻辑回归的对数似然损失函数的方法。</strong></p>
+<p>也就是说，我们用的是类别的预测概率值和真实概率值的差来拟合损失。本文仅讨论用对数似然损失函数的GBDT分类。而对于对数似然损失函数，我们又有二元分类和多元分类的区别。</p>
+<h3 id="7-1-二元分类算法"><a href="#7-1-二元分类算法" class="headerlink" title="7.1 二元分类算法"></a>7.1 二元分类算法</h3><p>对于二元GBDT，如果用类似于逻辑回归的对数似然损失函数，则损失函数为：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyor0u8iatLzt15YpczNnbOsoRr1sEr2RvP3jTWs8qQgAGZgrhYKhbiaEw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>其中y∈{−1,+1}。则此时的负梯度误差为</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyiaKu2ichtrUfyDRkFbwibz1WyxNxLK62ePp2OMyKcGd3eupg2jGptoJzg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>对于生成的决策树，我们各个叶子节点的最佳残差拟合值为</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyzmvLpfZt9ACruqtJct6Mdic2x1ibt92yducrmTWtCO5qg8XvDDmBIsLg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>由于上式比较难优化，我们一般使用近似值代替</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyd3gAujuSrODXLfhr0ODJ2QJ7r1AG9KY4FpMvsP8JHLw06qS4Xx3sUA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>除了负梯度计算和叶子节点的最佳残差拟合的线性搜索，二元GBDT分类和GBDT回归算法过程相同。</p>
+<h3 id="7-2-多元分类算法"><a href="#7-2-多元分类算法" class="headerlink" title="7.2 多元分类算法"></a>7.2 <strong>多元分类算法</strong></h3><p>多元GBDT要比二元GBDT复杂一些，对应的是多元逻辑回归和二元逻辑回归的复杂度差别。假设类别数为K，则此时我们的对数似然损失函数为：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lynUXdO0WoeZx3kmacQGpC0vj9ny3ageHT4BcLG4sxJ3PeUwZY2EaTvA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>其中如果样本输出类别为k，则yk=1。第k类的概率pk(x)的表达式为：</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyfGo24kcicXMRRpfZrwUdy5MCEmttkCkL18kBibEryicNmlGiba4wgjBn8g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>集合上两式，我们可以计算出第t轮的第i个样本对应类别l的负梯度误差为</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyjDA8kSib3lX4UPdal2YQNADJibOQdec9gyRod0oXd01h37WWet50QfXA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>对于生成的决策树，我们各个叶子节点的最佳残差拟合值为</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lytoTyickEpRJluwyooIWm65M2vbM8yVf2LRwMibMUacYzx3N9EHRN3UtA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>由于上式比较难优化，我们一般使用近似值代替</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyyw8DyXqxF36pAWYHEh7AdB0BHzy8OJvBCBaygzicdUUeclNrLheGN3w/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>除了负梯度计算和叶子节点的最佳残差拟合的线性搜索，多元GBDT分类和二元GBDT分类以及GBDT回归算法过程相同。</p>
+<h2 id="8-正则化"><a href="#8-正则化" class="headerlink" title="8 正则化"></a>8 <strong>正则化</strong></h2><p>和Adaboost一样，我们也需要对GBDT进行正则化，防止过拟合。</p>
+<p>GBDT的正则化主要有三种方式。</p>
+<p><strong>第一种是和Adaboost类似的正则化项</strong>，即<strong>步长(learning rate)</strong>。定义为ν,对于前面的弱学习器的迭代</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyDzGSAZPzHsznm49bIdewQ5CibDjbjUK37E0BzhIe7Szcr0lRTx8Oib3A/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>如果我们加上了正则化项，则有</p>
+<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/KdayOo3PqHCMaFT1BjrnWicmQzJOrs8lyhicpZnfvsEAUeINAqfLibtT0qNzVxy6LpDmbh6oBibmWOJhQgKNSXGK0g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p>ν的取值范围为0&lt;ν≤1。对于同样的训练集学习效果，较小的ν意味着我们需要更多的弱学习器的迭代次数。通常我们用步长和迭代最大次数一起来决定算法的拟合效果。</p>
+<p><strong>第二种正则化的方式是通过子采样比例（subsample）。</strong>取值为(0,1]。注意这里的子采样和随机森林不一样，随机森林使用的是放回抽样，而这里是不放回抽样。如果取值为1，则全部样本都使用，等于没有使用子采样。如果取值小于1，则只有一部分样本会去做GBDT的决策树拟合。选择小于1的比例可以减少方差，即防止过拟合，但是会增加样本拟合的偏差，因此取值不能太低。推荐在[0.5, 0.8]之间。<strong>使用了子采样的GBDT有时也称作随机梯度提升树(Stochastic Gradient Boosting Tree, SGBT)</strong>。由于使用了子采样，程序可以通过采样分发到不同的任务去做boosting的迭代过程，最后形成新树，从而减少弱学习器难以并行学习的弱点。 </p>
+<p><strong>第三种是对于弱学习器即CART回归树进行正则化剪枝。</strong>在决策树原理篇里我们已经讲过，这里就不重复了</p>
+<h2 id="9-总结"><a href="#9-总结" class="headerlink" title="9 总结"></a>9 总结</h2><p>GDBT本身并不复杂，不过要吃透的话需要对集成学习的原理，决策树原理和各种损失函树有一定的了解。由于GBDT的卓越性能，只要是研究机器学习都应该掌握这个算法，包括背后的原理和应用调参方法。目前GBDT的算法比较好的库是xgboost。当然scikit-learn也可以。</p>
+<p><strong>优点</strong></p>
+<p><strong>1)</strong> 可以灵活处理各种类型的数据，包括连续值和离散值。</p>
+<p><strong>2)</strong> 在相对少的调参时间情况下，预测的准备率也可以比较高。这个是相对SVM来说的。</p>
+<p><strong>3）</strong>使用一些健壮的损失函数，对异常值的鲁棒性非常强。比如 Huber损失函数和Quantile损失函数。</p>
+<p><strong>缺点</strong></p>
+<p><strong>1)</strong> 由于弱学习器之间存在依赖关系，难以并行训练数据。不过可以通过自采样的SGBT来达到部分并行。</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined" target="_blank" rel="noopener">Leon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://dataquaner.github.io/2019/12/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8805%EF%BC%89%EF%BC%9A%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91%E7%AE%97%E6%B3%95GBDT/">https://dataquaner.github.io/2019/12/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8805%EF%BC%89%EF%BC%9A%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91%E7%AE%97%E6%B3%95GBDT/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://dataquaner.github.io">DataQuaner</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/GBDT/">GBDT    </a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/js/social-share.min.js"></script></div></div><div class="post-reward"><a class="reward-button"><i class="fa fa-qrcode"></i> 打赏<div class="reward-main"><ul class="reward-all"><li class="reward-item"><img class="lazyload post-qr-code__img" src="/img/wechat.jpg"><div class="post-qr-code__desc">微信</div></li><li class="reward-item"><img class="lazyload post-qr-code__img" src="/img/alipay.jpg"><div class="post-qr-code__desc">支付宝</div></li></ul></div></a></div><nav class="pagination_post" id="pagination"><div class="next-post pull-full"><a href="/2019/12/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8809%EF%BC%89%EF%BC%9AID3%E3%80%81C4.5%E3%80%81CART%E3%80%81%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E3%80%81bagging%E3%80%81boosting%E3%80%81Adaboost%E3%80%81GBDT%E3%80%81xgboost%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/"><img class="next_cover lazyload" data-src="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png" onerror="onerror=null;src='/img/404.jpg'"><div class="label">下一篇</div><div class="next_info"><span>机器学习系列之决策树算法（09）：ID3、C4.5、CART、随机森林、bagging、boosting、Adaboost、GBDT、xgboost算法总结</span></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fa fa-fw fa-thumbs-up" aria-hidden="true"></i><span> 相关推荐</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2019/12/24/机器学习系列之决策树算法（09）：ID3、C4.5、CART、随机森林、bagging、boosting、Adaboost、GBDT、xgboost算法总结/" title="机器学习系列之决策树算法（09）：ID3、C4.5、CART、随机森林、bagging、boosting、Adaboost、GBDT、xgboost算法总结"><img class="relatedPosts_cover lazyload"data-src="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png"><div class="relatedPosts_title">机器学习系列之决策树算法（09）：ID3、C4.5、CART、随机森林、bagging、boosting、Adaboost、GBDT、xgboost算法总结</div></a></div></div><div class="clear_both"></div></div><hr><div id="post-comment"><div class="comment_headling"><i class="fa fa-comments fa-fw" aria-hidden="true"></i><span> 评论</span></div><div id="disqus_thread"></div><script>var unused = null;
+var disqus_config = function () {
+  this.page.url = 'https://dataquaner.github.io/2019/12/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8805%EF%BC%89%EF%BC%9A%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91%E7%AE%97%E6%B3%95GBDT/';
+  this.page.identifier = '2019/12/24/机器学习系列之决策树算法（05）：梯度提升树算法GBDT/';
+  this.page.title = '机器学习系列之决策树算法（05）：梯度提升树算法GBDT';
+}
+var d = document, s = d.createElement('script');
+s.src = "https://" + 'dataquaner' +".disqus.com/embed.js";
+s.setAttribute('data-timestamp', '' + +new Date());
+(d.head || d.body).appendChild(s);</script></div></div></div><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2019 By Leon</div><div class="framework-info"><span>驱动 </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://dataquaner.github.io/">blog</a>!</div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="阅读模式"></i><i class="fa fa-plus" id="font_plus" title="放大字体"></i><i class="fa fa-minus" id="font_minus" title="缩小字体"></i><a class="translate_chn_to_cht" id="translateLink" href="javascript:translatePage();" title="简繁转换" target="_self">繁</a><i class="darkmode fa fa-moon-o" id="darkmode" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><a id="to_comment" href="#post-comment" title="直达评论"><i class="scroll_to_comment fa fa-comments">  </i></a><i class="fa fa-list-ul close" id="mobile-toc-button" title="目录" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/baidupush.js"> </script><script src="/js/tw_cn.js"></script><script>translateInitilization()
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@latest/lazysizes.min.js" async=""></script></body></html>

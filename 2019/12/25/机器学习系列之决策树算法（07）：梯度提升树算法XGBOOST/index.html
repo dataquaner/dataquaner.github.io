@@ -27,7 +27,8 @@
     <script src="/libs/jquery/jquery.min.js"></script>
     
 <link rel="alternate" href="/atom.xml" title="DataQuaner" type="application/atom+xml">
-</head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 
 <body>
@@ -121,58 +122,6 @@
       
       <span>友情链接</span>
     </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="" class="waves-effect waves-light">
-
-      
-      <i class="fas fa-list" style="zoom: 0.6;"></i>
-      
-      <span>Medias</span>
-      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
-    </a>
-    <ul class="sub-nav menus_item_child ">
-      
-      <li>
-        <a href="/musics">
-          
-          <i class="fas fa-music" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Musics</span>
-        </a>
-      </li>
-      
-      <li>
-        <a href="/movies">
-          
-          <i class="fas fa-film" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Movies</span>
-        </a>
-      </li>
-      
-      <li>
-        <a href="/books">
-          
-          <i class="fas fa-book" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Books</span>
-        </a>
-      </li>
-      
-      <li>
-        <a href="/galleries">
-          
-          <i class="fas fa-image" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Galleries</span>
-        </a>
-      </li>
-      
-    </ul>
     
   </li>
   
@@ -275,61 +224,6 @@
 			
 			友情链接
 		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="javascript:;" target="_blank" rel="noopener">
-			
-				<i class="fa-fw fas fa-list"></i>
-			
-			Medias
-			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
-		</a>
-            <ul  style="background:  ;" >
-              
-                <li>   
-				
-                  <a href="/musics " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-music" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Musics</span>
-                  </a>
-                </li>
-              
-                <li>   
-				
-                  <a href="/movies " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-film" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Movies</span>
-                  </a>
-                </li>
-              
-                <li>   
-				
-                  <a href="/books " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-book" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Books</span>
-                  </a>
-                </li>
-              
-                <li>   
-				
-                  <a href="/galleries " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-image" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Galleries</span>
-                  </a>
-                </li>
-               
-            </ul>
           
         </li>
         
@@ -567,12 +461,32 @@
                 
 
                 
-
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2019-12-25
+                </div>
                 
 
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    15.6k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    55 分
+                </div>
                 
 				
                 
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
             </div>
             
         </div>
@@ -743,7 +657,7 @@
 <p><strong>(2) 当树达到最大深度时，停止建树，因为树的深度太深容易出现过拟合，这里需要设置一个超参数max_depth。</strong></p>
 <p><strong>(3) 当引入一次分裂后，重新计算新生成的左、右两个叶子结点的样本权重和。如果任一个叶子结点的样本权重低于某一个阈值，也会放弃此次分裂。</strong>这涉及到一个超参数:最小样本权重和，是指如果一个叶子节点包含的样本数量太少也会放弃分裂，防止树分的太细，这也是过拟合的一种措施。</p>
 <p>每个叶子结点的样本权值和计算方式如下：</p>
-<img src="https://pic3.zhimg.com/80/v2-4ecca09165ffb7a76123401d2009191a_hd.jpg" alt="img" style="zoom:33%;" />
+<img src="https://pic3.zhimg.com/80/v2-4ecca09165ffb7a76123401d2009191a_hd.jpg" alt="img" style="zoom:33%;">
 
 <p>总结推导过程：</p>
 <p><img src="https://pic2.zhimg.com/80/v2-def00357a06b469b6144d6acb8ab75a9_hd.jpg" alt="总结推导过程"></p>
@@ -812,17 +726,100 @@
 </ul>
 <p><strong>（5）模型实现上的差异</strong></p>
 <p>决策树的学习最耗时的一个步骤就是对特征的值进行排序（因为要确定最佳分割点）。xgboost在训练之前，预先对数据进行了排序，然后保存为block结构，后面的迭代中重复地使用这个结构，大大减小计算量。其能够实现在特征粒度的并行。</p>
-<h2 id="XGBoost代码实现"><a href="#XGBoost代码实现" class="headerlink" title="XGBoost代码实现"></a>XGBoost代码实现</h2><h3 id="安装XGBoost依赖包"><a href="#安装XGBoost依赖包" class="headerlink" title="安装XGBoost依赖包"></a><strong>安装XGBoost依赖包</strong></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install xgboost</span><br></pre></td></tr></table></figure>
-
+<h2 id="XGBoost代码实现"><a href="#XGBoost代码实现" class="headerlink" title="XGBoost代码实现"></a>XGBoost代码实现</h2><h3 id="安装XGBoost依赖包"><a href="#安装XGBoost依赖包" class="headerlink" title="安装XGBoost依赖包"></a><strong>安装XGBoost依赖包</strong></h3><pre class="line-numbers language-python"><code class="language-python">pip install xgboost<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h3 id="XGBoost分类和回归"><a href="#XGBoost分类和回归" class="headerlink" title="XGBoost分类和回归"></a><strong>XGBoost分类和回归</strong></h3><p>XGBoost有两大类接口：XGBoost原生接口 和 scikit-learn接口 ，并且XGBoost能够实现分类和回归两种任务。</p>
 <p><strong>（1）基于XGBoost原生接口的分类</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">import</span> xgboost <span class="keyword">as</span> xgb</span><br><span class="line"><span class="keyword">from</span> xgboost <span class="keyword">import</span> plot_importance</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"></span><br><span class="line"><span class="comment"># read in the iris data</span></span><br><span class="line">iris = load_iris()</span><br><span class="line"></span><br><span class="line">X = iris.data</span><br><span class="line">y = iris.target</span><br><span class="line"></span><br><span class="line"><span class="comment"># split train data and test data</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">1234565</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># set XGBoost's parameters</span></span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">'booster'</span>: <span class="string">'gbtree'</span>,</span><br><span class="line">    <span class="string">'objective'</span>: <span class="string">'multi:softmax'</span>,   <span class="comment"># 回归任务设置为：'objective': 'reg:gamma',</span></span><br><span class="line">    <span class="string">'num_class'</span>: <span class="number">3</span>,      <span class="comment"># 回归任务没有这个参数</span></span><br><span class="line">    <span class="string">'gamma'</span>: <span class="number">0.1</span>,</span><br><span class="line">    <span class="string">'max_depth'</span>: <span class="number">6</span>,</span><br><span class="line">    <span class="string">'lambda'</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">'subsample'</span>: <span class="number">0.7</span>,</span><br><span class="line">    <span class="string">'colsample_bytree'</span>: <span class="number">0.7</span>,</span><br><span class="line">    <span class="string">'min_child_weight'</span>: <span class="number">3</span>,</span><br><span class="line">    <span class="string">'silent'</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="string">'eta'</span>: <span class="number">0.1</span>,</span><br><span class="line">    <span class="string">'seed'</span>: <span class="number">1000</span>,</span><br><span class="line">    <span class="string">'nthread'</span>: <span class="number">4</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">plst = params.items()</span><br><span class="line"></span><br><span class="line">dtrain = xgb.DMatrix(X_train, y_train)</span><br><span class="line">num_rounds = <span class="number">500</span></span><br><span class="line">model = xgb.train(plst, dtrain, num_rounds)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 对测试集进行预测</span></span><br><span class="line">dtest = xgb.DMatrix(X_test)</span><br><span class="line">ans = model.predict(dtest)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算准确率</span></span><br><span class="line">cnt1 = <span class="number">0</span></span><br><span class="line">cnt2 = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(y_test)):</span><br><span class="line">    <span class="keyword">if</span> ans[i] == y_test[i]:</span><br><span class="line">        cnt1 += <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        cnt2 += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"Accuracy: %.2f %% "</span> % (<span class="number">100</span> * cnt1 / (cnt1 + cnt2)))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示重要特征</span></span><br><span class="line">plot_importance(model)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>datasets <span class="token keyword">import</span> load_iris
+<span class="token keyword">import</span> xgboost <span class="token keyword">as</span> xgb
+<span class="token keyword">from</span> xgboost <span class="token keyword">import</span> plot_importance
+<span class="token keyword">from</span> matplotlib <span class="token keyword">import</span> pyplot <span class="token keyword">as</span> plt
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>model_selection <span class="token keyword">import</span> train_test_split
 
+<span class="token comment" spellcheck="true"># read in the iris data</span>
+iris <span class="token operator">=</span> load_iris<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+X <span class="token operator">=</span> iris<span class="token punctuation">.</span>data
+y <span class="token operator">=</span> iris<span class="token punctuation">.</span>target
+
+<span class="token comment" spellcheck="true"># split train data and test data</span>
+X_train<span class="token punctuation">,</span> X_test<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> y_test <span class="token operator">=</span> train_test_split<span class="token punctuation">(</span>X<span class="token punctuation">,</span> y<span class="token punctuation">,</span> test_size<span class="token operator">=</span><span class="token number">0.2</span><span class="token punctuation">,</span> random_state<span class="token operator">=</span><span class="token number">1234565</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># set XGBoost's parameters</span>
+params <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token string">'booster'</span><span class="token punctuation">:</span> <span class="token string">'gbtree'</span><span class="token punctuation">,</span>
+    <span class="token string">'objective'</span><span class="token punctuation">:</span> <span class="token string">'multi:softmax'</span><span class="token punctuation">,</span>   <span class="token comment" spellcheck="true"># 回归任务设置为：'objective': 'reg:gamma',</span>
+    <span class="token string">'num_class'</span><span class="token punctuation">:</span> <span class="token number">3</span><span class="token punctuation">,</span>      <span class="token comment" spellcheck="true"># 回归任务没有这个参数</span>
+    <span class="token string">'gamma'</span><span class="token punctuation">:</span> <span class="token number">0.1</span><span class="token punctuation">,</span>
+    <span class="token string">'max_depth'</span><span class="token punctuation">:</span> <span class="token number">6</span><span class="token punctuation">,</span>
+    <span class="token string">'lambda'</span><span class="token punctuation">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+    <span class="token string">'subsample'</span><span class="token punctuation">:</span> <span class="token number">0.7</span><span class="token punctuation">,</span>
+    <span class="token string">'colsample_bytree'</span><span class="token punctuation">:</span> <span class="token number">0.7</span><span class="token punctuation">,</span>
+    <span class="token string">'min_child_weight'</span><span class="token punctuation">:</span> <span class="token number">3</span><span class="token punctuation">,</span>
+    <span class="token string">'silent'</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    <span class="token string">'eta'</span><span class="token punctuation">:</span> <span class="token number">0.1</span><span class="token punctuation">,</span>
+    <span class="token string">'seed'</span><span class="token punctuation">:</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+    <span class="token string">'nthread'</span><span class="token punctuation">:</span> <span class="token number">4</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+plst <span class="token operator">=</span> params<span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+dtrain <span class="token operator">=</span> xgb<span class="token punctuation">.</span>DMatrix<span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">)</span>
+num_rounds <span class="token operator">=</span> <span class="token number">500</span>
+model <span class="token operator">=</span> xgb<span class="token punctuation">.</span>train<span class="token punctuation">(</span>plst<span class="token punctuation">,</span> dtrain<span class="token punctuation">,</span> num_rounds<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 对测试集进行预测</span>
+dtest <span class="token operator">=</span> xgb<span class="token punctuation">.</span>DMatrix<span class="token punctuation">(</span>X_test<span class="token punctuation">)</span>
+ans <span class="token operator">=</span> model<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>dtest<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 计算准确率</span>
+cnt1 <span class="token operator">=</span> <span class="token number">0</span>
+cnt2 <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>y_test<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> ans<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">==</span> y_test<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">:</span>
+        cnt1 <span class="token operator">+=</span> <span class="token number">1</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        cnt2 <span class="token operator">+=</span> <span class="token number">1</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Accuracy: %.2f %% "</span> <span class="token operator">%</span> <span class="token punctuation">(</span><span class="token number">100</span> <span class="token operator">*</span> cnt1 <span class="token operator">/</span> <span class="token punctuation">(</span>cnt1 <span class="token operator">+</span> cnt2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 显示重要特征</span>
+plot_importance<span class="token punctuation">(</span>model<span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><strong>（2）基于Scikit-learn接口的回归</strong></p>
 <p>这里，我们用Kaggle比赛中回归问题：House Prices: Advanced Regression Techniques，地址：<a href="https://link.zhihu.com/?target=https%3A//www.kaggle.com/c/house-prices-advanced-regression-techniques">https://www.kaggle.com/c/house-prices-advanced-regression-techniques</a> 来进行实例讲解。</p>
 <p>该房价预测的训练数据集中一共有81列，第一列是Id，最后一列是label，中间79列是特征。这79列特征中，有43列是分类型变量，33列是整数变量，3列是浮点型变量。训练数据集中存在缺失值。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.impute <span class="keyword">import</span> SimpleImputer</span><br><span class="line"><span class="keyword">import</span> xgboost <span class="keyword">as</span> xgb</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_absolute_error</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1.读文件</span></span><br><span class="line">data = pd.read_csv(<span class="string">'./dataset/train.csv'</span>)</span><br><span class="line">data.dropna(axis=<span class="number">0</span>, subset=[<span class="string">'SalePrice'</span>], inplace=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2.切分数据输入：特征 输出：预测目标变量</span></span><br><span class="line">y = data.SalePrice</span><br><span class="line">X = data.drop([<span class="string">'SalePrice'</span>], axis=<span class="number">1</span>).select_dtypes(exclude=[<span class="string">'object'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3.切分训练集、测试集,切分比例7.5 : 2.5</span></span><br><span class="line">train_X, test_X, train_y, test_y = train_test_split(X.values, y.values, test_size=<span class="number">0.25</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4.空值处理，默认方法：使用特征列的平均值进行填充</span></span><br><span class="line">my_imputer = SimpleImputer()</span><br><span class="line">train_X = my_imputer.fit_transform(train_X)</span><br><span class="line">test_X = my_imputer.transform(test_X)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5.调用XGBoost模型，使用训练集数据进行训练（拟合）</span></span><br><span class="line"><span class="comment"># Add verbosity=2 to print messages while running boosting</span></span><br><span class="line">my_model = xgb.XGBRegressor(objective=<span class="string">'reg:squarederror'</span>, verbosity=<span class="number">2</span>)  <span class="comment"># xgb.XGBClassifier() XGBoost分类模型</span></span><br><span class="line">my_model.fit(train_X, train_y, verbose=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 6.使用模型对测试集数据进行预测</span></span><br><span class="line">predictions = my_model.predict(test_X)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 7.对模型的预测结果进行评判（平均绝对误差）</span></span><br><span class="line">print(<span class="string">"Mean Absolute Error : "</span> + str(mean_absolute_error(predictions, test_y)))</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">import</span> pandas <span class="token keyword">as</span> pd
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>model_selection <span class="token keyword">import</span> train_test_split
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>impute <span class="token keyword">import</span> SimpleImputer
+<span class="token keyword">import</span> xgboost <span class="token keyword">as</span> xgb
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>metrics <span class="token keyword">import</span> mean_absolute_error
 
+<span class="token comment" spellcheck="true"># 1.读文件</span>
+data <span class="token operator">=</span> pd<span class="token punctuation">.</span>read_csv<span class="token punctuation">(</span><span class="token string">'./dataset/train.csv'</span><span class="token punctuation">)</span>
+data<span class="token punctuation">.</span>dropna<span class="token punctuation">(</span>axis<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> subset<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'SalePrice'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> inplace<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 2.切分数据输入：特征 输出：预测目标变量</span>
+y <span class="token operator">=</span> data<span class="token punctuation">.</span>SalePrice
+X <span class="token operator">=</span> data<span class="token punctuation">.</span>drop<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'SalePrice'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span>select_dtypes<span class="token punctuation">(</span>exclude<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'object'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 3.切分训练集、测试集,切分比例7.5 : 2.5</span>
+train_X<span class="token punctuation">,</span> test_X<span class="token punctuation">,</span> train_y<span class="token punctuation">,</span> test_y <span class="token operator">=</span> train_test_split<span class="token punctuation">(</span>X<span class="token punctuation">.</span>values<span class="token punctuation">,</span> y<span class="token punctuation">.</span>values<span class="token punctuation">,</span> test_size<span class="token operator">=</span><span class="token number">0.25</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 4.空值处理，默认方法：使用特征列的平均值进行填充</span>
+my_imputer <span class="token operator">=</span> SimpleImputer<span class="token punctuation">(</span><span class="token punctuation">)</span>
+train_X <span class="token operator">=</span> my_imputer<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>train_X<span class="token punctuation">)</span>
+test_X <span class="token operator">=</span> my_imputer<span class="token punctuation">.</span>transform<span class="token punctuation">(</span>test_X<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 5.调用XGBoost模型，使用训练集数据进行训练（拟合）</span>
+<span class="token comment" spellcheck="true"># Add verbosity=2 to print messages while running boosting</span>
+my_model <span class="token operator">=</span> xgb<span class="token punctuation">.</span>XGBRegressor<span class="token punctuation">(</span>objective<span class="token operator">=</span><span class="token string">'reg:squarederror'</span><span class="token punctuation">,</span> verbosity<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># xgb.XGBClassifier() XGBoost分类模型</span>
+my_model<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>train_X<span class="token punctuation">,</span> train_y<span class="token punctuation">,</span> verbose<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 6.使用模型对测试集数据进行预测</span>
+predictions <span class="token operator">=</span> my_model<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>test_X<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 7.对模型的预测结果进行评判（平均绝对误差）</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Mean Absolute Error : "</span> <span class="token operator">+</span> str<span class="token punctuation">(</span>mean_absolute_error<span class="token punctuation">(</span>predictions<span class="token punctuation">,</span> test_y<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="XGBoost调参"><a href="#XGBoost调参" class="headerlink" title="XGBoost调参"></a><strong>XGBoost调参</strong></h3><p>在上一部分中，XGBoot模型的参数都使用了模型的默认参数，但默认参数并不是最好的。要想让XGBoost表现的更好，需要对XGBoost模型进行参数微调。XGBoost需要调的参数不算多，他们可以分成三个部分：</p>
 <blockquote>
 <p><strong>1、General Parameters，即与整个模型属基调相关的参数；</strong></p>
@@ -923,14 +920,14 @@
 <ul>
 <li>如果在训练中没有缺失值而在预测中出现缺失，那么会自动将缺失值的划分方向放到右子结点。</li>
 </ul>
-<img src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0fkqnx5yOhtlvx8dFgk1DvVfp2pmTsZ0yX0A2usH3afam4cJb7lQNIJGb3N2VZicclrfoRqM6MHhtQ/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img" style="zoom:33%;" />
+<img src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0fkqnx5yOhtlvx8dFgk1DvVfp2pmTsZ0yX0A2usH3afam4cJb7lQNIJGb3N2VZicclrfoRqM6MHhtQ/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img" style="zoom:33%;">
 
 <p>find_split时，缺失值处理的伪代码</p>
 <h3 id="XGBoost中叶子结点的权重如何计算出来"><a href="#XGBoost中叶子结点的权重如何计算出来" class="headerlink" title="XGBoost中叶子结点的权重如何计算出来"></a>XGBoost中叶子结点的权重如何计算出来</h3><p>XGBoost目标函数最终推导形式如下：</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0fDfLgXV02BLFJ9eaFEJB0ERQaHDopzOeSvCyaPGicmHqArjzlJYDejcTs9YJoAFdAqwyVrdpUPZQA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0fDfLgXV02BLFJ9eaFEJB0ERQaHDopzOeSvCyaPGicmHqArjzlJYDejcTs9YJoAFdAqwyVrdpUPZQA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
 <p>利用一元二次函数求最值的知识，当目标函数达到最小值Obj<em>时，每个叶子结点的权重为wj</em>。</p>
 <p>具体公式如下：</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0fDfLgXV02BLFJ9eaFEJB0EURBYpwF4xF4x2lLh7BroeKUjRqk17VXpkZqPEjaskia4kiazjs9nyg0A/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0fDfLgXV02BLFJ9eaFEJB0EURBYpwF4xF4x2lLh7BroeKUjRqk17VXpkZqPEjaskia4kiazjs9nyg0A/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
 <h3 id="XGBoost中的一棵树的停止生长条件"><a href="#XGBoost中的一棵树的停止生长条件" class="headerlink" title="XGBoost中的一棵树的停止生长条件"></a>XGBoost中的一棵树的停止生长条件</h3><ul>
 <li>当新引入的一次分裂所带来的增益Gain&lt;0时，放弃当前的分裂。这是训练损失和模型结构复杂度的博弈过程。</li>
 <li>当树达到最大深度时，停止建树，因为树的深度太深容易出现过拟合，这里需要设置一个超参数max_depth。</li>
@@ -954,11 +951,9 @@
 <p>第一种，如果你在意AUC，采用AUC来评估模型的性能，那你可以通过设置scale_pos_weight来平衡正样本和负样本的权重。例如，当正负样本比例为1:10时，scale_pos_weight可以取10；</p>
 <p>第二种，如果你在意概率(预测得分的合理性)，你不能重新平衡数据集(会破坏数据的真实分布)，应该设置max_delta_step为一个有限数字来帮助收敛（基模型为LR时有效）。</p>
 <p>原话是这么说的：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">For common cases such <span class="keyword">as</span> ads clickthrough log, the dataset <span class="keyword">is</span> extremely imbalanced. This can affect the training of xgboost model, <span class="keyword">and</span> there are two ways to improve it.  If you care only about the ranking order (AUC) of your prediction      Balance the positive <span class="keyword">and</span> negative weights, via scale_pos_weight      Use AUC <span class="keyword">for</span> evaluation  If you care about predicting the right probability      In such a case, you cannot re-balance the dataset      In such a case, set parameter max_delta_step to a finite number (say <span class="number">1</span>) will help convergence</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python">For common cases such <span class="token keyword">as</span> ads clickthrough log<span class="token punctuation">,</span> the dataset <span class="token keyword">is</span> extremely imbalanced<span class="token punctuation">.</span> This can affect the training of xgboost model<span class="token punctuation">,</span> <span class="token operator">and</span> there are two ways to improve it<span class="token punctuation">.</span>  If you care only about the ranking order <span class="token punctuation">(</span>AUC<span class="token punctuation">)</span> of your prediction      Balance the positive <span class="token operator">and</span> negative weights<span class="token punctuation">,</span> via scale_pos_weight      Use AUC <span class="token keyword">for</span> evaluation  If you care about predicting the right probability      In such a case<span class="token punctuation">,</span> you cannot re<span class="token operator">-</span>balance the dataset      In such a case<span class="token punctuation">,</span> set parameter max_delta_step to a finite number <span class="token punctuation">(</span>say <span class="token number">1</span><span class="token punctuation">)</span> will help convergence<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>那么，源码到底是怎么利用<strong>scale_pos_weight</strong>来平衡样本的呢，是调节权重还是过采样呢？请看源码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (info.labels[i] == <span class="number">1.0</span>f)  w *= param_.scale_pos_weight</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">if</span> <span class="token punctuation">(</span>info<span class="token punctuation">.</span>labels<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">1.</span><span class="token number">0f</span><span class="token punctuation">)</span>  w <span class="token operator">*=</span> param_<span class="token punctuation">.</span>scale_pos_weight<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>可以看出，应该是增大了少数样本的权重。</p>
 <p>除此之外，还可以通过上采样、下采样、SMOTE算法或者自定义代价函数的方式解决正负样本不平衡的问题。</p>
 <h3 id="比较LR和GBDT，说说什么情景下GBDT不如LR"><a href="#比较LR和GBDT，说说什么情景下GBDT不如LR" class="headerlink" title="比较LR和GBDT，说说什么情景下GBDT不如LR"></a>比较LR和GBDT，说说什么情景下GBDT不如LR</h3><p>先说说LR和GBDT的区别：</p>
@@ -990,11 +985,7 @@
 <li><strong>学习方法的scalability</strong>：Block结构支持并行化，支持 Out-of-core计算。</li>
 </ul>
 <h3 id="XGBoost如何评价特征的重要性"><a href="#XGBoost如何评价特征的重要性" class="headerlink" title="XGBoost如何评价特征的重要性"></a>XGBoost如何评价特征的重要性</h3><p>我们采用三种方法来评判XGBoost模型中特征的重要程度：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">官方文档：（1）weight - the number of times a feature is used to split the data across all trees. （2）gain - the average gain of the feature when it is used in trees. （3）cover - the average coverage of the feature when it is used in trees.</span><br></pre></td></tr></table></figure>
-
-
-
-<ul>
+<pre><code> 官方文档：（1）weight - the number of times a feature is used to split the data across all trees. （2）gain - the average gain of the feature when it is used in trees. （3）cover - the average coverage of the feature when it is used in trees.</code></pre><ul>
 <li><strong>weight</strong> ：该特征在所有树中被用作分割样本的特征的总次数。</li>
 <li><strong>gain</strong> ：该特征在其出现过的所有树中产生的平均增益。</li>
 <li><strong>cover</strong> ：该特征在其出现过的所有树中的平均覆盖范围。</li>
@@ -1043,7 +1034,7 @@
 </ul>
 <p>一些模型如SVM和KNN，其模型原理中涉及到了对样本距离的度量，如果缺失值处理不当，最终会导致模型预测效果很差。</p>
 <p>而树模型对缺失值的敏感度低，大部分时候可以在数据缺失时时使用。原因就是，一棵树中每个结点在分裂时，寻找的是某个特征的最佳分裂点（特征值），完全可以不考虑存在特征值缺失的样本，也就是说，如果某些样本缺失的特征值缺失，对寻找最佳分割点的影响不是很大。</p>
-<p>XGBoost对缺失数据有特定的处理方法，<a href="http://mp.weixin.qq.com/s?__biz=Mzg2MjI5Mzk0MA==&mid=2247484181&idx=1&sn=8d0e51fb0cb974f042e66659e1daf447&chksm=ce0b59cef97cd0d8cf7f9ae1e91e41017ff6d4c4b43a4c19b476c0b6d37f15769f954c2965ef&scene=21#wechat_redirect" target="_blank" rel="noopener">详情参考上篇文章第7题</a>。</p>
+<p>XGBoost对缺失数据有特定的处理方法，<a href="http://mp.weixin.qq.com/s?__biz=Mzg2MjI5Mzk0MA==&amp;mid=2247484181&amp;idx=1&amp;sn=8d0e51fb0cb974f042e66659e1daf447&amp;chksm=ce0b59cef97cd0d8cf7f9ae1e91e41017ff6d4c4b43a4c19b476c0b6d37f15769f954c2965ef&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">详情参考上篇文章第7题</a>。</p>
 <p>因此，对于有缺失值的数据在经过缺失处理后：</p>
 <ul>
 <li>当数据量很小时，优先用朴素贝叶斯</li>
@@ -1051,7 +1042,7 @@
 <li>数据量较大，也可以用神经网络</li>
 <li>避免使用距离度量相关的模型，如KNN和SVM</li>
 </ul>
-<h3 id="XGBoost和LightGBM的区别"><a href="#XGBoost和LightGBM的区别" class="headerlink" title="XGBoost和LightGBM的区别"></a>XGBoost和LightGBM的区别</h3><p><img src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0cassUTLvbQlGic1CW6ialKxxJ2S8XI3VokUBf5TBOSDG8zb6gZXe0q63b4TyDlDPCX9G6cPXlmR4cw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<h3 id="XGBoost和LightGBM的区别"><a href="#XGBoost和LightGBM的区别" class="headerlink" title="XGBoost和LightGBM的区别"></a>XGBoost和LightGBM的区别</h3><p><img src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0cassUTLvbQlGic1CW6ialKxxJ2S8XI3VokUBf5TBOSDG8zb6gZXe0q63b4TyDlDPCX9G6cPXlmR4cw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
 <p>（1）树生长策略：XGB采用<code>level-wise</code>的分裂策略，LGB采用<code>leaf-wise</code>的分裂策略。XGB对每一层所有节点做无差别分裂，但是可能有些节点增益非常小，对结果影响不大，带来不必要的开销。Leaf-wise是在所有叶子节点中选取分裂收益最大的节点进行的，但是很容易出现过拟合问题，所以需要对最大深度做限制 。</p>
 <p>（2）分割点查找算法：XGB使用特征预排序算法，LGB使用基于直方图的切分点算法，其优势如下：</p>
 <ul>
@@ -1097,7 +1088,25 @@
 <p>【20】《百面机器学习》诸葛越主编、葫芦娃著，P295-P297。</p>
 <p>【21】<a href="https://zhuanlan.zhihu.com/p/86816771" target="_blank" rel="noopener">灵魂拷问，你看过Xgboost原文吗？ - 小雨姑娘的文章 - 知乎</a></p>
 <p>【22】<a href="https://www.zhihu.com/question/277638585/answer/522272201" target="_blank" rel="noopener">为什么xgboost泰勒二阶展开后效果就比较好了呢？ - Zsank的回答 - 知乎</a> </p>
-
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
             </div>
             <hr/>
 
@@ -1313,6 +1322,32 @@
     </div>
 
     
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '3fa0e3a4d72d5144a445',
+        clientSecret: '72054d513dd9fdc6b2c749216bb2c498048592aa',
+        repo: '',
+        owner: 'dataquaner',
+        admin: null,
+        id: '2019-12-25T00-00-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
 
     
 
@@ -1384,22 +1419,19 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/12/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8809%EF%BC%89%EF%BC%9AID3%E3%80%81C4.5%E3%80%81CART%E3%80%81%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E3%80%81bagging%E3%80%81boosting%E3%80%81Adaboost%E3%80%81GBDT%E3%80%81xgboost%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/">
+                <a href="/2019/12/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8805%EF%BC%89%EF%BC%9A%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91%E7%AE%97%E6%B3%95GBDT/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="机器学习系列之决策树算法（09）：ID3、C4.5、CART、随机森林、bagging、boosting、Adaboost、GBDT、xgboost算法总结">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="机器学习系列之决策树算法（05）：梯度提升树算法GBDT">
                         
-                        <span class="card-title">机器学习系列之决策树算法（09）：ID3、C4.5、CART、随机森林、bagging、boosting、Adaboost、GBDT、xgboost算法总结</span>
+                        <span class="card-title">机器学习系列之决策树算法（05）：梯度提升树算法GBDT</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            最近心血来潮，整理了一下和树有关的方法和模型，请多担待！
-决策树首先，决策树是一个有监督的分类模型，其本质是选择一个能带来最大信息增益的特征值进行树的分割，直到到达结束条件或者叶子结点纯度到达一定阈值。下图是决策树的一个简单例子
-
-按照分割
+                            1 前言前面讲述了《决策树的特征选择》、《决策树的生成》、《决策树的剪枝》，熟悉了单棵决策树的的实现细节，在实际应用时，往往采用多棵决策树组合的形式完成目标任务。那么如何组合单棵决策树可以使得模型效果更优呢？目前主要有两种思想：baggin
                         
                     </div>
                     <div class="publish-info">
@@ -1414,8 +1446,8 @@
                                     Machine Learning
                                 </a>
                             
-                            <a href="/categories/Machine-Learning/XGBoost/" class="post-category">
-                                    XGBoost
+                            <a href="/categories/Machine-Learning/GBDT/" class="post-category">
+                                    GBDT
                                 </a>
                             
                             
@@ -1425,8 +1457,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/XGBoost/">
-                        <span class="chip bg-color">XGBoost</span>
+                    <a href="/tags/GBDT/">
+                        <span class="chip bg-color">GBDT</span>
                     </a>
                     
                 </div>
@@ -1566,7 +1598,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 
     <footer class="page-footer bg-color">
-    <div class="container row center-align" style="margin-bottom: 0px !important;">
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">2019</span>
@@ -1574,6 +1606,9 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">56.4k</span>&nbsp;字
             
             
             
@@ -1593,17 +1628,61 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             
             <br>
             
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "6";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
             <br>
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+    <a href="https://github.com/dataquaner" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
         <i class="fab fa-github"></i>
     </a>
 
 
 
-    <a href="mailto:1181062873@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+    <a href="mailto:dataquanerleo@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
         <i class="fas fa-envelope-open"></i>
     </a>
 
@@ -1613,7 +1692,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 
 
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1181062873" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1181062873" data-position="top" data-delay="50">
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2077689752" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 2077689752" data-position="top" data-delay="50">
         <i class="fab fa-qq"></i>
     </a>
 

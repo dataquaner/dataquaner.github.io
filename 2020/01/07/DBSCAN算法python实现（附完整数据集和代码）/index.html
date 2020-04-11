@@ -28,7 +28,8 @@
     <script src="/libs/jquery/jquery.min.js"></script>
     
 <link rel="alternate" href="/atom.xml" title="DataQuaner" type="application/atom+xml">
-</head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 
 <body>
@@ -122,58 +123,6 @@
       
       <span>友情链接</span>
     </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="" class="waves-effect waves-light">
-
-      
-      <i class="fas fa-list" style="zoom: 0.6;"></i>
-      
-      <span>Medias</span>
-      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
-    </a>
-    <ul class="sub-nav menus_item_child ">
-      
-      <li>
-        <a href="/musics">
-          
-          <i class="fas fa-music" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Musics</span>
-        </a>
-      </li>
-      
-      <li>
-        <a href="/movies">
-          
-          <i class="fas fa-film" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Movies</span>
-        </a>
-      </li>
-      
-      <li>
-        <a href="/books">
-          
-          <i class="fas fa-book" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Books</span>
-        </a>
-      </li>
-      
-      <li>
-        <a href="/galleries">
-          
-          <i class="fas fa-image" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Galleries</span>
-        </a>
-      </li>
-      
-    </ul>
     
   </li>
   
@@ -276,61 +225,6 @@
 			
 			友情链接
 		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="javascript:;" target="_blank" rel="noopener">
-			
-				<i class="fa-fw fas fa-list"></i>
-			
-			Medias
-			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
-		</a>
-            <ul  style="background:  ;" >
-              
-                <li>   
-				
-                  <a href="/musics " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-music" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Musics</span>
-                  </a>
-                </li>
-              
-                <li>   
-				
-                  <a href="/movies " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-film" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Movies</span>
-                  </a>
-                </li>
-              
-                <li>   
-				
-                  <a href="/books " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-book" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Books</span>
-                  </a>
-                </li>
-              
-                <li>   
-				
-                  <a href="/galleries " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-image" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Galleries</span>
-                  </a>
-                </li>
-               
-            </ul>
           
         </li>
         
@@ -568,12 +462,32 @@
                 
 
                 
-
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2020-01-07
+                </div>
                 
 
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    1.7k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    7 分
+                </div>
                 
 				
                 
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
             </div>
             
         </div>
@@ -584,14 +498,73 @@
 <h1 id="1-算法思路"><a href="#1-算法思路" class="headerlink" title="1. 算法思路"></a>1. 算法思路</h1><p>DBSCAN算法的核心是“延伸”。先找到一个未访问的点p，若该点是核心点，则创建一个新的簇C，将其邻域中的点放入该簇，并遍历其邻域中的点，若其邻域中有点q为核心点，则将q的邻域内的点也划入簇C，直到C不再扩展。直到最后所有的点都标记为已访问。</p>
 <p>点p通过密度可达来扩大自己的“地盘”，实际上就是簇在“延伸”。 </p>
 <p>图示网站：<a href="https://www.naftaliharris.com/blog/visualizing-dbscan-clustering/" target="_blank" rel="noopener">https://www.naftaliharris.com/blog/visualizing-dbscan-clustering/</a> 可以看一下簇是如何延伸的。</p>
-<h1 id="2-算法实现"><a href="#2-算法实现" class="headerlink" title="2. 算法实现"></a>2. 算法实现</h1><h2 id="2-1-计算两点之间的距离"><a href="#2-1-计算两点之间的距离" class="headerlink" title="2.1 计算两点之间的距离"></a>2.1 计算两点之间的距离</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 计算两个点之间的欧式距离，参数为两个元组</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dist</span><span class="params">(t1, t2)</span>:</span></span><br><span class="line">    dis = math.sqrt((np.power((t1[<span class="number">0</span>]-t2[<span class="number">0</span>]),<span class="number">2</span>) + np.power((t1[<span class="number">1</span>]-t2[<span class="number">1</span>]),<span class="number">2</span>)))</span><br><span class="line">    <span class="comment"># print("两点之间的距离为："+str(dis))</span></span><br><span class="line">    <span class="keyword">return</span> dis</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-2-读取文件，加载数据集"><a href="#2-2-读取文件，加载数据集" class="headerlink" title="2.2 读取文件，加载数据集"></a><strong>2.2 读取文件，加载数据集</strong></h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">loadDataSet</span><span class="params">(fileName, splitChar=<span class="string">'\t'</span>)</span>:</span></span><br><span class="line">    dataSet = []</span><br><span class="line">    <span class="keyword">with</span> open(fileName) <span class="keyword">as</span> fr:</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> fr.readlines():</span><br><span class="line">            curline = line.strip().split(splitChar)</span><br><span class="line">            fltline = list(map(float, curline))</span><br><span class="line">            dataSet.append(fltline)</span><br><span class="line">    <span class="keyword">return</span> dataSet</span><br></pre></td></tr></table></figure>
-
+<h1 id="2-算法实现"><a href="#2-算法实现" class="headerlink" title="2. 算法实现"></a>2. 算法实现</h1><h2 id="2-1-计算两点之间的距离"><a href="#2-1-计算两点之间的距离" class="headerlink" title="2.1 计算两点之间的距离"></a>2.1 计算两点之间的距离</h2><pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 计算两个点之间的欧式距离，参数为两个元组</span>
+<span class="token keyword">def</span> <span class="token function">dist</span><span class="token punctuation">(</span>t1<span class="token punctuation">,</span> t2<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    dis <span class="token operator">=</span> math<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>power<span class="token punctuation">(</span><span class="token punctuation">(</span>t1<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">-</span>t2<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">+</span> np<span class="token punctuation">.</span>power<span class="token punctuation">(</span><span class="token punctuation">(</span>t1<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token operator">-</span>t2<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true"># print("两点之间的距离为："+str(dis))</span>
+    <span class="token keyword">return</span> dis<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="2-2-读取文件，加载数据集"><a href="#2-2-读取文件，加载数据集" class="headerlink" title="2.2 读取文件，加载数据集"></a><strong>2.2 读取文件，加载数据集</strong></h2><pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">loadDataSet</span><span class="token punctuation">(</span>fileName<span class="token punctuation">,</span> splitChar<span class="token operator">=</span><span class="token string">'\t'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    dataSet <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">with</span> open<span class="token punctuation">(</span>fileName<span class="token punctuation">)</span> <span class="token keyword">as</span> fr<span class="token punctuation">:</span>
+        <span class="token keyword">for</span> line <span class="token keyword">in</span> fr<span class="token punctuation">.</span>readlines<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            curline <span class="token operator">=</span> line<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span>splitChar<span class="token punctuation">)</span>
+            fltline <span class="token operator">=</span> list<span class="token punctuation">(</span>map<span class="token punctuation">(</span>float<span class="token punctuation">,</span> curline<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            dataSet<span class="token punctuation">.</span>append<span class="token punctuation">(</span>fltline<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> dataSet
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="2-3-DBSCAN算法实现"><a href="#2-3-DBSCAN算法实现" class="headerlink" title="2.3 DBSCAN算法实现"></a>2.3 DBSCAN算法实现</h2><p>1、标记点是否被访问：我设置了两个列表，一个存放未访问的点unvisited，一个存放已访问的点visited。每次访问一个点，unvisited列表remove该点，visited列表append该点，以此来实现点的标记改变。</p>
 <p>2、C作为输出结果，初始时是一个长度为所有点的个数的值全为-1的列表。之后修改点对应的索引的值来设置点属于哪个簇</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># DBSCAN算法，参数为数据集，Eps为指定半径参数，MinPts为制定邻域密度阈值</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dbscan</span><span class="params">(Data, Eps, MinPts)</span>:</span></span><br><span class="line">    num = len(Data)  <span class="comment"># 点的个数</span></span><br><span class="line">    <span class="comment"># print("点的个数："+str(num))</span></span><br><span class="line">    unvisited = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(num)]  <span class="comment"># 没有访问到的点的列表</span></span><br><span class="line">    <span class="comment"># print(unvisited)</span></span><br><span class="line">    visited = []  <span class="comment"># 已经访问的点的列表</span></span><br><span class="line">    C = [<span class="number">-1</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(num)]</span><br><span class="line">    <span class="comment"># C为输出结果，默认是一个长度为num的值全为-1的列表</span></span><br><span class="line">    <span class="comment"># 用k来标记不同的簇，k = -1表示噪声点</span></span><br><span class="line">    k = <span class="number">-1</span></span><br><span class="line">    <span class="comment"># 如果还有没访问的点</span></span><br><span class="line">    <span class="keyword">while</span> len(unvisited) &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="comment"># 随机选择一个unvisited对象</span></span><br><span class="line">        p = random.choice(unvisited)</span><br><span class="line">        unvisited.remove(p)</span><br><span class="line">        visited.append(p)</span><br><span class="line">        <span class="comment"># N为p的epsilon邻域中的对象的集合</span></span><br><span class="line">        N = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(num):</span><br><span class="line">            <span class="keyword">if</span> (dist(Data[i], Data[p]) &lt;= Eps):<span class="comment"># and (i!=p):</span></span><br><span class="line">                N.append(i)</span><br><span class="line">        <span class="comment"># 如果p的epsilon邻域中的对象数大于指定阈值，说明p是一个核心对象</span></span><br><span class="line">        <span class="keyword">if</span> len(N) &gt;= MinPts:</span><br><span class="line">            k = k+<span class="number">1</span></span><br><span class="line">            <span class="comment"># print(k)</span></span><br><span class="line">            C[p] = k</span><br><span class="line">            <span class="comment"># 对于p的epsilon邻域中的每个对象pi</span></span><br><span class="line">            <span class="keyword">for</span> pi <span class="keyword">in</span> N:</span><br><span class="line">                <span class="keyword">if</span> pi <span class="keyword">in</span> unvisited:</span><br><span class="line">                    unvisited.remove(pi)</span><br><span class="line">                    visited.append(pi)</span><br><span class="line">                    <span class="comment"># 找到pi的邻域中的核心对象，将这些对象放入N中</span></span><br><span class="line">                    <span class="comment"># M是位于pi的邻域中的点的列表</span></span><br><span class="line">                    M = []</span><br><span class="line">                    <span class="keyword">for</span> j <span class="keyword">in</span> range(num):</span><br><span class="line">                        <span class="keyword">if</span> (dist(Data[j], Data[pi])&lt;=Eps): <span class="comment">#and (j!=pi):</span></span><br><span class="line">                            M.append(j)</span><br><span class="line">                    <span class="keyword">if</span> len(M)&gt;=MinPts:</span><br><span class="line">                        <span class="keyword">for</span> t <span class="keyword">in</span> M:</span><br><span class="line">                            <span class="keyword">if</span> t <span class="keyword">not</span> <span class="keyword">in</span> N:</span><br><span class="line">                                N.append(t)</span><br><span class="line">                <span class="comment"># 若pi不属于任何簇，C[pi] == -1说明C中第pi个值没有改动</span></span><br><span class="line">                <span class="keyword">if</span> C[pi] == <span class="number">-1</span>:</span><br><span class="line">                    C[pi] = k</span><br><span class="line">        <span class="comment"># 如果p的epsilon邻域中的对象数小于指定阈值，说明p是一个噪声点</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            C[p] = <span class="number">-1</span></span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> C</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># DBSCAN算法，参数为数据集，Eps为指定半径参数，MinPts为制定邻域密度阈值</span>
+<span class="token keyword">def</span> <span class="token function">dbscan</span><span class="token punctuation">(</span>Data<span class="token punctuation">,</span> Eps<span class="token punctuation">,</span> MinPts<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    num <span class="token operator">=</span> len<span class="token punctuation">(</span>Data<span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 点的个数</span>
+    <span class="token comment" spellcheck="true"># print("点的个数："+str(num))</span>
+    unvisited <span class="token operator">=</span> <span class="token punctuation">[</span>i <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># 没有访问到的点的列表</span>
+    <span class="token comment" spellcheck="true"># print(unvisited)</span>
+    visited <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># 已经访问的点的列表</span>
+    C <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token comment" spellcheck="true"># C为输出结果，默认是一个长度为num的值全为-1的列表</span>
+    <span class="token comment" spellcheck="true"># 用k来标记不同的簇，k = -1表示噪声点</span>
+    k <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span>
+    <span class="token comment" spellcheck="true"># 如果还有没访问的点</span>
+    <span class="token keyword">while</span> len<span class="token punctuation">(</span>unvisited<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">:</span>
+        <span class="token comment" spellcheck="true"># 随机选择一个unvisited对象</span>
+        p <span class="token operator">=</span> random<span class="token punctuation">.</span>choice<span class="token punctuation">(</span>unvisited<span class="token punctuation">)</span>
+        unvisited<span class="token punctuation">.</span>remove<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+        visited<span class="token punctuation">.</span>append<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+        <span class="token comment" spellcheck="true"># N为p的epsilon邻域中的对象的集合</span>
+        N <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>dist<span class="token punctuation">(</span>Data<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> Data<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">&lt;=</span> Eps<span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token comment" spellcheck="true"># and (i!=p):</span>
+                N<span class="token punctuation">.</span>append<span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+        <span class="token comment" spellcheck="true"># 如果p的epsilon邻域中的对象数大于指定阈值，说明p是一个核心对象</span>
+        <span class="token keyword">if</span> len<span class="token punctuation">(</span>N<span class="token punctuation">)</span> <span class="token operator">>=</span> MinPts<span class="token punctuation">:</span>
+            k <span class="token operator">=</span> k<span class="token operator">+</span><span class="token number">1</span>
+            <span class="token comment" spellcheck="true"># print(k)</span>
+            C<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">=</span> k
+            <span class="token comment" spellcheck="true"># 对于p的epsilon邻域中的每个对象pi</span>
+            <span class="token keyword">for</span> pi <span class="token keyword">in</span> N<span class="token punctuation">:</span>
+                <span class="token keyword">if</span> pi <span class="token keyword">in</span> unvisited<span class="token punctuation">:</span>
+                    unvisited<span class="token punctuation">.</span>remove<span class="token punctuation">(</span>pi<span class="token punctuation">)</span>
+                    visited<span class="token punctuation">.</span>append<span class="token punctuation">(</span>pi<span class="token punctuation">)</span>
+                    <span class="token comment" spellcheck="true"># 找到pi的邻域中的核心对象，将这些对象放入N中</span>
+                    <span class="token comment" spellcheck="true"># M是位于pi的邻域中的点的列表</span>
+                    M <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+                    <span class="token keyword">for</span> j <span class="token keyword">in</span> range<span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                        <span class="token keyword">if</span> <span class="token punctuation">(</span>dist<span class="token punctuation">(</span>Data<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">,</span> Data<span class="token punctuation">[</span>pi<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token operator">&lt;=</span>Eps<span class="token punctuation">)</span><span class="token punctuation">:</span> <span class="token comment" spellcheck="true">#and (j!=pi):</span>
+                            M<span class="token punctuation">.</span>append<span class="token punctuation">(</span>j<span class="token punctuation">)</span>
+                    <span class="token keyword">if</span> len<span class="token punctuation">(</span>M<span class="token punctuation">)</span><span class="token operator">>=</span>MinPts<span class="token punctuation">:</span>
+                        <span class="token keyword">for</span> t <span class="token keyword">in</span> M<span class="token punctuation">:</span>
+                            <span class="token keyword">if</span> t <span class="token operator">not</span> <span class="token keyword">in</span> N<span class="token punctuation">:</span>
+                                N<span class="token punctuation">.</span>append<span class="token punctuation">(</span>t<span class="token punctuation">)</span>
+                <span class="token comment" spellcheck="true"># 若pi不属于任何簇，C[pi] == -1说明C中第pi个值没有改动</span>
+                <span class="token keyword">if</span> C<span class="token punctuation">[</span>pi<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">:</span>
+                    C<span class="token punctuation">[</span>pi<span class="token punctuation">]</span> <span class="token operator">=</span> k
+        <span class="token comment" spellcheck="true"># 如果p的epsilon邻域中的对象数小于指定阈值，说明p是一个噪声点</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            C<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span>
 
+    <span class="token keyword">return</span> C
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h1 id="3-问题记录"><a href="#3-问题记录" class="headerlink" title="3. 问题记录"></a>3. 问题记录</h1><p>代码思路非常简单，让我以为实现起来也很简单。结果拖拖拉拉半个多月才终于将算法改好。</p>
 <p>算法实现过程中遇到的问题其实是小问题，但是导致的结果非常严重。因为不起眼所以才难以察觉。</p>
 <p>这是刚开始我运行算法得到的结果（Eps为10，MinPts为10）：</p>
@@ -606,9 +579,136 @@
 <h1 id="4-运行结果"><a href="#4-运行结果" class="headerlink" title="4. 运行结果"></a>4. 运行结果</h1><p><img src="https://img-blog.csdnimg.cn/20190614104713963.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0pveWNlX0Zm,size_16,color_FFFFFF,t_70" alt="img"></p>
 <h1 id="5-完整代码"><a href="#5-完整代码" class="headerlink" title="5. 完整代码"></a>5. 完整代码</h1><h2 id="5-1-源数据"><a href="#5-1-源数据" class="headerlink" title="5.1 源数据"></a>5.1 源数据</h2><p>附数据集</p>
 <p>链接：<a href="https://pan.baidu.com/s/1dI1Eu7etWvx8IZX-ikqBig" target="_blank" rel="noopener">数据集788个点</a><br>        提取码：rv06</p>
-<h2 id="5-2-源代码"><a href="#5-2-源代码" class="headerlink" title="5.2 源代码"></a>5.2 源代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># encoding:utf-8</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"> </span><br><span class="line">list_1 = []</span><br><span class="line">list_2 = []</span><br><span class="line"><span class="comment"># 数据集一：随机生成散点图,参数为点的个数</span></span><br><span class="line"><span class="comment"># def scatter(num):</span></span><br><span class="line"><span class="comment">#     for i in range(num):</span></span><br><span class="line"><span class="comment">#         x = random.randint(0, 100)</span></span><br><span class="line"><span class="comment">#         list_1.append(x)</span></span><br><span class="line"><span class="comment">#         y = random.randint(0, 100)</span></span><br><span class="line"><span class="comment">#         list_2.append(y)</span></span><br><span class="line"><span class="comment">#     print(list_1)</span></span><br><span class="line"><span class="comment">#     print(list_2)</span></span><br><span class="line"><span class="comment">#     data = list(zip(list_1, list_2))</span></span><br><span class="line"><span class="comment">#     print(data)</span></span><br><span class="line"><span class="comment">#     #plt.scatter(list_1, list_2)</span></span><br><span class="line"><span class="comment">#     #plt.show()</span></span><br><span class="line"><span class="comment">#     return data</span></span><br><span class="line"><span class="comment">#scatter(50)</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">loadDataSet</span><span class="params">(fileName, splitChar=<span class="string">'\t'</span>)</span>:</span></span><br><span class="line">    dataSet = []</span><br><span class="line">    <span class="keyword">with</span> open(fileName) <span class="keyword">as</span> fr:</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> fr.readlines():</span><br><span class="line">            curline = line.strip().split(splitChar)</span><br><span class="line">            fltline = list(map(float, curline))</span><br><span class="line">            dataSet.append(fltline)</span><br><span class="line">    <span class="keyword">return</span> dataSet</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 计算两个点之间的欧式距离，参数为两个元组</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dist</span><span class="params">(t1, t2)</span>:</span></span><br><span class="line">    dis = math.sqrt((np.power((t1[<span class="number">0</span>]-t2[<span class="number">0</span>]),<span class="number">2</span>) + np.power((t1[<span class="number">1</span>]-t2[<span class="number">1</span>]),<span class="number">2</span>)))</span><br><span class="line">    <span class="comment"># print("两点之间的距离为："+str(dis))</span></span><br><span class="line">    <span class="keyword">return</span> dis</span><br><span class="line"> </span><br><span class="line"><span class="comment"># dis = dist((1,1),(3,4))</span></span><br><span class="line"><span class="comment"># print(dis)</span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="comment"># DBSCAN算法，参数为数据集，Eps为指定半径参数，MinPts为制定邻域密度阈值</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dbscan</span><span class="params">(Data, Eps, MinPts)</span>:</span></span><br><span class="line">    num = len(Data)  <span class="comment"># 点的个数</span></span><br><span class="line">    <span class="comment"># print("点的个数："+str(num))</span></span><br><span class="line">    unvisited = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(num)]  <span class="comment"># 没有访问到的点的列表</span></span><br><span class="line">    <span class="comment"># print(unvisited)</span></span><br><span class="line">    visited = []  <span class="comment"># 已经访问的点的列表</span></span><br><span class="line">    C = [<span class="number">-1</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(num)]</span><br><span class="line">    <span class="comment"># C为输出结果，默认是一个长度为num的值全为-1的列表</span></span><br><span class="line">    <span class="comment"># 用k来标记不同的簇，k = -1表示噪声点</span></span><br><span class="line">    k = <span class="number">-1</span></span><br><span class="line">    <span class="comment"># 如果还有没访问的点</span></span><br><span class="line">    <span class="keyword">while</span> len(unvisited) &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="comment"># 随机选择一个unvisited对象</span></span><br><span class="line">        p = random.choice(unvisited)</span><br><span class="line">        unvisited.remove(p)</span><br><span class="line">        visited.append(p)</span><br><span class="line">        <span class="comment"># N为p的epsilon邻域中的对象的集合</span></span><br><span class="line">        N = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(num):</span><br><span class="line">            <span class="keyword">if</span> (dist(Data[i], Data[p]) &lt;= Eps):<span class="comment"># and (i!=p):</span></span><br><span class="line">                N.append(i)</span><br><span class="line">        <span class="comment"># 如果p的epsilon邻域中的对象数大于指定阈值，说明p是一个核心对象</span></span><br><span class="line">        <span class="keyword">if</span> len(N) &gt;= MinPts:</span><br><span class="line">            k = k+<span class="number">1</span></span><br><span class="line">            <span class="comment"># print(k)</span></span><br><span class="line">            C[p] = k</span><br><span class="line">            <span class="comment"># 对于p的epsilon邻域中的每个对象pi</span></span><br><span class="line">            <span class="keyword">for</span> pi <span class="keyword">in</span> N:</span><br><span class="line">                <span class="keyword">if</span> pi <span class="keyword">in</span> unvisited:</span><br><span class="line">                    unvisited.remove(pi)</span><br><span class="line">                    visited.append(pi)</span><br><span class="line">                    <span class="comment"># 找到pi的邻域中的核心对象，将这些对象放入N中</span></span><br><span class="line">                    <span class="comment"># M是位于pi的邻域中的点的列表</span></span><br><span class="line">                    M = []</span><br><span class="line">                    <span class="keyword">for</span> j <span class="keyword">in</span> range(num):</span><br><span class="line">                        <span class="keyword">if</span> (dist(Data[j], Data[pi])&lt;=Eps): <span class="comment">#and (j!=pi):</span></span><br><span class="line">                            M.append(j)</span><br><span class="line">                    <span class="keyword">if</span> len(M)&gt;=MinPts:</span><br><span class="line">                        <span class="keyword">for</span> t <span class="keyword">in</span> M:</span><br><span class="line">                            <span class="keyword">if</span> t <span class="keyword">not</span> <span class="keyword">in</span> N:</span><br><span class="line">                                N.append(t)</span><br><span class="line">                <span class="comment"># 若pi不属于任何簇，C[pi] == -1说明C中第pi个值没有改动</span></span><br><span class="line">                <span class="keyword">if</span> C[pi] == <span class="number">-1</span>:</span><br><span class="line">                    C[pi] = k</span><br><span class="line">        <span class="comment"># 如果p的epsilon邻域中的对象数小于指定阈值，说明p是一个噪声点</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            C[p] = <span class="number">-1</span></span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> C</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="comment"># 数据集二：788个点</span></span><br><span class="line">dataSet = loadDataSet(<span class="string">'788points.txt'</span>, splitChar=<span class="string">','</span>)</span><br><span class="line">C = dbscan(dataSet, <span class="number">2</span>, <span class="number">14</span>)</span><br><span class="line">print(C)</span><br><span class="line">x = []</span><br><span class="line">y = []</span><br><span class="line"><span class="keyword">for</span> data <span class="keyword">in</span> dataSet:</span><br><span class="line">    x.append(data[<span class="number">0</span>])</span><br><span class="line">    y.append(data[<span class="number">1</span>])</span><br><span class="line">plt.figure(figsize=(<span class="number">8</span>, <span class="number">6</span>), dpi=<span class="number">80</span>)</span><br><span class="line">plt.scatter(x,y, c=C, marker=<span class="string">'o'</span>)</span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment"># print(x)</span></span><br><span class="line"><span class="comment"># print(y)</span></span><br></pre></td></tr></table></figure>
+<h2 id="5-2-源代码"><a href="#5-2-源代码" class="headerlink" title="5.2 源代码"></a>5.2 源代码</h2><pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># encoding:utf-8</span>
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+<span class="token keyword">import</span> random
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">import</span> math
+<span class="token keyword">from</span> sklearn <span class="token keyword">import</span> datasets
+
+list_1 <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+list_2 <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token comment" spellcheck="true"># 数据集一：随机生成散点图,参数为点的个数</span>
+<span class="token comment" spellcheck="true"># def scatter(num):</span>
+<span class="token comment" spellcheck="true">#     for i in range(num):</span>
+<span class="token comment" spellcheck="true">#         x = random.randint(0, 100)</span>
+<span class="token comment" spellcheck="true">#         list_1.append(x)</span>
+<span class="token comment" spellcheck="true">#         y = random.randint(0, 100)</span>
+<span class="token comment" spellcheck="true">#         list_2.append(y)</span>
+<span class="token comment" spellcheck="true">#     print(list_1)</span>
+<span class="token comment" spellcheck="true">#     print(list_2)</span>
+<span class="token comment" spellcheck="true">#     data = list(zip(list_1, list_2))</span>
+<span class="token comment" spellcheck="true">#     print(data)</span>
+<span class="token comment" spellcheck="true">#     #plt.scatter(list_1, list_2)</span>
+<span class="token comment" spellcheck="true">#     #plt.show()</span>
+<span class="token comment" spellcheck="true">#     return data</span>
+<span class="token comment" spellcheck="true">#scatter(50)</span>
+
+<span class="token keyword">def</span> <span class="token function">loadDataSet</span><span class="token punctuation">(</span>fileName<span class="token punctuation">,</span> splitChar<span class="token operator">=</span><span class="token string">'\t'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    dataSet <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">with</span> open<span class="token punctuation">(</span>fileName<span class="token punctuation">)</span> <span class="token keyword">as</span> fr<span class="token punctuation">:</span>
+        <span class="token keyword">for</span> line <span class="token keyword">in</span> fr<span class="token punctuation">.</span>readlines<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            curline <span class="token operator">=</span> line<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span>splitChar<span class="token punctuation">)</span>
+            fltline <span class="token operator">=</span> list<span class="token punctuation">(</span>map<span class="token punctuation">(</span>float<span class="token punctuation">,</span> curline<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            dataSet<span class="token punctuation">.</span>append<span class="token punctuation">(</span>fltline<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> dataSet
+
+<span class="token comment" spellcheck="true"># 计算两个点之间的欧式距离，参数为两个元组</span>
+<span class="token keyword">def</span> <span class="token function">dist</span><span class="token punctuation">(</span>t1<span class="token punctuation">,</span> t2<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    dis <span class="token operator">=</span> math<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>power<span class="token punctuation">(</span><span class="token punctuation">(</span>t1<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">-</span>t2<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">+</span> np<span class="token punctuation">.</span>power<span class="token punctuation">(</span><span class="token punctuation">(</span>t1<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token operator">-</span>t2<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true"># print("两点之间的距离为："+str(dis))</span>
+    <span class="token keyword">return</span> dis
+
+<span class="token comment" spellcheck="true"># dis = dist((1,1),(3,4))</span>
+<span class="token comment" spellcheck="true"># print(dis)</span>
 
 
+<span class="token comment" spellcheck="true"># DBSCAN算法，参数为数据集，Eps为指定半径参数，MinPts为制定邻域密度阈值</span>
+<span class="token keyword">def</span> <span class="token function">dbscan</span><span class="token punctuation">(</span>Data<span class="token punctuation">,</span> Eps<span class="token punctuation">,</span> MinPts<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    num <span class="token operator">=</span> len<span class="token punctuation">(</span>Data<span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 点的个数</span>
+    <span class="token comment" spellcheck="true"># print("点的个数："+str(num))</span>
+    unvisited <span class="token operator">=</span> <span class="token punctuation">[</span>i <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># 没有访问到的点的列表</span>
+    <span class="token comment" spellcheck="true"># print(unvisited)</span>
+    visited <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># 已经访问的点的列表</span>
+    C <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token comment" spellcheck="true"># C为输出结果，默认是一个长度为num的值全为-1的列表</span>
+    <span class="token comment" spellcheck="true"># 用k来标记不同的簇，k = -1表示噪声点</span>
+    k <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span>
+    <span class="token comment" spellcheck="true"># 如果还有没访问的点</span>
+    <span class="token keyword">while</span> len<span class="token punctuation">(</span>unvisited<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">:</span>
+        <span class="token comment" spellcheck="true"># 随机选择一个unvisited对象</span>
+        p <span class="token operator">=</span> random<span class="token punctuation">.</span>choice<span class="token punctuation">(</span>unvisited<span class="token punctuation">)</span>
+        unvisited<span class="token punctuation">.</span>remove<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+        visited<span class="token punctuation">.</span>append<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+        <span class="token comment" spellcheck="true"># N为p的epsilon邻域中的对象的集合</span>
+        N <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>dist<span class="token punctuation">(</span>Data<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> Data<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">&lt;=</span> Eps<span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token comment" spellcheck="true"># and (i!=p):</span>
+                N<span class="token punctuation">.</span>append<span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+        <span class="token comment" spellcheck="true"># 如果p的epsilon邻域中的对象数大于指定阈值，说明p是一个核心对象</span>
+        <span class="token keyword">if</span> len<span class="token punctuation">(</span>N<span class="token punctuation">)</span> <span class="token operator">>=</span> MinPts<span class="token punctuation">:</span>
+            k <span class="token operator">=</span> k<span class="token operator">+</span><span class="token number">1</span>
+            <span class="token comment" spellcheck="true"># print(k)</span>
+            C<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">=</span> k
+            <span class="token comment" spellcheck="true"># 对于p的epsilon邻域中的每个对象pi</span>
+            <span class="token keyword">for</span> pi <span class="token keyword">in</span> N<span class="token punctuation">:</span>
+                <span class="token keyword">if</span> pi <span class="token keyword">in</span> unvisited<span class="token punctuation">:</span>
+                    unvisited<span class="token punctuation">.</span>remove<span class="token punctuation">(</span>pi<span class="token punctuation">)</span>
+                    visited<span class="token punctuation">.</span>append<span class="token punctuation">(</span>pi<span class="token punctuation">)</span>
+                    <span class="token comment" spellcheck="true"># 找到pi的邻域中的核心对象，将这些对象放入N中</span>
+                    <span class="token comment" spellcheck="true"># M是位于pi的邻域中的点的列表</span>
+                    M <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+                    <span class="token keyword">for</span> j <span class="token keyword">in</span> range<span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                        <span class="token keyword">if</span> <span class="token punctuation">(</span>dist<span class="token punctuation">(</span>Data<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">,</span> Data<span class="token punctuation">[</span>pi<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token operator">&lt;=</span>Eps<span class="token punctuation">)</span><span class="token punctuation">:</span> <span class="token comment" spellcheck="true">#and (j!=pi):</span>
+                            M<span class="token punctuation">.</span>append<span class="token punctuation">(</span>j<span class="token punctuation">)</span>
+                    <span class="token keyword">if</span> len<span class="token punctuation">(</span>M<span class="token punctuation">)</span><span class="token operator">>=</span>MinPts<span class="token punctuation">:</span>
+                        <span class="token keyword">for</span> t <span class="token keyword">in</span> M<span class="token punctuation">:</span>
+                            <span class="token keyword">if</span> t <span class="token operator">not</span> <span class="token keyword">in</span> N<span class="token punctuation">:</span>
+                                N<span class="token punctuation">.</span>append<span class="token punctuation">(</span>t<span class="token punctuation">)</span>
+                <span class="token comment" spellcheck="true"># 若pi不属于任何簇，C[pi] == -1说明C中第pi个值没有改动</span>
+                <span class="token keyword">if</span> C<span class="token punctuation">[</span>pi<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">:</span>
+                    C<span class="token punctuation">[</span>pi<span class="token punctuation">]</span> <span class="token operator">=</span> k
+        <span class="token comment" spellcheck="true"># 如果p的epsilon邻域中的对象数小于指定阈值，说明p是一个噪声点</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            C<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span>
+
+    <span class="token keyword">return</span> C
+
+
+<span class="token comment" spellcheck="true"># 数据集二：788个点</span>
+dataSet <span class="token operator">=</span> loadDataSet<span class="token punctuation">(</span><span class="token string">'788points.txt'</span><span class="token punctuation">,</span> splitChar<span class="token operator">=</span><span class="token string">','</span><span class="token punctuation">)</span>
+C <span class="token operator">=</span> dbscan<span class="token punctuation">(</span>dataSet<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">14</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>C<span class="token punctuation">)</span>
+x <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+y <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token keyword">for</span> data <span class="token keyword">in</span> dataSet<span class="token punctuation">:</span>
+    x<span class="token punctuation">.</span>append<span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    y<span class="token punctuation">.</span>append<span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">,</span> dpi<span class="token operator">=</span><span class="token number">80</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>scatter<span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">,</span> c<span class="token operator">=</span>C<span class="token punctuation">,</span> marker<span class="token operator">=</span><span class="token string">'o'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true"># print(x)</span>
+<span class="token comment" spellcheck="true"># print(y)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
             </div>
             <hr/>
 
@@ -824,6 +924,32 @@
     </div>
 
     
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '3fa0e3a4d72d5144a445',
+        clientSecret: '72054d513dd9fdc6b2c749216bb2c498048592aa',
+        repo: '',
+        owner: 'dataquaner',
+        admin: null,
+        id: '2020-01-07T16-05-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
 
     
 
@@ -895,12 +1021,12 @@ graphviz安装包下载地址 https://www.graphviz
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/XGBoost/">
-                        <span class="chip bg-color">XGBoost</span>
-                    </a>
-                    
                     <a href="/tags/LightGBM/">
                         <span class="chip bg-color">LightGBM</span>
+                    </a>
+                    
+                    <a href="/tags/XGBoost/">
+                        <span class="chip bg-color">XGBoost</span>
                     </a>
                     
                     <a href="/tags/GBDT/">
@@ -1105,7 +1231,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 
     <footer class="page-footer bg-color">
-    <div class="container row center-align" style="margin-bottom: 0px !important;">
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">2019</span>
@@ -1113,6 +1239,9 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">56.4k</span>&nbsp;字
             
             
             
@@ -1132,17 +1261,61 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             
             <br>
             
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "6";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
             <br>
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+    <a href="https://github.com/dataquaner" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
         <i class="fab fa-github"></i>
     </a>
 
 
 
-    <a href="mailto:1181062873@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+    <a href="mailto:dataquanerleo@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
         <i class="fas fa-envelope-open"></i>
     </a>
 
@@ -1152,7 +1325,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 
 
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1181062873" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1181062873" data-position="top" data-delay="50">
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2077689752" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 2077689752" data-position="top" data-delay="50">
         <i class="fab fa-qq"></i>
     </a>
 

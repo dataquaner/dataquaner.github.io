@@ -27,7 +27,8 @@
     <script src="/libs/jquery/jquery.min.js"></script>
     
 <link rel="alternate" href="/atom.xml" title="DataQuaner" type="application/atom+xml">
-</head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 
 <body>
@@ -121,58 +122,6 @@
       
       <span>友情链接</span>
     </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="" class="waves-effect waves-light">
-
-      
-      <i class="fas fa-list" style="zoom: 0.6;"></i>
-      
-      <span>Medias</span>
-      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
-    </a>
-    <ul class="sub-nav menus_item_child ">
-      
-      <li>
-        <a href="/musics">
-          
-          <i class="fas fa-music" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Musics</span>
-        </a>
-      </li>
-      
-      <li>
-        <a href="/movies">
-          
-          <i class="fas fa-film" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Movies</span>
-        </a>
-      </li>
-      
-      <li>
-        <a href="/books">
-          
-          <i class="fas fa-book" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Books</span>
-        </a>
-      </li>
-      
-      <li>
-        <a href="/galleries">
-          
-          <i class="fas fa-image" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Galleries</span>
-        </a>
-      </li>
-      
-    </ul>
     
   </li>
   
@@ -275,61 +224,6 @@
 			
 			友情链接
 		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="javascript:;" target="_blank" rel="noopener">
-			
-				<i class="fa-fw fas fa-list"></i>
-			
-			Medias
-			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
-		</a>
-            <ul  style="background:  ;" >
-              
-                <li>   
-				
-                  <a href="/musics " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-music" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Musics</span>
-                  </a>
-                </li>
-              
-                <li>   
-				
-                  <a href="/movies " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-film" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Movies</span>
-                  </a>
-                </li>
-              
-                <li>   
-				
-                  <a href="/books " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-book" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Books</span>
-                  </a>
-                </li>
-              
-                <li>   
-				
-                  <a href="/galleries " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-image" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Galleries</span>
-                  </a>
-                </li>
-               
-            </ul>
           
         </li>
         
@@ -567,12 +461,32 @@
                 
 
                 
-
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2019-12-25
+                </div>
                 
 
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    1.9k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    8 分
+                </div>
                 
 				
                 
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
             </div>
             
         </div>
@@ -581,66 +495,191 @@
             <div id="articleContent">
                 <h2 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1. 问题描述"></a>1. 问题描述</h2><p> 近来, 在python环境下使用xgboost算法作若干的机器学习任务, 在这个过程中也使用了其内置的函数来可视化树的结果, 但对leaf value的值一知半解; 同时, 也遇到过使用xgboost 内置的predict 对测试集进行打分预测, 发现若干样本集的输出分值是一样的. 这个问题该怎么解释呢? 通过翻阅Stack Overflow 上的相关问题, 以及搜索到的github上的issue回答, 应该算初步对这个问题有了一定的理解。</p>
 <h2 id="2-数据集"><a href="#2-数据集" class="headerlink" title="2. 数据集"></a>2. 数据集</h2><p> 在这里, 使用经典的鸢尾花的数据来说明. 使用二分类的问题来说明, 故在这里只取前100行的数据.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"> </span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line">data = iris.data[:<span class="number">100</span>]</span><br><span class="line"><span class="keyword">print</span> data.shape</span><br><span class="line"><span class="comment">#(100L, 4L)</span></span><br><span class="line"><span class="comment">#一共有100个样本数据, 维度为4维</span></span><br><span class="line"> </span><br><span class="line">label = iris.target[:<span class="number">100</span>]</span><br><span class="line"><span class="keyword">print</span> label</span><br><span class="line"><span class="comment">#正好选取label为0和1的数据</span></span><br><span class="line">[<span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span></span><br><span class="line"> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span></span><br><span class="line"> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span> <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">from</span> sklearn <span class="token keyword">import</span> datasets
 
-<h2 id="3-训练集与测试集"><a href="#3-训练集与测试集" class="headerlink" title="3. 训练集与测试集"></a>3. 训练集与测试集</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cross_validation <span class="keyword">import</span> train_test_split</span><br><span class="line"> </span><br><span class="line">train_x, test_x, train_y, test_y = train_test_split(data, label, random_state=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+iris <span class="token operator">=</span> datasets<span class="token punctuation">.</span>load_iris<span class="token punctuation">(</span><span class="token punctuation">)</span>
+data <span class="token operator">=</span> iris<span class="token punctuation">.</span>data<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">100</span><span class="token punctuation">]</span>
+<span class="token keyword">print</span> data<span class="token punctuation">.</span>shape
+<span class="token comment" spellcheck="true">#(100L, 4L)</span>
+<span class="token comment" spellcheck="true">#一共有100个样本数据, 维度为4维</span>
 
-<h2 id="4-Xgboost建模"><a href="#4-Xgboost建模" class="headerlink" title="4. Xgboost建模"></a>4. Xgboost建模</h2><h3 id="4-1-模型初始化设置"><a href="#4-1-模型初始化设置" class="headerlink" title="4.1 模型初始化设置"></a>4.1 模型初始化设置</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> xgboost <span class="keyword">as</span> xgb</span><br><span class="line">dtrain=xgb.DMatrix(train_x,label=train_y)</span><br><span class="line">dtest=xgb.DMatrix(test_x)</span><br><span class="line"> </span><br><span class="line">params=&#123;<span class="string">'booster'</span>:<span class="string">'gbtree'</span>,</span><br><span class="line">    <span class="string">'objective'</span>: <span class="string">'binary:logistic'</span>,</span><br><span class="line">    <span class="string">'eval_metric'</span>: <span class="string">'auc'</span>,</span><br><span class="line">    <span class="string">'max_depth'</span>:<span class="number">4</span>,</span><br><span class="line">    <span class="string">'lambda'</span>:<span class="number">10</span>,</span><br><span class="line">    <span class="string">'subsample'</span>:<span class="number">0.75</span>,</span><br><span class="line">    <span class="string">'colsample_bytree'</span>:<span class="number">0.75</span>,</span><br><span class="line">    <span class="string">'min_child_weight'</span>:<span class="number">2</span>,</span><br><span class="line">    <span class="string">'eta'</span>: <span class="number">0.025</span>,</span><br><span class="line">    <span class="string">'seed'</span>:<span class="number">0</span>,</span><br><span class="line">    <span class="string">'nthread'</span>:<span class="number">8</span>,</span><br><span class="line">     <span class="string">'silent'</span>:<span class="number">1</span>&#125;</span><br><span class="line"> </span><br><span class="line">watchlist = [(dtrain,<span class="string">'train'</span>)]</span><br></pre></td></tr></table></figure>
+label <span class="token operator">=</span> iris<span class="token punctuation">.</span>target<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">100</span><span class="token punctuation">]</span>
+<span class="token keyword">print</span> label
+<span class="token comment" spellcheck="true">#正好选取label为0和1的数据</span>
+<span class="token punctuation">[</span><span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span>
+ <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span>
+ <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span> <span class="token number">1</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="3-训练集与测试集"><a href="#3-训练集与测试集" class="headerlink" title="3. 训练集与测试集"></a>3. 训练集与测试集</h2><pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>cross_validation <span class="token keyword">import</span> train_test_split
 
-<h3 id="4-2-建模与预测"><a href="#4-2-建模与预测" class="headerlink" title="4.2 建模与预测"></a>4.2 建模与预测</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">bst=xgb.train(params,dtrain,num_boost_round=<span class="number">100</span>,evals=watchlist)</span><br><span class="line"> </span><br><span class="line">ypred=bst.predict(dtest)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 设置阈值, 输出一些评价指标</span></span><br><span class="line">y_pred = (ypred &gt;= <span class="number">0.5</span>)*<span class="number">1</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> metrics</span><br><span class="line"><span class="keyword">print</span> <span class="string">'AUC: %.4f'</span> % metrics.roc_auc_score(test_y,ypred)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'ACC: %.4f'</span> % metrics.accuracy_score(test_y,y_pred)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'Recall: %.4f'</span> % metrics.recall_score(test_y,y_pred)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'F1-score: %.4f'</span> %metrics.f1_score(test_y,y_pred)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'Precesion: %.4f'</span> %metrics.precision_score(test_y,y_pred)</span><br><span class="line">metrics.confusion_matrix(test_y,y_pred)</span><br></pre></td></tr></table></figure>
+train_x<span class="token punctuation">,</span> test_x<span class="token punctuation">,</span> train_y<span class="token punctuation">,</span> test_y <span class="token operator">=</span> train_test_split<span class="token punctuation">(</span>data<span class="token punctuation">,</span> label<span class="token punctuation">,</span> random_state<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h2 id="4-Xgboost建模"><a href="#4-Xgboost建模" class="headerlink" title="4. Xgboost建模"></a>4. Xgboost建模</h2><h3 id="4-1-模型初始化设置"><a href="#4-1-模型初始化设置" class="headerlink" title="4.1 模型初始化设置"></a>4.1 模型初始化设置</h3><pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">import</span> xgboost <span class="token keyword">as</span> xgb
+dtrain<span class="token operator">=</span>xgb<span class="token punctuation">.</span>DMatrix<span class="token punctuation">(</span>train_x<span class="token punctuation">,</span>label<span class="token operator">=</span>train_y<span class="token punctuation">)</span>
+dtest<span class="token operator">=</span>xgb<span class="token punctuation">.</span>DMatrix<span class="token punctuation">(</span>test_x<span class="token punctuation">)</span>
 
+params<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">'booster'</span><span class="token punctuation">:</span><span class="token string">'gbtree'</span><span class="token punctuation">,</span>
+    <span class="token string">'objective'</span><span class="token punctuation">:</span> <span class="token string">'binary:logistic'</span><span class="token punctuation">,</span>
+    <span class="token string">'eval_metric'</span><span class="token punctuation">:</span> <span class="token string">'auc'</span><span class="token punctuation">,</span>
+    <span class="token string">'max_depth'</span><span class="token punctuation">:</span><span class="token number">4</span><span class="token punctuation">,</span>
+    <span class="token string">'lambda'</span><span class="token punctuation">:</span><span class="token number">10</span><span class="token punctuation">,</span>
+    <span class="token string">'subsample'</span><span class="token punctuation">:</span><span class="token number">0.75</span><span class="token punctuation">,</span>
+    <span class="token string">'colsample_bytree'</span><span class="token punctuation">:</span><span class="token number">0.75</span><span class="token punctuation">,</span>
+    <span class="token string">'min_child_weight'</span><span class="token punctuation">:</span><span class="token number">2</span><span class="token punctuation">,</span>
+    <span class="token string">'eta'</span><span class="token punctuation">:</span> <span class="token number">0.025</span><span class="token punctuation">,</span>
+    <span class="token string">'seed'</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token string">'nthread'</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">,</span>
+     <span class="token string">'silent'</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">}</span>
+
+watchlist <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">(</span>dtrain<span class="token punctuation">,</span><span class="token string">'train'</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="4-2-建模与预测"><a href="#4-2-建模与预测" class="headerlink" title="4.2 建模与预测"></a>4.2 建模与预测</h3><pre class="line-numbers language-python"><code class="language-python">bst<span class="token operator">=</span>xgb<span class="token punctuation">.</span>train<span class="token punctuation">(</span>params<span class="token punctuation">,</span>dtrain<span class="token punctuation">,</span>num_boost_round<span class="token operator">=</span><span class="token number">100</span><span class="token punctuation">,</span>evals<span class="token operator">=</span>watchlist<span class="token punctuation">)</span>
+
+ypred<span class="token operator">=</span>bst<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>dtest<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 设置阈值, 输出一些评价指标</span>
+y_pred <span class="token operator">=</span> <span class="token punctuation">(</span>ypred <span class="token operator">>=</span> <span class="token number">0.5</span><span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">1</span>
+
+<span class="token keyword">from</span> sklearn <span class="token keyword">import</span> metrics
+<span class="token keyword">print</span> <span class="token string">'AUC: %.4f'</span> <span class="token operator">%</span> metrics<span class="token punctuation">.</span>roc_auc_score<span class="token punctuation">(</span>test_y<span class="token punctuation">,</span>ypred<span class="token punctuation">)</span>
+<span class="token keyword">print</span> <span class="token string">'ACC: %.4f'</span> <span class="token operator">%</span> metrics<span class="token punctuation">.</span>accuracy_score<span class="token punctuation">(</span>test_y<span class="token punctuation">,</span>y_pred<span class="token punctuation">)</span>
+<span class="token keyword">print</span> <span class="token string">'Recall: %.4f'</span> <span class="token operator">%</span> metrics<span class="token punctuation">.</span>recall_score<span class="token punctuation">(</span>test_y<span class="token punctuation">,</span>y_pred<span class="token punctuation">)</span>
+<span class="token keyword">print</span> <span class="token string">'F1-score: %.4f'</span> <span class="token operator">%</span>metrics<span class="token punctuation">.</span>f1_score<span class="token punctuation">(</span>test_y<span class="token punctuation">,</span>y_pred<span class="token punctuation">)</span>
+<span class="token keyword">print</span> <span class="token string">'Precesion: %.4f'</span> <span class="token operator">%</span>metrics<span class="token punctuation">.</span>precision_score<span class="token punctuation">(</span>test_y<span class="token punctuation">,</span>y_pred<span class="token punctuation">)</span>
+metrics<span class="token punctuation">.</span>confusion_matrix<span class="token punctuation">(</span>test_y<span class="token punctuation">,</span>y_pred<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>Out[23]:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">AUC: <span class="number">1.0000</span></span><br><span class="line">ACC: <span class="number">1.0000</span></span><br><span class="line">Recall: <span class="number">1.0000</span></span><br><span class="line">F1-score: <span class="number">1.0000</span></span><br><span class="line">Precesion: <span class="number">1.0000</span></span><br><span class="line">array([[<span class="number">13</span>,  <span class="number">0</span>],</span><br><span class="line">       [ <span class="number">0</span>, <span class="number">12</span>]], dtype=int64)</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python">AUC<span class="token punctuation">:</span> <span class="token number">1.0000</span>
+ACC<span class="token punctuation">:</span> <span class="token number">1.0000</span>
+Recall<span class="token punctuation">:</span> <span class="token number">1.0000</span>
+F1<span class="token operator">-</span>score<span class="token punctuation">:</span> <span class="token number">1.0000</span>
+Precesion<span class="token punctuation">:</span> <span class="token number">1.0000</span>
+array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token number">13</span><span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">,</span> dtype<span class="token operator">=</span>int64<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>Yeah, 完美的模型, 完美的预测!</p>
-<h3 id="4-3-可视化输出"><a href="#4-3-可视化输出" class="headerlink" title="4.3 可视化输出"></a>4.3 可视化输出</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#对于预测的输出有三种方式</span></span><br><span class="line">?bst.predict</span><br><span class="line">Signature: bst.predict(data, output_margin=<span class="literal">False</span>, ntree_limit=<span class="number">0</span>, pred_leaf=<span class="literal">False</span>, pred_contribs=<span class="literal">False</span>, approx_contribs=<span class="literal">False</span>)</span><br><span class="line"> </span><br><span class="line">pred_leaf : bool</span><br><span class="line">    When this option <span class="keyword">is</span> on, the output will be a matrix of (nsample, ntrees)</span><br><span class="line">    <span class="keyword">with</span> each record indicating the predicted leaf index of each sample <span class="keyword">in</span> each tree.</span><br><span class="line">    Note that the leaf index of a tree <span class="keyword">is</span> unique per tree, so you may find leaf <span class="number">1</span></span><br><span class="line">    <span class="keyword">in</span> both tree <span class="number">1</span> <span class="keyword">and</span> tree <span class="number">0.</span></span><br><span class="line"> </span><br><span class="line">pred_contribs : bool</span><br><span class="line">    When this option <span class="keyword">is</span> on, the output will be a matrix of (nsample, nfeats+<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">with</span> each record indicating the feature contributions (SHAP values) <span class="keyword">for</span> that</span><br><span class="line">    prediction. The sum of all feature contributions <span class="keyword">is</span> equal to the prediction.</span><br><span class="line">    Note that the bias <span class="keyword">is</span> added <span class="keyword">as</span> the final column, on top of the regular features.</span><br></pre></td></tr></table></figure>
+<h3 id="4-3-可视化输出"><a href="#4-3-可视化输出" class="headerlink" title="4.3 可视化输出"></a>4.3 可视化输出</h3><pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true">#对于预测的输出有三种方式</span>
+?bst<span class="token punctuation">.</span>predict
+Signature<span class="token punctuation">:</span> bst<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>data<span class="token punctuation">,</span> output_margin<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> ntree_limit<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> pred_leaf<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> pred_contribs<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> approx_contribs<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
 
+pred_leaf <span class="token punctuation">:</span> bool
+    When this option <span class="token keyword">is</span> on<span class="token punctuation">,</span> the output will be a matrix of <span class="token punctuation">(</span>nsample<span class="token punctuation">,</span> ntrees<span class="token punctuation">)</span>
+    <span class="token keyword">with</span> each record indicating the predicted leaf index of each sample <span class="token keyword">in</span> each tree<span class="token punctuation">.</span>
+    Note that the leaf index of a tree <span class="token keyword">is</span> unique per tree<span class="token punctuation">,</span> so you may find leaf <span class="token number">1</span>
+    <span class="token keyword">in</span> both tree <span class="token number">1</span> <span class="token operator">and</span> tree <span class="token number">0</span><span class="token punctuation">.</span>
+
+pred_contribs <span class="token punctuation">:</span> bool
+    When this option <span class="token keyword">is</span> on<span class="token punctuation">,</span> the output will be a matrix of <span class="token punctuation">(</span>nsample<span class="token punctuation">,</span> nfeats<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token keyword">with</span> each record indicating the feature contributions <span class="token punctuation">(</span>SHAP values<span class="token punctuation">)</span> <span class="token keyword">for</span> that
+    prediction<span class="token punctuation">.</span> The sum of all feature contributions <span class="token keyword">is</span> equal to the prediction<span class="token punctuation">.</span>
+    Note that the bias <span class="token keyword">is</span> added <span class="token keyword">as</span> the final column<span class="token punctuation">,</span> on top of the regular features<span class="token punctuation">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="4-3-1-得分"><a href="#4-3-1-得分" class="headerlink" title="4.3.1 得分"></a>4.3.1 得分</h4><p>默认的输出就是得分, 这没什么好说的, 直接上code.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ypred = bst.predict(dtest)</span><br><span class="line">ypred</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python">ypred <span class="token operator">=</span> bst<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>dtest<span class="token punctuation">)</span>
+ypred<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>Out[32]:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">array([ <span class="number">0.20081411</span>,  <span class="number">0.80391562</span>,  <span class="number">0.20081411</span>,  <span class="number">0.80391562</span>,  <span class="number">0.80391562</span>,</span><br><span class="line">        <span class="number">0.80391562</span>,  <span class="number">0.20081411</span>,  <span class="number">0.80391562</span>,  <span class="number">0.80391562</span>,  <span class="number">0.80391562</span>,</span><br><span class="line">        <span class="number">0.80391562</span>,  <span class="number">0.80391562</span>,  <span class="number">0.80391562</span>,  <span class="number">0.20081411</span>,  <span class="number">0.20081411</span>,</span><br><span class="line">        <span class="number">0.20081411</span>,  <span class="number">0.20081411</span>,  <span class="number">0.20081411</span>,  <span class="number">0.20081411</span>,  <span class="number">0.20081411</span>,</span><br><span class="line">        <span class="number">0.20081411</span>,  <span class="number">0.80391562</span>,  <span class="number">0.20081411</span>,  <span class="number">0.80391562</span>,  <span class="number">0.20081411</span>], dtype=float32)</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python">array<span class="token punctuation">(</span><span class="token punctuation">[</span> <span class="token number">0.20081411</span><span class="token punctuation">,</span>  <span class="token number">0.80391562</span><span class="token punctuation">,</span>  <span class="token number">0.20081411</span><span class="token punctuation">,</span>  <span class="token number">0.80391562</span><span class="token punctuation">,</span>  <span class="token number">0.80391562</span><span class="token punctuation">,</span>
+        <span class="token number">0.80391562</span><span class="token punctuation">,</span>  <span class="token number">0.20081411</span><span class="token punctuation">,</span>  <span class="token number">0.80391562</span><span class="token punctuation">,</span>  <span class="token number">0.80391562</span><span class="token punctuation">,</span>  <span class="token number">0.80391562</span><span class="token punctuation">,</span>
+        <span class="token number">0.80391562</span><span class="token punctuation">,</span>  <span class="token number">0.80391562</span><span class="token punctuation">,</span>  <span class="token number">0.80391562</span><span class="token punctuation">,</span>  <span class="token number">0.20081411</span><span class="token punctuation">,</span>  <span class="token number">0.20081411</span><span class="token punctuation">,</span>
+        <span class="token number">0.20081411</span><span class="token punctuation">,</span>  <span class="token number">0.20081411</span><span class="token punctuation">,</span>  <span class="token number">0.20081411</span><span class="token punctuation">,</span>  <span class="token number">0.20081411</span><span class="token punctuation">,</span>  <span class="token number">0.20081411</span><span class="token punctuation">,</span>
+        <span class="token number">0.20081411</span><span class="token punctuation">,</span>  <span class="token number">0.80391562</span><span class="token punctuation">,</span>  <span class="token number">0.20081411</span><span class="token punctuation">,</span>  <span class="token number">0.80391562</span><span class="token punctuation">,</span>  <span class="token number">0.20081411</span><span class="token punctuation">]</span><span class="token punctuation">,</span> dtype<span class="token operator">=</span>float32<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>在这里, 就可以观察到文章最开始遇到的问题: 为什么得分几乎都是一样的值? 先不急, 看看另外两种输出.</p>
 <h4 id="4-3-2-所属的叶子节点"><a href="#4-3-2-所属的叶子节点" class="headerlink" title="4.3.2 所属的叶子节点"></a>4.3.2 所属的叶子节点</h4><p>当设置<code>pred_leaf=True</code>的时候, 这时就会输出每个样本在所有树中的叶子节点</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ypred_leaf = bst.predict(dtest, pred_leaf=<span class="literal">True</span>)</span><br><span class="line">ypred_leaf</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python">ypred_leaf <span class="token operator">=</span> bst<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>dtest<span class="token punctuation">,</span> pred_leaf<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+ypred_leaf<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>Out[33]:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">array([[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, ..., <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">       [<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, ..., <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, ..., <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">       ..., </span><br><span class="line">       [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, ..., <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">       [<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, ..., <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, ..., <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>]])</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python">array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> 
+       <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>输出的维度为[样本数, 树的数量], 树的数量默认是100, 所以<code>ypred_leaf</code>的维度为<code>[100*100]</code>.</p>
 <p>对于第一行数据的解释就是, 在xgboost所有的100棵树里, 预测的叶子节点都是1(相对于每颗树).</p>
 <p>那怎么看每颗树以及相应的叶子节点的分值呢?这里有两种方法, 可视化树或者直接输出模型.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xgb.to_graphviz(bst, num_trees=<span class="number">0</span>)</span><br><span class="line"><span class="comment">#可视化第一棵树的生成情况</span></span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python">xgb<span class="token punctuation">.</span>to_graphviz<span class="token punctuation">(</span>bst<span class="token punctuation">,</span> num_trees<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">#可视化第一棵树的生成情况</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><img src="https://images2017.cnblogs.com/blog/957413/201710/957413-20171017204407818-1932629185.png" alt="img"></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#直接输出模型的迭代工程</span></span><br><span class="line">bst.dump_model(<span class="string">"model.txt"</span>)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">booster[<span class="number">0</span>]:</span><br><span class="line"><span class="number">0</span>:[f3&lt;<span class="number">0.75</span>] yes=<span class="number">1</span>,no=<span class="number">2</span>,missing=<span class="number">1</span></span><br><span class="line">    <span class="number">1</span>:leaf=<span class="number">-0.019697</span></span><br><span class="line">    <span class="number">2</span>:leaf=<span class="number">0.0214286</span></span><br><span class="line">booster[<span class="number">1</span>]:</span><br><span class="line"><span class="number">0</span>:[f2&lt;<span class="number">2.35</span>] yes=<span class="number">1</span>,no=<span class="number">2</span>,missing=<span class="number">1</span></span><br><span class="line">    <span class="number">1</span>:leaf=<span class="number">-0.0212184</span></span><br><span class="line">    <span class="number">2</span>:leaf=<span class="number">0.0212</span></span><br><span class="line">booster[<span class="number">2</span>]:</span><br><span class="line"><span class="number">0</span>:[f2&lt;<span class="number">2.35</span>] yes=<span class="number">1</span>,no=<span class="number">2</span>,missing=<span class="number">1</span></span><br><span class="line">    <span class="number">1</span>:leaf=<span class="number">-0.0197404</span></span><br><span class="line">    <span class="number">2</span>:leaf=<span class="number">0.0197235</span></span><br><span class="line">booster[<span class="number">3</span>]: ……</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true">#直接输出模型的迭代工程</span>
+bst<span class="token punctuation">.</span>dump_model<span class="token punctuation">(</span><span class="token string">"model.txt"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-python"><code class="language-python">booster<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+<span class="token number">0</span><span class="token punctuation">:</span><span class="token punctuation">[</span>f3<span class="token operator">&lt;</span><span class="token number">0.75</span><span class="token punctuation">]</span> yes<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>no<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span>missing<span class="token operator">=</span><span class="token number">1</span>
+    <span class="token number">1</span><span class="token punctuation">:</span>leaf<span class="token operator">=</span><span class="token operator">-</span><span class="token number">0.019697</span>
+    <span class="token number">2</span><span class="token punctuation">:</span>leaf<span class="token operator">=</span><span class="token number">0.0214286</span>
+booster<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+<span class="token number">0</span><span class="token punctuation">:</span><span class="token punctuation">[</span>f2<span class="token operator">&lt;</span><span class="token number">2.35</span><span class="token punctuation">]</span> yes<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>no<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span>missing<span class="token operator">=</span><span class="token number">1</span>
+    <span class="token number">1</span><span class="token punctuation">:</span>leaf<span class="token operator">=</span><span class="token operator">-</span><span class="token number">0.0212184</span>
+    <span class="token number">2</span><span class="token punctuation">:</span>leaf<span class="token operator">=</span><span class="token number">0.0212</span>
+booster<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+<span class="token number">0</span><span class="token punctuation">:</span><span class="token punctuation">[</span>f2<span class="token operator">&lt;</span><span class="token number">2.35</span><span class="token punctuation">]</span> yes<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>no<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span>missing<span class="token operator">=</span><span class="token number">1</span>
+    <span class="token number">1</span><span class="token punctuation">:</span>leaf<span class="token operator">=</span><span class="token operator">-</span><span class="token number">0.0197404</span>
+    <span class="token number">2</span><span class="token punctuation">:</span>leaf<span class="token operator">=</span><span class="token number">0.0197235</span>
+booster<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">:</span> ……<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>通过上述命令就可以输出模型的迭代过程, 可以看到每颗树都有两个叶子节点(树比较简单). 然后我们对每颗树中的叶子节点1的value进行累加求和, 同时进行相应的函数转换, 就是第一个样本的预测值.</p>
 <p>在这里, 以第一个样本为例, 可以看到, 该样本在所有树中都属于第一个叶子, 所以累加值, 得到以下值.</p>
 <p>同样, 以第二个样本为例, 可以看到, 该样本在所有树中都属于第二个叶子, 所以累加值, 得到以下值.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">leaf1   <span class="number">-1.381214</span></span><br><span class="line">leaf2    <span class="number">1.410950</span></span><br></pre></td></tr></table></figure>
-
-<p>在使用xgboost模型最开始, 模型初始化的时候, 我们就设置了<code>&#39;objective&#39;: &#39;binary:logistic&#39;</code>, 因此使用函数将累加的值转换为实际的打分:</p>
+<pre class="line-numbers language-python"><code class="language-python">leaf1   <span class="token operator">-</span><span class="token number">1.381214</span>
+leaf2    <span class="token number">1.410950</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>在使用xgboost模型最开始, 模型初始化的时候, 我们就设置了<code>'objective': 'binary:logistic'</code>, 因此使用函数将累加的值转换为实际的打分:</p>
 <p>f(x)=1/(1+exp(−x))</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>/float(<span class="number">1</span>+np.exp(<span class="number">1.38121416</span>))</span><br><span class="line">Out[<span class="number">24</span>]: <span class="number">0.20081407112186503</span></span><br><span class="line"><span class="number">1</span>/float(<span class="number">1</span>+np.exp(<span class="number">-1.410950</span>))</span><br><span class="line">Out[<span class="number">25</span>]: <span class="number">0.8039157403338895</span></span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python"><span class="token number">1</span><span class="token operator">/</span>float<span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">+</span>np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token number">1.38121416</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+Out<span class="token punctuation">[</span><span class="token number">24</span><span class="token punctuation">]</span><span class="token punctuation">:</span> <span class="token number">0.20081407112186503</span>
+<span class="token number">1</span><span class="token operator">/</span>float<span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">+</span>np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1.410950</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+Out<span class="token punctuation">[</span><span class="token number">25</span><span class="token punctuation">]</span><span class="token punctuation">:</span> <span class="token number">0.8039157403338895</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>这就与<code>ypred = bst.predict(dtest)</code> 的分值相对应上了.</p>
 <h4 id="4-3-2-特征重要性"><a href="#4-3-2-特征重要性" class="headerlink" title="4.3.2 特征重要性"></a>4.3.2 特征重要性</h4><p>接着, 我们看另一种输出方式, 输出的是特征相对于得分的重要性.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ypred_contribs = bst.predict(dtest, pred_contribs=<span class="literal">True</span>)</span><br><span class="line">ypred_contribs</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python">ypred_contribs <span class="token operator">=</span> bst<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>dtest<span class="token punctuation">,</span> pred_contribs<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+ypred_contribs<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>Out[37]:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">array([[ <span class="number">0.</span>        ,  <span class="number">0.</span>        , <span class="number">-1.01448286</span>, <span class="number">-0.41277751</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.96967536</span>,  <span class="number">0.39522746</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        , <span class="number">-1.01448286</span>, <span class="number">-0.41277751</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.96967536</span>,  <span class="number">0.39522746</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.96967536</span>,  <span class="number">0.39522746</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.96967536</span>,  <span class="number">0.39522746</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        , <span class="number">-1.01448286</span>, <span class="number">-0.41277751</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.96967536</span>,  <span class="number">0.39522746</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.96967536</span>,  <span class="number">0.39522746</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.96967536</span>,  <span class="number">0.39522746</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.96967536</span>,  <span class="number">0.39522746</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.96967536</span>,  <span class="number">0.39522746</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.96967536</span>,  <span class="number">0.39522746</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        , <span class="number">-1.01448286</span>, <span class="number">-0.41277751</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        , <span class="number">-1.01448286</span>, <span class="number">-0.41277751</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        , <span class="number">-1.01448286</span>, <span class="number">-0.41277751</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        , <span class="number">-1.01448286</span>, <span class="number">-0.41277751</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        , <span class="number">-1.01448286</span>, <span class="number">-0.41277751</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        , <span class="number">-1.01448286</span>, <span class="number">-0.41277751</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        , <span class="number">-1.01448286</span>, <span class="number">-0.41277751</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        , <span class="number">-1.01448286</span>, <span class="number">-0.41277751</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.96967536</span>,  <span class="number">0.39522746</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        , <span class="number">-1.01448286</span>, <span class="number">-0.41277751</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.96967536</span>,  <span class="number">0.39522746</span>,  <span class="number">0.04604663</span>],</span><br><span class="line">       [ <span class="number">0.</span>        ,  <span class="number">0.</span>        , <span class="number">-1.01448286</span>, <span class="number">-0.41277751</span>,  <span class="number">0.04604663</span>]], dtype=float32)</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python">array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1.01448286</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">0.41277751</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0.96967536</span><span class="token punctuation">,</span>  <span class="token number">0.39522746</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1.01448286</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">0.41277751</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0.96967536</span><span class="token punctuation">,</span>  <span class="token number">0.39522746</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0.96967536</span><span class="token punctuation">,</span>  <span class="token number">0.39522746</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0.96967536</span><span class="token punctuation">,</span>  <span class="token number">0.39522746</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1.01448286</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">0.41277751</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0.96967536</span><span class="token punctuation">,</span>  <span class="token number">0.39522746</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0.96967536</span><span class="token punctuation">,</span>  <span class="token number">0.39522746</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0.96967536</span><span class="token punctuation">,</span>  <span class="token number">0.39522746</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0.96967536</span><span class="token punctuation">,</span>  <span class="token number">0.39522746</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0.96967536</span><span class="token punctuation">,</span>  <span class="token number">0.39522746</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0.96967536</span><span class="token punctuation">,</span>  <span class="token number">0.39522746</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1.01448286</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">0.41277751</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1.01448286</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">0.41277751</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1.01448286</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">0.41277751</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1.01448286</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">0.41277751</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1.01448286</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">0.41277751</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1.01448286</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">0.41277751</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1.01448286</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">0.41277751</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1.01448286</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">0.41277751</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0.96967536</span><span class="token punctuation">,</span>  <span class="token number">0.39522746</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1.01448286</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">0.41277751</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0.96967536</span><span class="token punctuation">,</span>  <span class="token number">0.39522746</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       <span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span>  <span class="token number">0</span><span class="token punctuation">.</span>        <span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1.01448286</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">0.41277751</span><span class="token punctuation">,</span>  <span class="token number">0.04604663</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">,</span> dtype<span class="token operator">=</span>float32<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>输出的<code>ypred_contribs</code>的维度为<code>[100,5]</code>, 通过阅读前面的文档注释就可以知道, 最后一列是<code>bias</code>, 前面的四列分别是每个特征对最后打分的影响因子, 可以看出, 前面两个特征是不起作用的.</p>
 <p>通过这个输出, 怎么和最后的打分进行关联呢? 原理也是一样的, 还是以前两列为例.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">score_a = sum(ypred_contribs[<span class="number">0</span>])</span><br><span class="line"><span class="keyword">print</span> score_a</span><br><span class="line"><span class="comment"># -1.38121373579</span></span><br><span class="line">score_b = sum(ypred_contribs[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">print</span> score_b</span><br><span class="line"><span class="comment"># 1.41094945744</span></span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python">score_a <span class="token operator">=</span> sum<span class="token punctuation">(</span>ypred_contribs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span> score_a
+<span class="token comment" spellcheck="true"># -1.38121373579</span>
+score_b <span class="token operator">=</span> sum<span class="token punctuation">(</span>ypred_contribs<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span> score_b
+<span class="token comment" spellcheck="true"># 1.41094945744</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>相同的分值, 相同的处理情况.</p>
 <p>到此, 这期关于在python上关于xgboost算法的简单实现, 以及在实现的过程中: 得分的输出、样本对应到树的节点、每个样本中单独特征对得分的影响, 以及上述三者之间的联系, 均已介绍完毕。</p>
-
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
             </div>
             <hr/>
 
@@ -855,6 +894,32 @@
         </div>
     </div>
 
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '3fa0e3a4d72d5144a445',
+        clientSecret: '72054d513dd9fdc6b2c749216bb2c498048592aa',
+        repo: '',
+        owner: 'dataquaner',
+        admin: null,
+        id: '2019-12-25T09-45-30',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
     
 
     
@@ -1108,7 +1173,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 
     <footer class="page-footer bg-color">
-    <div class="container row center-align" style="margin-bottom: 0px !important;">
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">2019</span>
@@ -1116,6 +1181,9 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">56.4k</span>&nbsp;字
             
             
             
@@ -1135,17 +1203,61 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             
             <br>
             
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "6";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
             <br>
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+    <a href="https://github.com/dataquaner" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
         <i class="fab fa-github"></i>
     </a>
 
 
 
-    <a href="mailto:1181062873@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+    <a href="mailto:dataquanerleo@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
         <i class="fas fa-envelope-open"></i>
     </a>
 
@@ -1155,7 +1267,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 
 
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1181062873" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1181062873" data-position="top" data-delay="50">
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2077689752" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 2077689752" data-position="top" data-delay="50">
         <i class="fab fa-qq"></i>
     </a>
 

@@ -31,7 +31,8 @@
     <script src="/libs/jquery/jquery.min.js"></script>
     
 <link rel="alternate" href="/atom.xml" title="DataQuaner" type="application/atom+xml">
-</head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 
 <body>
@@ -125,58 +126,6 @@
       
       <span>友情链接</span>
     </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="" class="waves-effect waves-light">
-
-      
-      <i class="fas fa-list" style="zoom: 0.6;"></i>
-      
-      <span>Medias</span>
-      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
-    </a>
-    <ul class="sub-nav menus_item_child ">
-      
-      <li>
-        <a href="/musics">
-          
-          <i class="fas fa-music" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Musics</span>
-        </a>
-      </li>
-      
-      <li>
-        <a href="/movies">
-          
-          <i class="fas fa-film" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Movies</span>
-        </a>
-      </li>
-      
-      <li>
-        <a href="/books">
-          
-          <i class="fas fa-book" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Books</span>
-        </a>
-      </li>
-      
-      <li>
-        <a href="/galleries">
-          
-          <i class="fas fa-image" style="margin-top: -20px; zoom: 0.6;"></i>
-          
-          <span>Galleries</span>
-        </a>
-      </li>
-      
-    </ul>
     
   </li>
   
@@ -279,61 +228,6 @@
 			
 			友情链接
 		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="javascript:;" target="_blank" rel="noopener">
-			
-				<i class="fa-fw fas fa-list"></i>
-			
-			Medias
-			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
-		</a>
-            <ul  style="background:  ;" >
-              
-                <li>   
-				
-                  <a href="/musics " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-music" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Musics</span>
-                  </a>
-                </li>
-              
-                <li>   
-				
-                  <a href="/movies " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-film" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Movies</span>
-                  </a>
-                </li>
-              
-                <li>   
-				
-                  <a href="/books " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-book" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Books</span>
-                  </a>
-                </li>
-              
-                <li>   
-				
-                  <a href="/galleries " style="margin-left:75px";>
-				  
-				   <i class="fa fas fa-image" style="position: absolute;left:50px" ></i>
-			      
-		          <span>Galleries</span>
-                  </a>
-                </li>
-               
-            </ul>
           
         </li>
         
@@ -571,12 +465,32 @@
                 
 
                 
-
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2020-01-07
+                </div>
                 
 
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.6k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    11 分
+                </div>
                 
 				
                 
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
             </div>
             
         </div>
@@ -612,40 +526,254 @@
 <p><strong>eps：</strong>聚类类别中样本的相似度衡量，与类别内样本相似度成反比。可以理解为同一个类别当中，对两个样本之间距离的最大值限定。<br>    <strong>min_samples：</strong>每个聚类类别中的最小样本数，会对未分类样本数量造成影响，与未分类样本数量成正比。当相似样本数量少于该参数时，不会聚到一起。</p>
 </blockquote>
 <p>在实际应用过程中，根据样本的大小，以及样本的大致分布，了解聚类结果会随着这两个参数如何变化之后，可以根据自己的经验对两个参数进行调整。只有两个模型参数需要调整，因此调参过程也不会太麻烦。</p>
-<h1 id="2-代码实现"><a href="#2-代码实现" class="headerlink" title="2. 代码实现"></a>2. 代码实现</h1><h2 id="2-1-import需要的包"><a href="#2-1-import需要的包" class="headerlink" title="2.1 import需要的包"></a>2.1 import需要的包</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># === import packages === #</span></span><br><span class="line"><span class="keyword">import</span> jieba.posseg <span class="keyword">as</span> pseg</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> TfidfTransformer</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> CountVectorizer</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> DBSCAN</span><br></pre></td></tr></table></figure>
-
+<h1 id="2-代码实现"><a href="#2-代码实现" class="headerlink" title="2. 代码实现"></a>2. 代码实现</h1><h2 id="2-1-import需要的包"><a href="#2-1-import需要的包" class="headerlink" title="2.1 import需要的包"></a>2.1 import需要的包</h2><pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># === import packages === #</span>
+<span class="token keyword">import</span> jieba<span class="token punctuation">.</span>posseg <span class="token keyword">as</span> pseg
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>feature_extraction<span class="token punctuation">.</span>text <span class="token keyword">import</span> TfidfTransformer
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>feature_extraction<span class="token punctuation">.</span>text <span class="token keyword">import</span> CountVectorizer
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>cluster <span class="token keyword">import</span> DBSCAN<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="2-2-载入数据"><a href="#2-2-载入数据" class="headerlink" title="2.2 载入数据"></a>2.2 载入数据</h2><p>根据数据文件的不同存在不同的数据载入方法，我当时使用的是两种类型的数据，分别是直接包含目标短文本的txt，以json格式存储的txt。如果有用到这两种类型的文件可以参考这部分的数据载入代码，其他的请根据文件类型和数据样式自行载入。首先是载入以json格式存储的txt文件，可以用正则表达式，也可以根据数据存储的方式提取出对应的字段。先展示一下数据的存储格式：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">"code"</span>: <span class="string">"200"</span>,</span><br><span class="line"><span class="attr">"data"</span>: &#123;</span><br><span class="line"><span class="attr">"result"</span>: [</span><br><span class="line">&#123;</span><br><span class="line"><span class="attr">"updateDate"</span>: <span class="number">1551923786433</span>,</span><br><span class="line"><span class="attr">"ensureIntentName"</span>: <span class="string">"新意图"</span>,</span><br><span class="line"><span class="attr">"corpus"</span>: <span class="string">"怎么查询之前的小微提醒"</span>,</span><br><span class="line"><span class="attr">"recommendResult"</span>: <span class="number">0</span>,</span><br><span class="line"><span class="attr">"remark"</span>: <span class="string">""</span>,</span><br><span class="line"><span class="attr">"source"</span>: <span class="number">2</span>,</span><br><span class="line"><span class="attr">"result"</span>: <span class="number">2</span>,</span><br><span class="line"><span class="attr">"eventName"</span>: <span class="string">""</span>,</span><br><span class="line"><span class="attr">"id"</span>: <span class="string">"b07328fc-8383-44b7-b466-15b063b8544a"</span>,</span><br><span class="line"><span class="attr">"state"</span>: <span class="number">0</span>,</span><br><span class="line"><span class="attr">"tag"</span>: <span class="string">""</span>,</span><br><span class="line"><span class="attr">"isHandle"</span>: <span class="number">1</span>,</span><br><span class="line"><span class="attr">"createDate"</span>: <span class="number">1551669751334</span>,</span><br><span class="line"><span class="attr">"eventId"</span>: <span class="string">""</span>,</span><br><span class="line"><span class="attr">"corpusTagId"</span>: <span class="string">"3335d2d8-a16e-46a2-9ed7-76739108d684"</span>,</span><br><span class="line"><span class="attr">"intentName"</span>: <span class="string">""</span>,</span><br><span class="line"><span class="attr">"ensureIntent"</span>: <span class="string">"newIntent"</span>,</span><br><span class="line"><span class="attr">"recommendIntent"</span>: [</span><br><span class="line"><span class="string">"setmsgnotifications"</span></span><br><span class="line">],</span><br><span class="line"><span class="attr">"uploadTime"</span>: <span class="number">1551669751333</span>,</span><br><span class="line"><span class="attr">"w3account"</span>: <span class="string">"x00286769"</span>,</span><br><span class="line"><span class="attr">"createBy"</span>: <span class="string">"x00286769"</span>,</span><br><span class="line"><span class="attr">"intentCode"</span>: <span class="string">""</span>,</span><br><span class="line"><span class="attr">"isBotSupport"</span>: <span class="number">0</span>,</span><br><span class="line"><span class="attr">"userRole"</span>: <span class="string">"0"</span>,</span><br><span class="line"><span class="attr">"welinkVersion"</span>: <span class="string">"3.9.13"</span></span><br><span class="line">&#125;</span><br><span class="line">],</span><br><span class="line"><span class="attr">"pagination"</span>: &#123;</span><br><span class="line"><span class="attr">"pageCount"</span>: <span class="number">1</span>,</span><br><span class="line"><span class="attr">"pageSizes"</span>: <span class="number">50</span>,</span><br><span class="line"><span class="attr">"pageNumber"</span>: <span class="number">1</span>,</span><br><span class="line"><span class="attr">"offset"</span>: <span class="number">0</span>,</span><br><span class="line"><span class="attr">"pageTotal"</span>: <span class="number">1</span>,</span><br><span class="line"><span class="attr">"pageNumbers"</span>: <span class="number">1</span>,</span><br><span class="line"><span class="attr">"pageSize"</span>: <span class="number">50</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;,</span><br><span class="line"><span class="attr">"error"</span>: <span class="string">""</span>,</span><br><span class="line"><span class="attr">"stack"</span>: <span class="string">""</span>,</span><br><span class="line"><span class="attr">"message"</span>: <span class="string">"ok"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span>
+<span class="token property">"code"</span><span class="token operator">:</span> <span class="token string">"200"</span><span class="token punctuation">,</span>
+<span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+<span class="token property">"result"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+<span class="token punctuation">{</span>
+<span class="token property">"updateDate"</span><span class="token operator">:</span> <span class="token number">1551923786433</span><span class="token punctuation">,</span>
+<span class="token property">"ensureIntentName"</span><span class="token operator">:</span> <span class="token string">"新意图"</span><span class="token punctuation">,</span>
+<span class="token property">"corpus"</span><span class="token operator">:</span> <span class="token string">"怎么查询之前的小微提醒"</span><span class="token punctuation">,</span>
+<span class="token property">"recommendResult"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+<span class="token property">"remark"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+<span class="token property">"source"</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+<span class="token property">"result"</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+<span class="token property">"eventName"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+<span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"b07328fc-8383-44b7-b466-15b063b8544a"</span><span class="token punctuation">,</span>
+<span class="token property">"state"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+<span class="token property">"tag"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+<span class="token property">"isHandle"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+<span class="token property">"createDate"</span><span class="token operator">:</span> <span class="token number">1551669751334</span><span class="token punctuation">,</span>
+<span class="token property">"eventId"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+<span class="token property">"corpusTagId"</span><span class="token operator">:</span> <span class="token string">"3335d2d8-a16e-46a2-9ed7-76739108d684"</span><span class="token punctuation">,</span>
+<span class="token property">"intentName"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+<span class="token property">"ensureIntent"</span><span class="token operator">:</span> <span class="token string">"newIntent"</span><span class="token punctuation">,</span>
+<span class="token property">"recommendIntent"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+<span class="token string">"setmsgnotifications"</span>
+<span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token property">"uploadTime"</span><span class="token operator">:</span> <span class="token number">1551669751333</span><span class="token punctuation">,</span>
+<span class="token property">"w3account"</span><span class="token operator">:</span> <span class="token string">"x00286769"</span><span class="token punctuation">,</span>
+<span class="token property">"createBy"</span><span class="token operator">:</span> <span class="token string">"x00286769"</span><span class="token punctuation">,</span>
+<span class="token property">"intentCode"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+<span class="token property">"isBotSupport"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+<span class="token property">"userRole"</span><span class="token operator">:</span> <span class="token string">"0"</span><span class="token punctuation">,</span>
+<span class="token property">"welinkVersion"</span><span class="token operator">:</span> <span class="token string">"3.9.13"</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token property">"pagination"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+<span class="token property">"pageCount"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+<span class="token property">"pageSizes"</span><span class="token operator">:</span> <span class="token number">50</span><span class="token punctuation">,</span>
+<span class="token property">"pageNumber"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+<span class="token property">"offset"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+<span class="token property">"pageTotal"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+<span class="token property">"pageNumbers"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+<span class="token property">"pageSize"</span><span class="token operator">:</span> <span class="token number">50</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token property">"error"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+<span class="token property">"stack"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+<span class="token property">"message"</span><span class="token operator">:</span> <span class="token string">"ok"</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>我的目标是对上述数据当中，字典中key “data” 对应的字典中的 “result” 中每一个item 的 “corpus” 进行提取，于是就有了下列代码。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># === Data loading === #</span></span><br><span class="line">data = []</span><br><span class="line">corpus = []</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> open(<span class="string">"新意图语料.txt"</span>, <span class="string">'r+'</span>, encoding=<span class="string">'UTF-8'</span>):</span><br><span class="line">    data.append(eval(line))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(data)):</span><br><span class="line">    tmp = data[i][<span class="string">'data'</span>][<span class="string">'result'</span>]</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(len(tmp)):</span><br><span class="line">        corpus.append(tmp[j][<span class="string">'corpus'</span>])</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># === Data loading === #</span>
+data <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+corpus <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token keyword">for</span> line <span class="token keyword">in</span> open<span class="token punctuation">(</span><span class="token string">"新意图语料.txt"</span><span class="token punctuation">,</span> <span class="token string">'r+'</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'UTF-8'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    data<span class="token punctuation">.</span>append<span class="token punctuation">(</span>eval<span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    tmp <span class="token operator">=</span> data<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'result'</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> j <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>tmp<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        corpus<span class="token punctuation">.</span>append<span class="token punctuation">(</span>tmp<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'corpus'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>然后是载入包含目标短文本的txt，也就是说该txt直接存储了上面的 “corpus” 对应的内容，但是每一行的内容都加上了双引号和逗号，就通过strip把这些不需要的部分去掉了，最后得到所有 “corpus” 组成的list。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> open(<span class="string">"未识别语料.txt"</span>, <span class="string">'r+'</span>):</span><br><span class="line">    line = line.strip(<span class="string">'\n'</span>)</span><br><span class="line">    line = line.strip(<span class="string">'\t'</span>)</span><br><span class="line">    line = line.rstrip(<span class="string">','</span>)</span><br><span class="line">    line = line.lstrip(<span class="string">'"'</span>)</span><br><span class="line">    line = line.rstrip(<span class="string">'"'</span>)</span><br><span class="line">    corpus.append(line)</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">for</span> line <span class="token keyword">in</span> open<span class="token punctuation">(</span><span class="token string">"未识别语料.txt"</span><span class="token punctuation">,</span> <span class="token string">'r+'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    line <span class="token operator">=</span> line<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
+    line <span class="token operator">=</span> line<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token string">'\t'</span><span class="token punctuation">)</span>
+    line <span class="token operator">=</span> line<span class="token punctuation">.</span>rstrip<span class="token punctuation">(</span><span class="token string">','</span><span class="token punctuation">)</span>
+    line <span class="token operator">=</span> line<span class="token punctuation">.</span>lstrip<span class="token punctuation">(</span><span class="token string">'"'</span><span class="token punctuation">)</span>
+    line <span class="token operator">=</span> line<span class="token punctuation">.</span>rstrip<span class="token punctuation">(</span><span class="token string">'"'</span><span class="token punctuation">)</span>
+    corpus<span class="token punctuation">.</span>append<span class="token punctuation">(</span>line<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="2-3-对文本进行分词，并记录词性"><a href="#2-3-对文本进行分词，并记录词性" class="headerlink" title="2.3 对文本进行分词，并记录词性"></a>2.3 对文本进行分词，并记录词性</h2><p>调用结巴词库对语料进行分词，并记录分词结果中每个词的词性。我的数据集在处理之后得到了5316条短文本，分词得到20640个不重复的词汇及其对应的词性，并建立了两者之间的字典联系。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># === Record the text cut and POS === #</span></span><br><span class="line">part_of_speech = []</span><br><span class="line">word_after_cut = []</span><br><span class="line">cut_corpus_iter = corpus.copy()</span><br><span class="line">cut_corpus = corpus.copy()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(corpus)):</span><br><span class="line">    cut_corpus_iter[i] = pseg.cut(corpus[i])  <span class="comment"># 5316</span></span><br><span class="line">    cut_corpus[i] = <span class="string">""</span></span><br><span class="line">    <span class="keyword">for</span> every <span class="keyword">in</span> cut_corpus_iter[i]:</span><br><span class="line">        cut_corpus[i] = (cut_corpus[i] + <span class="string">" "</span> + str(every.word)).strip()</span><br><span class="line">        part_of_speech.append(every.flag)  <span class="comment"># 20640</span></span><br><span class="line">        word_after_cut.append(every.word)  <span class="comment"># 20640</span></span><br><span class="line">word_pos_dict = &#123;word_after_cut[i]: part_of_speech[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(word_after_cut))&#125;</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># === Record the text cut and POS === #</span>
+part_of_speech <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+word_after_cut <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+cut_corpus_iter <span class="token operator">=</span> corpus<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+cut_corpus <span class="token operator">=</span> corpus<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>corpus<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    cut_corpus_iter<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> pseg<span class="token punctuation">.</span>cut<span class="token punctuation">(</span>corpus<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 5316</span>
+    cut_corpus<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">""</span>
+    <span class="token keyword">for</span> every <span class="token keyword">in</span> cut_corpus_iter<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">:</span>
+        cut_corpus<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span>cut_corpus<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token string">" "</span> <span class="token operator">+</span> str<span class="token punctuation">(</span>every<span class="token punctuation">.</span>word<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        part_of_speech<span class="token punctuation">.</span>append<span class="token punctuation">(</span>every<span class="token punctuation">.</span>flag<span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 20640</span>
+        word_after_cut<span class="token punctuation">.</span>append<span class="token punctuation">(</span>every<span class="token punctuation">.</span>word<span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 20640</span>
+word_pos_dict <span class="token operator">=</span> <span class="token punctuation">{</span>word_after_cut<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">:</span> part_of_speech<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>word_after_cut<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">}</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="2-4-文本向量化–TF-IDF权重"><a href="#2-4-文本向量化–TF-IDF权重" class="headerlink" title="2.4 文本向量化–TF-IDF权重"></a>2.4 文本向量化–TF-IDF权重</h2><p>使用TF-IDF对文本进行向量化，得到文本的TF-IDF权重。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># === Get the TF-IDF weights === #</span></span><br><span class="line">Count_vectorizer = CountVectorizer()</span><br><span class="line">transformer = TfidfTransformer()  <span class="comment"># 用于统计每个词语的tf-idf权值</span></span><br><span class="line">tf_idf = transformer.fit_transform(Count_vectorizer.fit_transform(cut_corpus))</span><br><span class="line"><span class="comment"># （5316，2039）第一个fit_transform是计算tf-idf 第二个fit_transform是将文本转为词频矩阵</span></span><br><span class="line">word = Count_vectorizer.get_feature_names()  <span class="comment"># 2039，获取词袋模型中的所有词语</span></span><br><span class="line">weight = tf_idf.toarray()  <span class="comment"># （5316，2039）将tf-idf矩阵抽取出来，元素w[i][j]表示j词在i类文本中的tf-idf权重</span></span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># === Get the TF-IDF weights === #</span>
+Count_vectorizer <span class="token operator">=</span> CountVectorizer<span class="token punctuation">(</span><span class="token punctuation">)</span>
+transformer <span class="token operator">=</span> TfidfTransformer<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 用于统计每个词语的tf-idf权值</span>
+tf_idf <span class="token operator">=</span> transformer<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>Count_vectorizer<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>cut_corpus<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true"># （5316，2039）第一个fit_transform是计算tf-idf 第二个fit_transform是将文本转为词频矩阵</span>
+word <span class="token operator">=</span> Count_vectorizer<span class="token punctuation">.</span>get_feature_names<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 2039，获取词袋模型中的所有词语</span>
+weight <span class="token operator">=</span> tf_idf<span class="token punctuation">.</span>toarray<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># （5316，2039）将tf-idf矩阵抽取出来，元素w[i][j]表示j词在i类文本中的tf-idf权重</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="2-5-基于词性的新权重"><a href="#2-5-基于词性的新权重" class="headerlink" title="2.5 基于词性的新权重"></a>2.5 基于词性的新权重</h2><p>前面得到了分词的结果，并对词性进行了记录，接下来可以针对不同词汇的词性码，给与其TF-IDF权重以不同的乘数，这样可以突出某些类型的词汇的重要性，在一定程度上有助于聚类的效果。</p>
 <p>具体的乘数构造规则可以根据需求自行调整。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># === Get new weight with POS considered === #</span></span><br><span class="line">word_weight = [<span class="number">1</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(len(word))]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(word)):</span><br><span class="line">    <span class="keyword">if</span> word[i] <span class="keyword">not</span> <span class="keyword">in</span> word_pos_dict.keys():</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">if</span> word_pos_dict[word[i]] == <span class="string">'n'</span>:</span><br><span class="line">        word_weight[i] = <span class="number">1.2</span></span><br><span class="line">    <span class="keyword">elif</span> word_pos_dict[word[i]] == <span class="string">"vn"</span>:</span><br><span class="line">        word_weight[i] = <span class="number">1.1</span></span><br><span class="line">    <span class="keyword">elif</span> word_pos_dict[word[i]] == <span class="string">"m"</span>:</span><br><span class="line">        word_weight[i] = <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span>:  <span class="comment"># 权重调整可以根据实际情况进行更改</span></span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">word_weight = np.array(word_weight)</span><br><span class="line">new_weight = weight.copy()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(weight)):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(len(word)):</span><br><span class="line">        new_weight[i][j] = weight[i][j] * word_weight[j]</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># === Get new weight with POS considered === #</span>
+word_weight <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>word<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>word<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> word<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">not</span> <span class="token keyword">in</span> word_pos_dict<span class="token punctuation">.</span>keys<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">continue</span>
+    <span class="token keyword">if</span> word_pos_dict<span class="token punctuation">[</span>word<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'n'</span><span class="token punctuation">:</span>
+        word_weight<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1.2</span>
+    <span class="token keyword">elif</span> word_pos_dict<span class="token punctuation">[</span>word<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">"vn"</span><span class="token punctuation">:</span>
+        word_weight<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1.1</span>
+    <span class="token keyword">elif</span> word_pos_dict<span class="token punctuation">[</span>word<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">"m"</span><span class="token punctuation">:</span>
+        word_weight<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 权重调整可以根据实际情况进行更改</span>
+        <span class="token keyword">continue</span>
+word_weight <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>word_weight<span class="token punctuation">)</span>
+new_weight <span class="token operator">=</span> weight<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>weight<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> j <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>word<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        new_weight<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> weight<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">*</span> word_weight<span class="token punctuation">[</span>j<span class="token punctuation">]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="2-6-DBSCAN模型"><a href="#2-6-DBSCAN模型" class="headerlink" title="2.6 DBSCAN模型"></a>2.6 DBSCAN模型</h2><p>得到了文本的向量化表示之后就可以将其投喂到模型当中了，eps和min_samples都是可以调整的参数。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># === Fit the DBSCAN model and get the classify labels === #</span></span><br><span class="line">DBS_clf = DBSCAN(eps=<span class="number">1</span>, min_samples=<span class="number">4</span>)</span><br><span class="line">DBS_clf.fit(new_weight)</span><br><span class="line">print(DBS_clf.labels_)</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># === Fit the DBSCAN model and get the classify labels === #</span>
+DBS_clf <span class="token operator">=</span> DBSCAN<span class="token punctuation">(</span>eps<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> min_samples<span class="token operator">=</span><span class="token number">4</span><span class="token punctuation">)</span>
+DBS_clf<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>new_weight<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>DBS_clf<span class="token punctuation">.</span>labels_<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <h1 id="3-聚类结果"><a href="#3-聚类结果" class="headerlink" title="3. 聚类结果"></a>3. 聚类结果</h1><p>DBSCAN模型实现聚类之后，聚类的结果会存储在 <code>labels_</code> 中，将 <code>labels_</code> 与原来的文本一一对应，可以得到最终的聚类结果：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># === Define the function of classify the original corpus according to the labels === #</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">labels_to_original</span><span class="params">(labels, original_corpus)</span>:</span></span><br><span class="line">    <span class="keyword">assert</span> len(labels) == len(original_corpus)</span><br><span class="line">    max_label = max(labels)</span><br><span class="line">    number_label = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, max_label + <span class="number">1</span>, <span class="number">1</span>)]</span><br><span class="line">    number_label.append(<span class="number">-1</span>)</span><br><span class="line">    result = [[] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(number_label))]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(labels)):</span><br><span class="line">        index = number_label.index(labels[i])</span><br><span class="line">        result[index].append(original_corpus[i])</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># === Define the function of classify the original corpus according to the labels === #</span>
+<span class="token keyword">def</span> <span class="token function">labels_to_original</span><span class="token punctuation">(</span>labels<span class="token punctuation">,</span> original_corpus<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">assert</span> len<span class="token punctuation">(</span>labels<span class="token punctuation">)</span> <span class="token operator">==</span> len<span class="token punctuation">(</span>original_corpus<span class="token punctuation">)</span>
+    max_label <span class="token operator">=</span> max<span class="token punctuation">(</span>labels<span class="token punctuation">)</span>
+    number_label <span class="token operator">=</span> <span class="token punctuation">[</span>i <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> max_label <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    number_label<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+    result <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>number_label<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>labels<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        index <span class="token operator">=</span> number_label<span class="token punctuation">.</span>index<span class="token punctuation">(</span>labels<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+        result<span class="token punctuation">[</span>index<span class="token punctuation">]</span><span class="token punctuation">.</span>append<span class="token punctuation">(</span>original_corpus<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> result
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-python"><code class="language-python">labels_original <span class="token operator">=</span> labels_to_original<span class="token punctuation">(</span>DBS_clf<span class="token punctuation">.</span>labels_<span class="token punctuation">,</span> corpus<span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>labels_original<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true"># 聚类结果展示（部分）    </span>
+<span class="token punctuation">[</span><span class="token string">'社保卡'</span><span class="token punctuation">,</span> <span class="token string">'社保卡'</span><span class="token punctuation">,</span> <span class="token string">'社保卡。'</span><span class="token punctuation">,</span> <span class="token string">'社保卡办理'</span><span class="token punctuation">,</span> <span class="token string">'社保卡'</span><span class="token punctuation">,</span> <span class="token string">'社保卡'</span><span class="token punctuation">,</span> <span class="token string">'社保卡挂失'</span><span class="token punctuation">,</span> <span class="token string">'社保卡。'</span><span class="token punctuation">,</span> <span class="token string">'社保卡'</span><span class="token punctuation">,</span> <span class="token string">'领取社保卡。'</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token string">'五险一金'</span><span class="token punctuation">,</span> <span class="token string">'五险一金。'</span><span class="token punctuation">,</span> <span class="token string">'五险一金。'</span><span class="token punctuation">,</span> <span class="token string">'五险一金介绍'</span><span class="token punctuation">,</span> <span class="token string">'看看二月份五险一金情况'</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token string">'打开汇钱。'</span><span class="token punctuation">,</span> <span class="token string">'打开汇钱。'</span><span class="token punctuation">,</span> <span class="token string">'我要汇钱'</span><span class="token punctuation">,</span> <span class="token string">'我要汇钱。'</span><span class="token punctuation">,</span> <span class="token string">'我要汇钱。'</span><span class="token punctuation">,</span> <span class="token string">'我要汇钱。'</span><span class="token punctuation">,</span> <span class="token string">'我要汇钱。'</span><span class="token punctuation">,</span> <span class="token string">'我要汇钱。'</span><span class="token punctuation">,</span> <span class="token string">'我要汇钱。'</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token string">'车辆通行证。'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证。'</span><span class="token punctuation">,</span> <span class="token string">'我要办车辆通行证。'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证。'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证。'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证。'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证'</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token string">'邮件附件权限'</span><span class="token punctuation">,</span> <span class="token string">'等等邮件附件权限。'</span><span class="token punctuation">,</span> <span class="token string">'邮件附件权限'</span><span class="token punctuation">,</span> <span class="token string">'邮件附件权限'</span><span class="token punctuation">,</span> <span class="token string">'邮件附件权限'</span><span class="token punctuation">,</span> <span class="token string">'邮件附件权限'</span><span class="token punctuation">,</span> <span class="token string">'您好，请问怎样申请图片查看权限和邮件附件查看权限？'</span><span class="token punctuation">]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="4-附件：完整代码"><a href="#4-附件：完整代码" class="headerlink" title="4 附件：完整代码"></a>4 附件：完整代码</h1><pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># === import packages === #</span>
+<span class="token keyword">import</span> jieba<span class="token punctuation">.</span>posseg <span class="token keyword">as</span> pseg
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>feature_extraction<span class="token punctuation">.</span>text <span class="token keyword">import</span> TfidfTransformer
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>feature_extraction<span class="token punctuation">.</span>text <span class="token keyword">import</span> CountVectorizer
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>cluster <span class="token keyword">import</span> DBSCAN
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">labels_original = labels_to_original(DBS_clf.labels_, corpus)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">	print(labels_original[i])</span><br><span class="line"><span class="comment"># 聚类结果展示（部分）	</span></span><br><span class="line">[<span class="string">'社保卡'</span>, <span class="string">'社保卡'</span>, <span class="string">'社保卡。'</span>, <span class="string">'社保卡办理'</span>, <span class="string">'社保卡'</span>, <span class="string">'社保卡'</span>, <span class="string">'社保卡挂失'</span>, <span class="string">'社保卡。'</span>, <span class="string">'社保卡'</span>, <span class="string">'领取社保卡。'</span>]</span><br><span class="line">[<span class="string">'五险一金'</span>, <span class="string">'五险一金。'</span>, <span class="string">'五险一金。'</span>, <span class="string">'五险一金介绍'</span>, <span class="string">'看看二月份五险一金情况'</span>]</span><br><span class="line">[<span class="string">'打开汇钱。'</span>, <span class="string">'打开汇钱。'</span>, <span class="string">'我要汇钱'</span>, <span class="string">'我要汇钱。'</span>, <span class="string">'我要汇钱。'</span>, <span class="string">'我要汇钱。'</span>, <span class="string">'我要汇钱。'</span>, <span class="string">'我要汇钱。'</span>, <span class="string">'我要汇钱。'</span>]</span><br><span class="line">[<span class="string">'车辆通行证。'</span>, <span class="string">'车辆通行证。'</span>, <span class="string">'我要办车辆通行证。'</span>, <span class="string">'车辆通行证'</span>, <span class="string">'车辆通行证'</span>, <span class="string">'车辆通行证'</span>, <span class="string">'车辆通行证'</span>, <span class="string">'车辆通行证。'</span>, <span class="string">'车辆通行证'</span>, <span class="string">'车辆通行证。'</span>, <span class="string">'车辆通行证。'</span>, <span class="string">'车辆通行证'</span>]</span><br><span class="line">[<span class="string">'邮件附件权限'</span>, <span class="string">'等等邮件附件权限。'</span>, <span class="string">'邮件附件权限'</span>, <span class="string">'邮件附件权限'</span>, <span class="string">'邮件附件权限'</span>, <span class="string">'邮件附件权限'</span>, <span class="string">'您好，请问怎样申请图片查看权限和邮件附件查看权限？'</span>]</span><br></pre></td></tr></table></figure>
+<span class="token comment" spellcheck="true"># === Data loading === #</span>
+data <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+corpus <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token keyword">for</span> line <span class="token keyword">in</span> open<span class="token punctuation">(</span><span class="token string">"新意图语料.txt"</span><span class="token punctuation">,</span> <span class="token string">'r+'</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'UTF-8'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    data<span class="token punctuation">.</span>append<span class="token punctuation">(</span>eval<span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    tmp <span class="token operator">=</span> data<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'result'</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> j <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>tmp<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        corpus<span class="token punctuation">.</span>append<span class="token punctuation">(</span>tmp<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'corpus'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 
-<h1 id="4-附件：完整代码"><a href="#4-附件：完整代码" class="headerlink" title="4 附件：完整代码"></a>4 附件：完整代码</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># === import packages === #</span></span><br><span class="line"><span class="keyword">import</span> jieba.posseg <span class="keyword">as</span> pseg</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> TfidfTransformer</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> CountVectorizer</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> DBSCAN</span><br><span class="line"></span><br><span class="line"><span class="comment"># === Data loading === #</span></span><br><span class="line">data = []</span><br><span class="line">corpus = []</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> open(<span class="string">"新意图语料.txt"</span>, <span class="string">'r+'</span>, encoding=<span class="string">'UTF-8'</span>):</span><br><span class="line">    data.append(eval(line))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(data)):</span><br><span class="line">    tmp = data[i][<span class="string">'data'</span>][<span class="string">'result'</span>]</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(len(tmp)):</span><br><span class="line">        corpus.append(tmp[j][<span class="string">'corpus'</span>])</span><br><span class="line">        </span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> open(<span class="string">"未识别语料.txt"</span>, <span class="string">'r+'</span>):</span><br><span class="line">    line = line.strip(<span class="string">'\n'</span>)</span><br><span class="line">    line = line.strip(<span class="string">'\t'</span>)</span><br><span class="line">    line = line.rstrip(<span class="string">','</span>)</span><br><span class="line">    line = line.lstrip(<span class="string">'"'</span>)</span><br><span class="line">    line = line.rstrip(<span class="string">'"'</span>)</span><br><span class="line">    corpus.append(line)</span><br><span class="line">    </span><br><span class="line"><span class="comment"># === Record the text cut and POS === #</span></span><br><span class="line">part_of_speech = []</span><br><span class="line">word_after_cut = []</span><br><span class="line">cut_corpus_iter = corpus.copy()</span><br><span class="line">cut_corpus = corpus.copy()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(corpus)):</span><br><span class="line">    cut_corpus_iter[i] = pseg.cut(corpus[i])  <span class="comment"># 5316</span></span><br><span class="line">    cut_corpus[i] = <span class="string">""</span></span><br><span class="line">    <span class="keyword">for</span> every <span class="keyword">in</span> cut_corpus_iter[i]:</span><br><span class="line">        cut_corpus[i] = (cut_corpus[i] + <span class="string">" "</span> + str(every.word)).strip()</span><br><span class="line">        part_of_speech.append(every.flag)  <span class="comment"># 20640</span></span><br><span class="line">        word_after_cut.append(every.word)  <span class="comment"># 20640</span></span><br><span class="line">word_pos_dict = &#123;word_after_cut[i]: part_of_speech[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(word_after_cut))&#125;  </span><br><span class="line"></span><br><span class="line"><span class="comment"># === Get new weight with POS considered === #</span></span><br><span class="line">word_weight = [<span class="number">1</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(len(word))]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(word)):</span><br><span class="line">    <span class="keyword">if</span> word[i] <span class="keyword">not</span> <span class="keyword">in</span> word_pos_dict.keys():</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">if</span> word_pos_dict[word[i]] == <span class="string">'n'</span>:</span><br><span class="line">        word_weight[i] = <span class="number">1.2</span></span><br><span class="line">    <span class="keyword">elif</span> word_pos_dict[word[i]] == <span class="string">"vn"</span>:</span><br><span class="line">        word_weight[i] = <span class="number">1.1</span></span><br><span class="line">    <span class="keyword">elif</span> word_pos_dict[word[i]] == <span class="string">"m"</span>:</span><br><span class="line">        word_weight[i] = <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span>:  <span class="comment"># 权重调整可以根据实际情况进行更改</span></span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">word_weight = np.array(word_weight)</span><br><span class="line">new_weight = weight.copy()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(weight)):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(len(word)):</span><br><span class="line">        new_weight[i][j] = weight[i][j] * word_weight[j]</span><br><span class="line"></span><br><span class="line"><span class="comment"># === Fit the DBSCAN model and get the classify labels === #</span></span><br><span class="line">DBS_clf = DBSCAN(eps=<span class="number">1</span>, min_samples=<span class="number">4</span>)</span><br><span class="line">DBS_clf.fit(new_weight)</span><br><span class="line">print(DBS_clf.labels_)        </span><br><span class="line"> </span><br><span class="line"><span class="comment"># === Define the function of classify the original corpus according to the labels === #</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">labels_to_original</span><span class="params">(labels, original_corpus)</span>:</span></span><br><span class="line">    <span class="keyword">assert</span> len(labels) == len(original_corpus)</span><br><span class="line">    max_label = max(labels)</span><br><span class="line">    number_label = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, max_label + <span class="number">1</span>, <span class="number">1</span>)]</span><br><span class="line">    number_label.append(<span class="number">-1</span>)</span><br><span class="line">    result = [[] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(number_label))]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(labels)):</span><br><span class="line">        index = number_label.index(labels[i])</span><br><span class="line">        result[index].append(original_corpus[i])</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line">labels_original = labels_to_original(DBS_clf.labels_, corpus)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">	print(labels_original[i])</span><br></pre></td></tr></table></figure>
+<span class="token keyword">for</span> line <span class="token keyword">in</span> open<span class="token punctuation">(</span><span class="token string">"未识别语料.txt"</span><span class="token punctuation">,</span> <span class="token string">'r+'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    line <span class="token operator">=</span> line<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
+    line <span class="token operator">=</span> line<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token string">'\t'</span><span class="token punctuation">)</span>
+    line <span class="token operator">=</span> line<span class="token punctuation">.</span>rstrip<span class="token punctuation">(</span><span class="token string">','</span><span class="token punctuation">)</span>
+    line <span class="token operator">=</span> line<span class="token punctuation">.</span>lstrip<span class="token punctuation">(</span><span class="token string">'"'</span><span class="token punctuation">)</span>
+    line <span class="token operator">=</span> line<span class="token punctuation">.</span>rstrip<span class="token punctuation">(</span><span class="token string">'"'</span><span class="token punctuation">)</span>
+    corpus<span class="token punctuation">.</span>append<span class="token punctuation">(</span>line<span class="token punctuation">)</span>
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 聚类结果展示（部分）	</span></span><br><span class="line">[<span class="string">'社保卡'</span>, <span class="string">'社保卡'</span>, <span class="string">'社保卡。'</span>, <span class="string">'社保卡办理'</span>, <span class="string">'社保卡'</span>, <span class="string">'社保卡'</span>, <span class="string">'社保卡挂失'</span>, <span class="string">'社保卡。'</span>, <span class="string">'社保卡'</span>, <span class="string">'领取社保卡。'</span>]</span><br><span class="line">[<span class="string">'五险一金'</span>, <span class="string">'五险一金。'</span>, <span class="string">'五险一金。'</span>, <span class="string">'五险一金介绍'</span>, <span class="string">'看看二月份五险一金情况'</span>]</span><br><span class="line">[<span class="string">'打开汇钱。'</span>, <span class="string">'打开汇钱。'</span>, <span class="string">'我要汇钱'</span>, <span class="string">'我要汇钱。'</span>, <span class="string">'我要汇钱。'</span>, <span class="string">'我要汇钱。'</span>, <span class="string">'我要汇钱。'</span>, <span class="string">'我要汇钱。'</span>, <span class="string">'我要汇钱。'</span>]</span><br><span class="line">[<span class="string">'车辆通行证。'</span>, <span class="string">'车辆通行证。'</span>, <span class="string">'我要办车辆通行证。'</span>, <span class="string">'车辆通行证'</span>, <span class="string">'车辆通行证'</span>, <span class="string">'车辆通行证'</span>, <span class="string">'车辆通行证'</span>, <span class="string">'车辆通行证。'</span>, <span class="string">'车辆通行证'</span>, <span class="string">'车辆通行证。'</span>, <span class="string">'车辆通行证。'</span>, <span class="string">'车辆通行证'</span>]</span><br><span class="line">[<span class="string">'邮件附件权限'</span>, <span class="string">'等等邮件附件权限。'</span>, <span class="string">'邮件附件权限'</span>, <span class="string">'邮件附件权限'</span>, <span class="string">'邮件附件权限'</span>, <span class="string">'邮件附件权限'</span>, <span class="string">'您好，请问怎样申请图片查看权限和邮件附件查看权限？'</span>]</span><br></pre></td></tr></table></figure>
+<span class="token comment" spellcheck="true"># === Record the text cut and POS === #</span>
+part_of_speech <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+word_after_cut <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+cut_corpus_iter <span class="token operator">=</span> corpus<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+cut_corpus <span class="token operator">=</span> corpus<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>corpus<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    cut_corpus_iter<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> pseg<span class="token punctuation">.</span>cut<span class="token punctuation">(</span>corpus<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 5316</span>
+    cut_corpus<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">""</span>
+    <span class="token keyword">for</span> every <span class="token keyword">in</span> cut_corpus_iter<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">:</span>
+        cut_corpus<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span>cut_corpus<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token string">" "</span> <span class="token operator">+</span> str<span class="token punctuation">(</span>every<span class="token punctuation">.</span>word<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        part_of_speech<span class="token punctuation">.</span>append<span class="token punctuation">(</span>every<span class="token punctuation">.</span>flag<span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 20640</span>
+        word_after_cut<span class="token punctuation">.</span>append<span class="token punctuation">(</span>every<span class="token punctuation">.</span>word<span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 20640</span>
+word_pos_dict <span class="token operator">=</span> <span class="token punctuation">{</span>word_after_cut<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">:</span> part_of_speech<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>word_after_cut<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">}</span>  
 
+<span class="token comment" spellcheck="true"># === Get new weight with POS considered === #</span>
+word_weight <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>word<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>word<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> word<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">not</span> <span class="token keyword">in</span> word_pos_dict<span class="token punctuation">.</span>keys<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">continue</span>
+    <span class="token keyword">if</span> word_pos_dict<span class="token punctuation">[</span>word<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'n'</span><span class="token punctuation">:</span>
+        word_weight<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1.2</span>
+    <span class="token keyword">elif</span> word_pos_dict<span class="token punctuation">[</span>word<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">"vn"</span><span class="token punctuation">:</span>
+        word_weight<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1.1</span>
+    <span class="token keyword">elif</span> word_pos_dict<span class="token punctuation">[</span>word<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">"m"</span><span class="token punctuation">:</span>
+        word_weight<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 权重调整可以根据实际情况进行更改</span>
+        <span class="token keyword">continue</span>
+word_weight <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>word_weight<span class="token punctuation">)</span>
+new_weight <span class="token operator">=</span> weight<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>weight<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> j <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>word<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        new_weight<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> weight<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">*</span> word_weight<span class="token punctuation">[</span>j<span class="token punctuation">]</span>
 
+<span class="token comment" spellcheck="true"># === Fit the DBSCAN model and get the classify labels === #</span>
+DBS_clf <span class="token operator">=</span> DBSCAN<span class="token punctuation">(</span>eps<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> min_samples<span class="token operator">=</span><span class="token number">4</span><span class="token punctuation">)</span>
+DBS_clf<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>new_weight<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>DBS_clf<span class="token punctuation">.</span>labels_<span class="token punctuation">)</span>        
+
+<span class="token comment" spellcheck="true"># === Define the function of classify the original corpus according to the labels === #</span>
+<span class="token keyword">def</span> <span class="token function">labels_to_original</span><span class="token punctuation">(</span>labels<span class="token punctuation">,</span> original_corpus<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">assert</span> len<span class="token punctuation">(</span>labels<span class="token punctuation">)</span> <span class="token operator">==</span> len<span class="token punctuation">(</span>original_corpus<span class="token punctuation">)</span>
+    max_label <span class="token operator">=</span> max<span class="token punctuation">(</span>labels<span class="token punctuation">)</span>
+    number_label <span class="token operator">=</span> <span class="token punctuation">[</span>i <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> max_label <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    number_label<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+    result <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>number_label<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>labels<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        index <span class="token operator">=</span> number_label<span class="token punctuation">.</span>index<span class="token punctuation">(</span>labels<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+        result<span class="token punctuation">[</span>index<span class="token punctuation">]</span><span class="token punctuation">.</span>append<span class="token punctuation">(</span>original_corpus<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> result
+
+labels_original <span class="token operator">=</span> labels_to_original<span class="token punctuation">(</span>DBS_clf<span class="token punctuation">.</span>labels_<span class="token punctuation">,</span> corpus<span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>labels_original<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 聚类结果展示（部分）    </span>
+<span class="token punctuation">[</span><span class="token string">'社保卡'</span><span class="token punctuation">,</span> <span class="token string">'社保卡'</span><span class="token punctuation">,</span> <span class="token string">'社保卡。'</span><span class="token punctuation">,</span> <span class="token string">'社保卡办理'</span><span class="token punctuation">,</span> <span class="token string">'社保卡'</span><span class="token punctuation">,</span> <span class="token string">'社保卡'</span><span class="token punctuation">,</span> <span class="token string">'社保卡挂失'</span><span class="token punctuation">,</span> <span class="token string">'社保卡。'</span><span class="token punctuation">,</span> <span class="token string">'社保卡'</span><span class="token punctuation">,</span> <span class="token string">'领取社保卡。'</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token string">'五险一金'</span><span class="token punctuation">,</span> <span class="token string">'五险一金。'</span><span class="token punctuation">,</span> <span class="token string">'五险一金。'</span><span class="token punctuation">,</span> <span class="token string">'五险一金介绍'</span><span class="token punctuation">,</span> <span class="token string">'看看二月份五险一金情况'</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token string">'打开汇钱。'</span><span class="token punctuation">,</span> <span class="token string">'打开汇钱。'</span><span class="token punctuation">,</span> <span class="token string">'我要汇钱'</span><span class="token punctuation">,</span> <span class="token string">'我要汇钱。'</span><span class="token punctuation">,</span> <span class="token string">'我要汇钱。'</span><span class="token punctuation">,</span> <span class="token string">'我要汇钱。'</span><span class="token punctuation">,</span> <span class="token string">'我要汇钱。'</span><span class="token punctuation">,</span> <span class="token string">'我要汇钱。'</span><span class="token punctuation">,</span> <span class="token string">'我要汇钱。'</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token string">'车辆通行证。'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证。'</span><span class="token punctuation">,</span> <span class="token string">'我要办车辆通行证。'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证。'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证。'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证。'</span><span class="token punctuation">,</span> <span class="token string">'车辆通行证'</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token string">'邮件附件权限'</span><span class="token punctuation">,</span> <span class="token string">'等等邮件附件权限。'</span><span class="token punctuation">,</span> <span class="token string">'邮件附件权限'</span><span class="token punctuation">,</span> <span class="token string">'邮件附件权限'</span><span class="token punctuation">,</span> <span class="token string">'邮件附件权限'</span><span class="token punctuation">,</span> <span class="token string">'邮件附件权限'</span><span class="token punctuation">,</span> <span class="token string">'您好，请问怎样申请图片查看权限和邮件附件查看权限？'</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
             </div>
             <hr/>
 
@@ -860,6 +988,32 @@
         </div>
     </div>
 
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '3fa0e3a4d72d5144a445',
+        clientSecret: '72054d513dd9fdc6b2c749216bb2c498048592aa',
+        repo: '',
+        owner: 'dataquaner',
+        admin: null,
+        id: '2020-01-07T16-05-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
     
 
     
@@ -1112,7 +1266,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 
     <footer class="page-footer bg-color">
-    <div class="container row center-align" style="margin-bottom: 0px !important;">
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">2019</span>
@@ -1120,6 +1274,9 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">56.4k</span>&nbsp;字
             
             
             
@@ -1139,17 +1296,61 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             
             <br>
             
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "6";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
             <br>
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+    <a href="https://github.com/dataquaner" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
         <i class="fab fa-github"></i>
     </a>
 
 
 
-    <a href="mailto:1181062873@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+    <a href="mailto:dataquanerleo@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
         <i class="fas fa-envelope-open"></i>
     </a>
 
@@ -1159,7 +1360,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 
 
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1181062873" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1181062873" data-position="top" data-delay="50">
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2077689752" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 2077689752" data-position="top" data-delay="50">
         <i class="fab fa-qq"></i>
     </a>
 

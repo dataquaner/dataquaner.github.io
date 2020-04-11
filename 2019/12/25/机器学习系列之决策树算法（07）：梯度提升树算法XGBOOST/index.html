@@ -1,75 +1,585 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><title>机器学习系列之决策树算法（07）：梯度提升树算法XGBoost | DataQuaner</title><meta name="description" content="XGBoost"><meta name="keywords" content="XGBoost"><meta name="author" content="Leon"><meta name="copyright" content="Leon"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="preconnect" href="//cdn.jsdelivr.net"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="机器学习系列之决策树算法（07）：梯度提升树算法XGBoost"><meta name="twitter:description" content="XGBoost"><meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png"><meta property="og:type" content="article"><meta property="og:title" content="机器学习系列之决策树算法（07）：梯度提升树算法XGBoost"><meta property="og:url" content="https://dataquaner.github.io/2019/12/25/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8807%EF%BC%89%EF%BC%9A%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91%E7%AE%97%E6%B3%95XGBOOST/"><meta property="og:site_name" content="DataQuaner"><meta property="og:description" content="XGBoost"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>const autoChangeMode = 'false'
-var t = Cookies.get("theme");
-if (autoChangeMode == '1'){
-const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
-const isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
-const isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
-const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
-
-if (t === undefined){
-  if (isLightMode) activateLightMode()
-  else if (isDarkMode) activateDarkMode()
-  else if (isNotSpecified || hasNoSupport){
-    console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
-    now = new Date();
-    hour = now.getHours();
-    isNight = hour < 6 || hour >= 18
-    isNight ? activateDarkMode() : activateLightMode()
-}
-} else if (t == 'light') activateLightMode()
-else activateDarkMode()
+<!DOCTYPE HTML>
+<html lang="zh-CN">
 
 
-} else if (autoChangeMode == '2'){
-  now = new Date();
-  hour = now.getHours();
-  isNight = hour < 6 || hour >= 18
-  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
-  else if (t === 'light') activateLightMode()
-  else activateDarkMode() 
-} else {
-  if ( t == 'dark' ) activateDarkMode()
-  else if ( t == 'light') activateLightMode()
-}
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="XGBoost">
+    <meta name="description" content="前言XGBoost的全称是eXtreme Gradient Boosting，它是经过优化的分布式梯度提升库，旨在高效、灵活且可移植。XGBoost是大规模并行boosting tree的工具，它是目前最快最好的开源 boosting tr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>机器学习系列之决策树算法（07）：梯度提升树算法XGBoost | DataQuaner</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
 
-function activateDarkMode(){
-  document.documentElement.setAttribute('data-theme', 'dark')
-  if (document.querySelector('meta[name="theme-color"]') !== null){
-    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
-  }
-}
-function activateLightMode(){
-  document.documentElement.setAttribute('data-theme', 'light')
-  if (document.querySelector('meta[name="theme-color"]') !== null){
-  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
-  }
-}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="https://dataquaner.github.io/2019/12/25/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8807%EF%BC%89%EF%BC%9A%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91%E7%AE%97%E6%B3%95XGBOOST/"><link rel="prev" title="机器学习系列之决策树算法（03）：决策树的剪枝" href="https://dataquaner.github.io/2019/12/25/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8803%EF%BC%89%EF%BC%9A%E5%86%B3%E7%AD%96%E6%A0%91%E7%9A%84%E5%89%AA%E6%9E%9D/"><link rel="next" title="机器学习系列之决策树算法（05）：梯度提升树算法GBDT" href="https://dataquaner.github.io/2019/12/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8805%EF%BC%89%EF%BC%9A%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91%E7%AE%97%E6%B3%95GBDT/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
-  root: '/',
-  algolia: undefined,
-  localSearch: undefined,
-  translate: {"defaultEncoding":2,"translateDelay":0,"cookieDomain":"https://xxx/","msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
-  highlight_copy: 'true',
-  highlight_lang: 'true',
-  highlight_shrink: 'false',
-  copy: {
-    success: '复制成功',
-    error: '复制错误',
-    noSupport: '浏览器不支持'
-  },
-  bookmark: {
-    title: 'Snackbar.bookmark.title',
-    message_prev: '按',
-    message_next: '键将本页加入书签'
-  },
-  runtime_unit: '天',
-  copyright: undefined,
-  copy_copyright_js: false,
-  ClickShowText: undefined,
-  medium_zoom: 'false',
-  Snackbar: undefined
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="alternate" href="/atom.xml" title="DataQuaner" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">DataQuaner</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
   
-}</script><link rel="alternate" href="/atom.xml" title="DataQuaner" type="application/atom+xml">
-</head><body><div id="header"> <div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">DataQuaner</a></span><i class="fa fa-bars fa-fw toggle-menu pull_right close" aria-hidden="true"></i><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 类别</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> 小憩</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> 电影</span></a></li></ul></div></div></span><span class="pull_right" id="search_button"></span></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="lazyload avatar_img" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/Photo/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'"></div><div class="mobile_post_data"><div class="mobile_data_item is_center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">16</div></a></div></div><div class="mobile_data_item is_center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">8</div></a></div></div><div class="mobile_data_item is_center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">13</div></a></div></div></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 类别</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> 小憩</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> 电影</span></a></li></ul></div></div></div><div id="mobile-sidebar-toc"><div class="toc_mobile_headline">目录</div><ol class="toc_mobile_items"><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#前言"><span class="toc_mobile_items-number">1.</span> <span class="toc_mobile_items-text">前言</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#数学原理"><span class="toc_mobile_items-number">2.</span> <span class="toc_mobile_items-text">数学原理</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#生成一棵树"><span class="toc_mobile_items-number">2.1.</span> <span class="toc_mobile_items-text">生成一棵树</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#Boosting-Tree回顾"><span class="toc_mobile_items-number">2.1.1.</span> <span class="toc_mobile_items-text">Boosting Tree回顾</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#目标函数"><span class="toc_mobile_items-number">2.1.2.</span> <span class="toc_mobile_items-text">目标函数</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#基于决策树的目标函数"><span class="toc_mobile_items-number">2.1.3.</span> <span class="toc_mobile_items-text">基于决策树的目标函数</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#泰勒公式展开"><span class="toc_mobile_items-number">2.1.4.</span> <span class="toc_mobile_items-text">泰勒公式展开</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#一棵树的生长细节"><span class="toc_mobile_items-number">2.2.</span> <span class="toc_mobile_items-text">一棵树的生长细节</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#分裂结点"><span class="toc_mobile_items-number">2.2.1.</span> <span class="toc_mobile_items-text">分裂结点</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#寻找最佳分裂点"><span class="toc_mobile_items-number">2.2.2.</span> <span class="toc_mobile_items-text">寻找最佳分裂点</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-6"><a class="toc_mobile_items-link" href="#贪心算法"><span class="toc_mobile_items-number">2.2.2.0.1.</span> <span class="toc_mobile_items-text">贪心算法</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-6"><a class="toc_mobile_items-link" href="#近似算法"><span class="toc_mobile_items-number">2.2.2.0.2.</span> <span class="toc_mobile_items-text">近似算法</span></a></li></ol></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#停止生长"><span class="toc_mobile_items-number">2.2.3.</span> <span class="toc_mobile_items-text">停止生长</span></a></li></ol></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#算法工程优化"><span class="toc_mobile_items-number">3.</span> <span class="toc_mobile_items-text">算法工程优化</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#对内存的优化：列块并行学习"><span class="toc_mobile_items-number">3.1.</span> <span class="toc_mobile_items-text">对内存的优化：列块并行学习</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#对CPU-Cache的优化：缓存优化"><span class="toc_mobile_items-number">3.2.</span> <span class="toc_mobile_items-text">对CPU Cache的优化：缓存优化</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#对IO的优化：核外块计算"><span class="toc_mobile_items-number">3.3.</span> <span class="toc_mobile_items-text">对IO的优化：核外块计算</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#优缺点"><span class="toc_mobile_items-number">4.</span> <span class="toc_mobile_items-text">优缺点</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#优点"><span class="toc_mobile_items-number">4.1.</span> <span class="toc_mobile_items-text">优点</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#缺点"><span class="toc_mobile_items-number">4.2.</span> <span class="toc_mobile_items-text">缺点</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost与GBDT的差异"><span class="toc_mobile_items-number">4.3.</span> <span class="toc_mobile_items-text">XGBoost与GBDT的差异</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#XGBoost代码实现"><span class="toc_mobile_items-number">5.</span> <span class="toc_mobile_items-text">XGBoost代码实现</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#安装XGBoost依赖包"><span class="toc_mobile_items-number">5.1.</span> <span class="toc_mobile_items-text">安装XGBoost依赖包</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost分类和回归"><span class="toc_mobile_items-number">5.2.</span> <span class="toc_mobile_items-text">XGBoost分类和回归</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost调参"><span class="toc_mobile_items-number">5.3.</span> <span class="toc_mobile_items-text">XGBoost调参</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#General-Parameters"><span class="toc_mobile_items-number">5.3.1.</span> <span class="toc_mobile_items-text">General Parameters</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#Booster-parameters"><span class="toc_mobile_items-number">5.3.2.</span> <span class="toc_mobile_items-text">Booster parameters</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#Learning-Task-Parameters"><span class="toc_mobile_items-number">5.3.3.</span> <span class="toc_mobile_items-text">Learning Task Parameters</span></a></li></ol></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#关于XGBoost若干问题的思考"><span class="toc_mobile_items-number">6.</span> <span class="toc_mobile_items-text">关于XGBoost若干问题的思考</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost与GBDT的联系和区别有哪些？"><span class="toc_mobile_items-number">6.1.</span> <span class="toc_mobile_items-text">XGBoost与GBDT的联系和区别有哪些？</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#为什么XGBoost泰勒二阶展开后效果就比较好呢？"><span class="toc_mobile_items-number">6.2.</span> <span class="toc_mobile_items-text">为什么XGBoost泰勒二阶展开后效果就比较好呢？</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost对缺失值是怎么处理的？"><span class="toc_mobile_items-number">6.3.</span> <span class="toc_mobile_items-text">XGBoost对缺失值是怎么处理的？</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost为什么可以并行训练？"><span class="toc_mobile_items-number">6.4.</span> <span class="toc_mobile_items-text">XGBoost为什么可以并行训练？</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#20道XGBoost面试题"><span class="toc_mobile_items-number">7.</span> <span class="toc_mobile_items-text">20道XGBoost面试题</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#简单介绍一下XGBoost"><span class="toc_mobile_items-number">7.1.</span> <span class="toc_mobile_items-text">简单介绍一下XGBoost</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost与GBDT有什么不同"><span class="toc_mobile_items-number">7.2.</span> <span class="toc_mobile_items-text">XGBoost与GBDT有什么不同</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost为什么使用泰勒二阶展开"><span class="toc_mobile_items-number">7.3.</span> <span class="toc_mobile_items-text">XGBoost为什么使用泰勒二阶展开</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost为什么可以并行训练"><span class="toc_mobile_items-number">7.4.</span> <span class="toc_mobile_items-text">XGBoost为什么可以并行训练</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost为什么快"><span class="toc_mobile_items-number">7.5.</span> <span class="toc_mobile_items-text">XGBoost为什么快</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost防止过拟合的方法"><span class="toc_mobile_items-number">7.6.</span> <span class="toc_mobile_items-text">XGBoost防止过拟合的方法</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost如何处理缺失值"><span class="toc_mobile_items-number">7.7.</span> <span class="toc_mobile_items-text">XGBoost如何处理缺失值</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost中叶子结点的权重如何计算出来"><span class="toc_mobile_items-number">7.8.</span> <span class="toc_mobile_items-text">XGBoost中叶子结点的权重如何计算出来</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost中的一棵树的停止生长条件"><span class="toc_mobile_items-number">7.9.</span> <span class="toc_mobile_items-text">XGBoost中的一棵树的停止生长条件</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#RF和GBDT的区别"><span class="toc_mobile_items-number">7.10.</span> <span class="toc_mobile_items-text">RF和GBDT的区别</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost如何处理不平衡数据"><span class="toc_mobile_items-number">7.11.</span> <span class="toc_mobile_items-text">XGBoost如何处理不平衡数据</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#比较LR和GBDT，说说什么情景下GBDT不如LR"><span class="toc_mobile_items-number">7.12.</span> <span class="toc_mobile_items-text">比较LR和GBDT，说说什么情景下GBDT不如LR</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost中如何对树进行剪枝"><span class="toc_mobile_items-number">7.13.</span> <span class="toc_mobile_items-text">XGBoost中如何对树进行剪枝</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost如何选择最佳分裂点？"><span class="toc_mobile_items-number">7.14.</span> <span class="toc_mobile_items-text">XGBoost如何选择最佳分裂点？</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost的Scalable性如何体现"><span class="toc_mobile_items-number">7.15.</span> <span class="toc_mobile_items-text">XGBoost的Scalable性如何体现</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost如何评价特征的重要性"><span class="toc_mobile_items-number">7.16.</span> <span class="toc_mobile_items-text">XGBoost如何评价特征的重要性</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBooost参数调优的一般步骤"><span class="toc_mobile_items-number">7.17.</span> <span class="toc_mobile_items-text">XGBooost参数调优的一般步骤</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost模型如果过拟合了怎么解决"><span class="toc_mobile_items-number">7.18.</span> <span class="toc_mobile_items-text">XGBoost模型如果过拟合了怎么解决</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#为什么XGBoost相比某些模型对缺失值不敏感"><span class="toc_mobile_items-number">7.19.</span> <span class="toc_mobile_items-text">为什么XGBoost相比某些模型对缺失值不敏感</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#XGBoost和LightGBM的区别"><span class="toc_mobile_items-number">7.20.</span> <span class="toc_mobile_items-text">XGBoost和LightGBM的区别</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#参考资料"><span class="toc_mobile_items-number">8.</span> <span class="toc_mobile_items-text">参考资料</span></a></li></ol></div></div><div id="body-wrap"><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true">     </i><div class="auto_open" id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数学原理"><span class="toc-number">2.</span> <span class="toc-text">数学原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#生成一棵树"><span class="toc-number">2.1.</span> <span class="toc-text">生成一棵树</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Boosting-Tree回顾"><span class="toc-number">2.1.1.</span> <span class="toc-text">Boosting Tree回顾</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#目标函数"><span class="toc-number">2.1.2.</span> <span class="toc-text">目标函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基于决策树的目标函数"><span class="toc-number">2.1.3.</span> <span class="toc-text">基于决策树的目标函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#泰勒公式展开"><span class="toc-number">2.1.4.</span> <span class="toc-text">泰勒公式展开</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一棵树的生长细节"><span class="toc-number">2.2.</span> <span class="toc-text">一棵树的生长细节</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#分裂结点"><span class="toc-number">2.2.1.</span> <span class="toc-text">分裂结点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#寻找最佳分裂点"><span class="toc-number">2.2.2.</span> <span class="toc-text">寻找最佳分裂点</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#贪心算法"><span class="toc-number">2.2.2.0.1.</span> <span class="toc-text">贪心算法</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#近似算法"><span class="toc-number">2.2.2.0.2.</span> <span class="toc-text">近似算法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#停止生长"><span class="toc-number">2.2.3.</span> <span class="toc-text">停止生长</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#算法工程优化"><span class="toc-number">3.</span> <span class="toc-text">算法工程优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#对内存的优化：列块并行学习"><span class="toc-number">3.1.</span> <span class="toc-text">对内存的优化：列块并行学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对CPU-Cache的优化：缓存优化"><span class="toc-number">3.2.</span> <span class="toc-text">对CPU Cache的优化：缓存优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对IO的优化：核外块计算"><span class="toc-number">3.3.</span> <span class="toc-text">对IO的优化：核外块计算</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优缺点"><span class="toc-number">4.</span> <span class="toc-text">优缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#优点"><span class="toc-number">4.1.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点"><span class="toc-number">4.2.</span> <span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost与GBDT的差异"><span class="toc-number">4.3.</span> <span class="toc-text">XGBoost与GBDT的差异</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XGBoost代码实现"><span class="toc-number">5.</span> <span class="toc-text">XGBoost代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装XGBoost依赖包"><span class="toc-number">5.1.</span> <span class="toc-text">安装XGBoost依赖包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost分类和回归"><span class="toc-number">5.2.</span> <span class="toc-text">XGBoost分类和回归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost调参"><span class="toc-number">5.3.</span> <span class="toc-text">XGBoost调参</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#General-Parameters"><span class="toc-number">5.3.1.</span> <span class="toc-text">General Parameters</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Booster-parameters"><span class="toc-number">5.3.2.</span> <span class="toc-text">Booster parameters</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Learning-Task-Parameters"><span class="toc-number">5.3.3.</span> <span class="toc-text">Learning Task Parameters</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于XGBoost若干问题的思考"><span class="toc-number">6.</span> <span class="toc-text">关于XGBoost若干问题的思考</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost与GBDT的联系和区别有哪些？"><span class="toc-number">6.1.</span> <span class="toc-text">XGBoost与GBDT的联系和区别有哪些？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么XGBoost泰勒二阶展开后效果就比较好呢？"><span class="toc-number">6.2.</span> <span class="toc-text">为什么XGBoost泰勒二阶展开后效果就比较好呢？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost对缺失值是怎么处理的？"><span class="toc-number">6.3.</span> <span class="toc-text">XGBoost对缺失值是怎么处理的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost为什么可以并行训练？"><span class="toc-number">6.4.</span> <span class="toc-text">XGBoost为什么可以并行训练？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#20道XGBoost面试题"><span class="toc-number">7.</span> <span class="toc-text">20道XGBoost面试题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#简单介绍一下XGBoost"><span class="toc-number">7.1.</span> <span class="toc-text">简单介绍一下XGBoost</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost与GBDT有什么不同"><span class="toc-number">7.2.</span> <span class="toc-text">XGBoost与GBDT有什么不同</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost为什么使用泰勒二阶展开"><span class="toc-number">7.3.</span> <span class="toc-text">XGBoost为什么使用泰勒二阶展开</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost为什么可以并行训练"><span class="toc-number">7.4.</span> <span class="toc-text">XGBoost为什么可以并行训练</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost为什么快"><span class="toc-number">7.5.</span> <span class="toc-text">XGBoost为什么快</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost防止过拟合的方法"><span class="toc-number">7.6.</span> <span class="toc-text">XGBoost防止过拟合的方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost如何处理缺失值"><span class="toc-number">7.7.</span> <span class="toc-text">XGBoost如何处理缺失值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost中叶子结点的权重如何计算出来"><span class="toc-number">7.8.</span> <span class="toc-text">XGBoost中叶子结点的权重如何计算出来</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost中的一棵树的停止生长条件"><span class="toc-number">7.9.</span> <span class="toc-text">XGBoost中的一棵树的停止生长条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RF和GBDT的区别"><span class="toc-number">7.10.</span> <span class="toc-text">RF和GBDT的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost如何处理不平衡数据"><span class="toc-number">7.11.</span> <span class="toc-text">XGBoost如何处理不平衡数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#比较LR和GBDT，说说什么情景下GBDT不如LR"><span class="toc-number">7.12.</span> <span class="toc-text">比较LR和GBDT，说说什么情景下GBDT不如LR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost中如何对树进行剪枝"><span class="toc-number">7.13.</span> <span class="toc-text">XGBoost中如何对树进行剪枝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost如何选择最佳分裂点？"><span class="toc-number">7.14.</span> <span class="toc-text">XGBoost如何选择最佳分裂点？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost的Scalable性如何体现"><span class="toc-number">7.15.</span> <span class="toc-text">XGBoost的Scalable性如何体现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost如何评价特征的重要性"><span class="toc-number">7.16.</span> <span class="toc-text">XGBoost如何评价特征的重要性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBooost参数调优的一般步骤"><span class="toc-number">7.17.</span> <span class="toc-text">XGBooost参数调优的一般步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost模型如果过拟合了怎么解决"><span class="toc-number">7.18.</span> <span class="toc-text">XGBoost模型如果过拟合了怎么解决</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么XGBoost相比某些模型对缺失值不敏感"><span class="toc-number">7.19.</span> <span class="toc-text">为什么XGBoost相比某些模型对缺失值不敏感</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost和LightGBM的区别"><span class="toc-number">7.20.</span> <span class="toc-text">XGBoost和LightGBM的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">8.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png)"><div id="post-info"><div id="post-title"><div class="posttitle">机器学习系列之决策树算法（07）：梯度提升树算法XGBoost</div></div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 发表于 2019-12-25<span class="post-meta__separator">|</span><i class="fa fa-history" aria-hidden="true"></i> 更新于 2019-12-25</time><span class="post-meta__separator mobile_hidden">|</span><span class="mobile_hidden"><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Machine-Learning/">Machine Learning</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Machine-Learning/XGBoost/">XGBoost</a></span><div class="post-meta-wordcount"><i class="fa fa-file-word-o post-meta__icon" aria-hidden="true"></i><span>字数总计: </span><span class="word-count">15.6k</span><span class="post-meta__separator">|</span><i class="fa fa-clock-o post-meta__icon" aria-hidden="true"></i><span>阅读时长: 48 分钟</span><span class="post-meta__separator">|</span><i class="fa fa-eye post-meta__icon" aria-hidden="true">       </i><span>阅读量: </span><span id="busuanzi_value_page_pv"></span></div></div></div></div><div class="layout layout_post" id="content-inner">   <article id="post"><div class="article-container" id="post-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>XGBoost的全称是eXtreme Gradient Boosting，它是经过优化的分布式梯度提升库，旨在高效、灵活且可移植。XGBoost是大规模并行boosting tree的工具，它是目前最快最好的开源 boosting tree工具包，比常见的工具包快10倍以上。在数据科学方面，有大量的Kaggle选手选用XGBoost进行数据挖掘比赛，是各大数据科学比赛的必杀武器；在工业界大规模数据方面，XGBoost的分布式版本有广泛的可移植性，支持在Kubernetes、Hadoop、SGE、MPI、 Dask等各个分布式环境上运行，使得它可以很好地解决工业界大规模数据的问题。本文将从XGBoost的数学原理和工程实现上进行介绍，然后介绍XGBoost的优缺点。</p>
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="" class="waves-effect waves-light">
+
+      
+      <i class="fas fa-list" style="zoom: 0.6;"></i>
+      
+      <span>Medias</span>
+      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
+    </a>
+    <ul class="sub-nav menus_item_child ">
+      
+      <li>
+        <a href="/musics">
+          
+          <i class="fas fa-music" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>Musics</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/movies">
+          
+          <i class="fas fa-film" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>Movies</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/books">
+          
+          <i class="fas fa-book" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>Books</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/galleries">
+          
+          <i class="fas fa-image" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>Galleries</span>
+        </a>
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">DataQuaner</div>
+        <div class="logo-desc">
+            
+            Data|Algorithm|Business
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="javascript:;" target="_blank" rel="noopener">
+			
+				<i class="fa-fw fas fa-list"></i>
+			
+			Medias
+			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
+		</a>
+            <ul  style="background:  ;" >
+              
+                <li>   
+				
+                  <a href="/musics " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-music" style="position: absolute;left:50px" ></i>
+			      
+		          <span>Musics</span>
+                  </a>
+                </li>
+              
+                <li>   
+				
+                  <a href="/movies " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-film" style="position: absolute;left:50px" ></i>
+			      
+		          <span>Movies</span>
+                  </a>
+                </li>
+              
+                <li>   
+				
+                  <a href="/books " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-book" style="position: absolute;left:50px" ></i>
+			      
+		          <span>Books</span>
+                  </a>
+                </li>
+              
+                <li>   
+				
+                  <a href="/galleries " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-image" style="position: absolute;left:50px" ></i>
+			      
+		          <span>Galleries</span>
+                  </a>
+                </li>
+               
+            </ul>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">机器学习系列之决策树算法（07）：梯度提升树算法XGBoost</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/XGBoost/">
+                                <span class="chip bg-color">XGBoost</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Machine-Learning/" class="post-category">
+                                Machine Learning
+                            </a>
+                        
+                            <a href="/categories/Machine-Learning/XGBoost/" class="post-category">
+                                XGBoost
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2019-12-25
+                </div>
+                
+
+                
+
+                
+
+                
+				
+                
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>XGBoost的全称是eXtreme Gradient Boosting，它是经过优化的分布式梯度提升库，旨在高效、灵活且可移植。XGBoost是大规模并行boosting tree的工具，它是目前最快最好的开源 boosting tree工具包，比常见的工具包快10倍以上。在数据科学方面，有大量的Kaggle选手选用XGBoost进行数据挖掘比赛，是各大数据科学比赛的必杀武器；在工业界大规模数据方面，XGBoost的分布式版本有广泛的可移植性，支持在Kubernetes、Hadoop、SGE、MPI、 Dask等各个分布式环境上运行，使得它可以很好地解决工业界大规模数据的问题。本文将从XGBoost的数学原理和工程实现上进行介绍，然后介绍XGBoost的优缺点。</p>
 <h2 id="数学原理"><a href="#数学原理" class="headerlink" title="数学原理"></a>数学原理</h2><h3 id="生成一棵树"><a href="#生成一棵树" class="headerlink" title="生成一棵树"></a>生成一棵树</h3><h4 id="Boosting-Tree回顾"><a href="#Boosting-Tree回顾" class="headerlink" title="Boosting Tree回顾"></a><strong>Boosting Tree回顾</strong></h4><p>XGBoost模型是大规模并行boosting tree的工具，它是目前较好的开源boosting tree工具包。因此，在了解XGBoost算法基本原理之前，需要首先了解Boosting Tree算法基本原理。Boosting方法是一类应用广泛且非常有效的统计学习方法。它是基于这样一种思想：对于一个复杂任务来说，将多个专家的判断进行适当的综合所得出的判断，要比任何一个专家单独的判断要好。这种思想整体上可以分为两种：</p>
 <ul>
 <li><strong>强可学习</strong>：如果存在一个多项式的学习算法能够学习它，并且正确率很高，那么就称为强可学习，直接单个模型就搞定常规问题。就好比专家给出的意见都很接近且都是正确率很高的结果，那么一个专家的结论就可以用了，这种情况非常少见。</li>
@@ -78,81 +588,81 @@ function activateLightMode(){
 <p>boosting算法主要是针对弱可学习的分类器来开展优化工作。其关心的问题包括两方面内容：</p>
 <p>（1）在每一轮如何改变训练数据的权值和概率分布；</p>
 <p>（2）如何将弱分类器组合成一个强分类器，这种思路较好的就是AdaBoost算法，以前在遥感图像地物识别中得到过应用。</p>
-<p><img alt="Boosting模型基本流程" data-src="https://pic2.zhimg.com/80/v2-35e3fd2bd53b5cbfc2f9596eb2479591_hd.jpg" class="lazyload"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-35e3fd2bd53b5cbfc2f9596eb2479591_hd.jpg" alt="Boosting模型基本流程"></p>
 <p>Boosting Tree模型采用<strong>加法模型</strong>与<strong>前向分步算法</strong>，而且基模型都是决策树模型。前向分步算法（Forward stage wise additive model）是指在叠加新的基模型的基础上同步进行优化，具体而言，就是每一次叠加的模型都去拟合上一次模型拟合后产生的残差（Residual）。从算法模型解释上来说，Boosting Tree是决策树的加法模型：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Cbegin%7Bequation%7D+f_%7BM%7D%28x%29+%3D+%5Csum_%7Bm%3D1%7D%5E%7BM%7DT%28x%2C%5Ctheta_%7Bm%7D%29+%5Cend%7Bequation%7D" class="lazyload"> （1）</p>
-<p>上式中M为决策树的数量； <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=T%28x%2C+%5Ctheta_%7Bm%7D%29" class="lazyload"> 为某个决策树； <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Ctheta_%7Bm%7D" class="lazyload"> 为对应决策树的参数。</p>
-<p>Boosting Tree模型采用前向分步算法，其中假设 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f_%7B0%7D%28x%29+%3D+0" class="lazyload"> ，则第m步的模型是：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f_%7Bm%7D%28x%29+%3D+f_%7Bm-1%7D%28x%29%2BT%28x%2C+%5Ctheta_%7Bm%7D%29" class="lazyload"> （2）</p>
-<p>为求解对应的参数 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Ctheta_%7Bm%7D" class="lazyload"> ，需要最小化相应损失函数来确定，具体公式如下：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Ctheta_%7Bm%7D%5E%7B%27%7D+%3D+arg+%5Cmin_%7B%5Ctheta_%7Bm%7D%7D%5Csum_%7Bi%3D1%7D%5E%7BM%7DL%28y_%7Bi%7D%2C+f_%7Bm-1%7D%28x_%7Bi%7D%29+%2B+T%28x_%7Bi%7D%3B%5Ctheta_%7Bm%7D%29%29" class="lazyload"> （3）</p>
-<p>由前向分步算法得到M棵决策树<img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=T%28x%2C+%5Ctheta_%7Bm%7D%29" class="lazyload"> 后，再进行加和，就得到了提升树模型 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f_%7BM%7D%28x%29" class="lazyload"> 。在xgboost论文中提到的一个明显的boosting tree的加和应用案例如图3所示。</p>
-<p><img alt="img" data-src="https://pic2.zhimg.com/80/v2-fee9ec17376a633196bebbf56c18c2f5_hd.jpg" class="lazyload">图2 boosting tree的累加效果示意图</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Cbegin%7Bequation%7D+f_%7BM%7D%28x%29+%3D+%5Csum_%7Bm%3D1%7D%5E%7BM%7DT%28x%2C%5Ctheta_%7Bm%7D%29+%5Cend%7Bequation%7D" alt="[公式]"> （1）</p>
+<p>上式中M为决策树的数量； <img src="https://www.zhihu.com/equation?tex=T%28x%2C+%5Ctheta_%7Bm%7D%29" alt="[公式]"> 为某个决策树； <img src="https://www.zhihu.com/equation?tex=%5Ctheta_%7Bm%7D" alt="[公式]"> 为对应决策树的参数。</p>
+<p>Boosting Tree模型采用前向分步算法，其中假设 <img src="https://www.zhihu.com/equation?tex=f_%7B0%7D%28x%29+%3D+0" alt="[公式]"> ，则第m步的模型是：</p>
+<p><img src="https://www.zhihu.com/equation?tex=f_%7Bm%7D%28x%29+%3D+f_%7Bm-1%7D%28x%29%2BT%28x%2C+%5Ctheta_%7Bm%7D%29" alt="[公式]"> （2）</p>
+<p>为求解对应的参数 <img src="https://www.zhihu.com/equation?tex=%5Ctheta_%7Bm%7D" alt="[公式]"> ，需要最小化相应损失函数来确定，具体公式如下：</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Ctheta_%7Bm%7D%5E%7B%27%7D+%3D+arg+%5Cmin_%7B%5Ctheta_%7Bm%7D%7D%5Csum_%7Bi%3D1%7D%5E%7BM%7DL%28y_%7Bi%7D%2C+f_%7Bm-1%7D%28x_%7Bi%7D%29+%2B+T%28x_%7Bi%7D%3B%5Ctheta_%7Bm%7D%29%29" alt="[公式]"> （3）</p>
+<p>由前向分步算法得到M棵决策树<img src="https://www.zhihu.com/equation?tex=T%28x%2C+%5Ctheta_%7Bm%7D%29" alt="[公式]"> 后，再进行加和，就得到了提升树模型 <img src="https://www.zhihu.com/equation?tex=f_%7BM%7D%28x%29" alt="[公式]"> 。在xgboost论文中提到的一个明显的boosting tree的加和应用案例如图3所示。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-fee9ec17376a633196bebbf56c18c2f5_hd.jpg" alt="img">图2 boosting tree的累加效果示意图</p>
 <blockquote>
 <p>相关树模型的参数值求解主要依据于<strong>损失函数</strong>的定义。</p>
 <p>一般来言对于<strong>分类问题</strong>，选择<strong>指数损失函数</strong>作为损失函数时，将形成<strong>AdaBoost模型</strong>；</p>
 <p>对于<strong>回归问题</strong>，损失函数常利用<strong>平方损失函数</strong>。为了扩展Boosting Tree的应用范围，需要构建一种可以广泛适用的残差描述方式来满足于任意损失函数的形式，为解决分类问题的Gradient Boosting Decision Tree算法应运而生。</p>
 </blockquote>
 <p><strong><a href="https://zhuanlan.zhihu.com/p/90520307" target="_blank" rel="noopener">带正则项的Boosting Tree模型和带梯度的Boosting Tree推导过程</a></strong></p>
-<h4 id="目标函数"><a href="#目标函数" class="headerlink" title="目标函数"></a>目标函数</h4><p>我们知道 XGBoost 是由 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=k" class="lazyload"> 个基模型组成的一个加法运算式：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_i%3D%5Csum_%7Bt%3D1%7D%5E%7Bk%7D%5C+f_t%28x_i%29+%5C%5C" class="lazyload"></p>
-<p>其中 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f_k" class="lazyload"> 为第 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=k" class="lazyload"> 个基模型， <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_i" class="lazyload"> 为第 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=i" class="lazyload"> 个样本的预测值。</p>
-<p>损失函数可由预测值 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_i" class="lazyload"> 与真实值 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=y_i" class="lazyload"> 进行表示：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=L%3D%5Csum_%7Bi%3D1%7D%5En+l%28+y_i%2C+%5Chat%7By%7D_i%29+%5C%5C" class="lazyload"></p>
-<p>其中 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=n" class="lazyload"> 为样本数量。</p>
-<p>我们知道模型的预测精度由模型的偏差和方差共同决定，损失函数代表了模型的偏差，想要方差小则需要简单的模型，所以目标函数由模型的<strong>损失函数 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=L" class="lazyload"></strong> 与<strong>抑制模型复杂度的正则项 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5COmega" class="lazyload"></strong> 组成，所以我们有：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=Obj+%3D%5Csum_%7Bi%3D1%7D%5En+l%28%5Chat%7By%7D_i%2C+y_i%29+%2B+%5Csum_%7Bt%3D1%7D%5Ek+%5COmega%28f_t%29+%5C%5C+" class="lazyload"></p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5COmega" class="lazyload"> 为模型的正则项，由于 XGBoost 支持决策树也支持线性模型，所以这里再不展开描述。</p>
-<p>我们知道 boosting 模型是前向加法，以第 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=t" class="lazyload"> 步的模型为例，模型对第 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=i" class="lazyload"> 个样本 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x_%7Bi%7D" class="lazyload"> 的预测为：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=++%5Chat%7By%7D_i%5Et%3D+%5Chat%7By%7D_i%5E%7Bt-1%7D+%2B+f_t%28x_i%29++%5C%5C" class="lazyload"></p>
-<p>其中 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_i%5E%7Bt-1%7D" class="lazyload"> 由第 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=t-1" class="lazyload"> 步的模型给出的预测值，是已知常数，<img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f_t%28x_i%29" class="lazyload"> 是我们这次需要加入的新模型的预测值，此时，目标函数就可以写成：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Cbegin%7Balign%7D+Obj%5E%7B%28t%29%7D+%26%3D+%5Csum_%7Bi%3D1%7D%5Enl%28y_i%2C+%5Chat%7By%7D_i%5Et%29+%2B+%5Csum_%7Bi%3D1%7D%5Et%5COmega%28f_i%29+%5C%5C++++%26%3D+%5Csum_%7Bi%3D1%7D%5En+l%5Cleft%28y_i%2C+%5Chat%7By%7D_i%5E%7Bt-1%7D+%2B+f_t%28x_i%29+%5Cright%29+%2B+%5Csum_%7Bi%3D1%7D%5Et++%5COmega%28f_i%29++%5Cend%7Balign%7D+%5C%5C" class="lazyload"></p>
-<p>求此时最优化目标函数，就相当于求解 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f_t%28x_i%29" class="lazyload"> 。</p>
+<h4 id="目标函数"><a href="#目标函数" class="headerlink" title="目标函数"></a>目标函数</h4><p>我们知道 XGBoost 是由 <img src="https://www.zhihu.com/equation?tex=k" alt="[公式]"> 个基模型组成的一个加法运算式：</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_i%3D%5Csum_%7Bt%3D1%7D%5E%7Bk%7D%5C+f_t%28x_i%29+%5C%5C" alt="[公式]"></p>
+<p>其中 <img src="https://www.zhihu.com/equation?tex=f_k" alt="[公式]"> 为第 <img src="https://www.zhihu.com/equation?tex=k" alt="[公式]"> 个基模型， <img src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_i" alt="[公式]"> 为第 <img src="https://www.zhihu.com/equation?tex=i" alt="[公式]"> 个样本的预测值。</p>
+<p>损失函数可由预测值 <img src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_i" alt="[公式]"> 与真实值 <img src="https://www.zhihu.com/equation?tex=y_i" alt="[公式]"> 进行表示：</p>
+<p><img src="https://www.zhihu.com/equation?tex=L%3D%5Csum_%7Bi%3D1%7D%5En+l%28+y_i%2C+%5Chat%7By%7D_i%29+%5C%5C" alt="[公式]"></p>
+<p>其中 <img src="https://www.zhihu.com/equation?tex=n" alt="[公式]"> 为样本数量。</p>
+<p>我们知道模型的预测精度由模型的偏差和方差共同决定，损失函数代表了模型的偏差，想要方差小则需要简单的模型，所以目标函数由模型的<strong>损失函数 <img src="https://www.zhihu.com/equation?tex=L" alt="[公式]"></strong> 与<strong>抑制模型复杂度的正则项 <img src="https://www.zhihu.com/equation?tex=%5COmega" alt="[公式]"></strong> 组成，所以我们有：</p>
+<p><img src="https://www.zhihu.com/equation?tex=Obj+%3D%5Csum_%7Bi%3D1%7D%5En+l%28%5Chat%7By%7D_i%2C+y_i%29+%2B+%5Csum_%7Bt%3D1%7D%5Ek+%5COmega%28f_t%29+%5C%5C+" alt="[公式]"></p>
+<p><img src="https://www.zhihu.com/equation?tex=%5COmega" alt="[公式]"> 为模型的正则项，由于 XGBoost 支持决策树也支持线性模型，所以这里再不展开描述。</p>
+<p>我们知道 boosting 模型是前向加法，以第 <img src="https://www.zhihu.com/equation?tex=t" alt="[公式]"> 步的模型为例，模型对第 <img src="https://www.zhihu.com/equation?tex=i" alt="[公式]"> 个样本 <img src="https://www.zhihu.com/equation?tex=x_%7Bi%7D" alt="[公式]"> 的预测为：</p>
+<p><img src="https://www.zhihu.com/equation?tex=++%5Chat%7By%7D_i%5Et%3D+%5Chat%7By%7D_i%5E%7Bt-1%7D+%2B+f_t%28x_i%29++%5C%5C" alt="[公式]"></p>
+<p>其中 <img src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_i%5E%7Bt-1%7D" alt="[公式]"> 由第 <img src="https://www.zhihu.com/equation?tex=t-1" alt="[公式]"> 步的模型给出的预测值，是已知常数，<img src="https://www.zhihu.com/equation?tex=f_t%28x_i%29" alt="[公式]"> 是我们这次需要加入的新模型的预测值，此时，目标函数就可以写成：</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Cbegin%7Balign%7D+Obj%5E%7B%28t%29%7D+%26%3D+%5Csum_%7Bi%3D1%7D%5Enl%28y_i%2C+%5Chat%7By%7D_i%5Et%29+%2B+%5Csum_%7Bi%3D1%7D%5Et%5COmega%28f_i%29+%5C%5C++++%26%3D+%5Csum_%7Bi%3D1%7D%5En+l%5Cleft%28y_i%2C+%5Chat%7By%7D_i%5E%7Bt-1%7D+%2B+f_t%28x_i%29+%5Cright%29+%2B+%5Csum_%7Bi%3D1%7D%5Et++%5COmega%28f_i%29++%5Cend%7Balign%7D+%5C%5C" alt="[公式]"></p>
+<p>求此时最优化目标函数，就相当于求解 <img src="https://www.zhihu.com/equation?tex=f_t%28x_i%29" alt="[公式]"> 。</p>
 <blockquote>
-<p>泰勒公式是将一个在 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x%3Dx_0" class="lazyload"> 处具有 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=n" class="lazyload"> 阶导数的函数 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f%28x%29" class="lazyload"> 利用关于 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x-x_0" class="lazyload"> 的 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=n" class="lazyload"> 次多项式来逼近函数的方法，若函数 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f%28x%29" class="lazyload"> 在包含 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x_0" class="lazyload"> 的某个闭区间 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Ba%2Cb%5D" class="lazyload"> 上具有 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=n" class="lazyload"> 阶导数，且在开区间 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%28a%2Cb%29" class="lazyload"> 上具有 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=n%2B1" class="lazyload"> 阶导数，则对闭区间 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Ba%2Cb%5D" class="lazyload"> 上任意一点 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x" class="lazyload"> 有 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Cdisplaystyle+f%28x%29%3D%5Csum_%7Bi%3D0%7D%5E%7Bn%7D%5Cfrac%7Bf%5E%7B%28i%29%7D%28x_0%29%7D%7Bi%21%7D%28x-x_0%29%5E+i%2BR_n%28x%29+" class="lazyload"> ，其中的多项式称为函数在 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x_0" class="lazyload"> 处的泰勒展开式， <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=R_n%28x%29" class="lazyload"> 是泰勒公式的余项且是 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%28x%E2%88%92x_0%29%5En" class="lazyload"> 的高阶无穷小。</p>
+<p>泰勒公式是将一个在 <img src="https://www.zhihu.com/equation?tex=x%3Dx_0" alt="[公式]"> 处具有 <img src="https://www.zhihu.com/equation?tex=n" alt="[公式]"> 阶导数的函数 <img src="https://www.zhihu.com/equation?tex=f%28x%29" alt="[公式]"> 利用关于 <img src="https://www.zhihu.com/equation?tex=x-x_0" alt="[公式]"> 的 <img src="https://www.zhihu.com/equation?tex=n" alt="[公式]"> 次多项式来逼近函数的方法，若函数 <img src="https://www.zhihu.com/equation?tex=f%28x%29" alt="[公式]"> 在包含 <img src="https://www.zhihu.com/equation?tex=x_0" alt="[公式]"> 的某个闭区间 <img src="https://www.zhihu.com/equation?tex=%5Ba%2Cb%5D" alt="[公式]"> 上具有 <img src="https://www.zhihu.com/equation?tex=n" alt="[公式]"> 阶导数，且在开区间 <img src="https://www.zhihu.com/equation?tex=%28a%2Cb%29" alt="[公式]"> 上具有 <img src="https://www.zhihu.com/equation?tex=n%2B1" alt="[公式]"> 阶导数，则对闭区间 <img src="https://www.zhihu.com/equation?tex=%5Ba%2Cb%5D" alt="[公式]"> 上任意一点 <img src="https://www.zhihu.com/equation?tex=x" alt="[公式]"> 有 <img src="https://www.zhihu.com/equation?tex=%5Cdisplaystyle+f%28x%29%3D%5Csum_%7Bi%3D0%7D%5E%7Bn%7D%5Cfrac%7Bf%5E%7B%28i%29%7D%28x_0%29%7D%7Bi%21%7D%28x-x_0%29%5E+i%2BR_n%28x%29+" alt="[公式]"> ，其中的多项式称为函数在 <img src="https://www.zhihu.com/equation?tex=x_0" alt="[公式]"> 处的泰勒展开式， <img src="https://www.zhihu.com/equation?tex=R_n%28x%29" alt="[公式]"> 是泰勒公式的余项且是 <img src="https://www.zhihu.com/equation?tex=%28x%E2%88%92x_0%29%5En" alt="[公式]"> 的高阶无穷小。</p>
 </blockquote>
-<p>根据泰勒公式我们把函数 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f%28x%2B%5CDelta+x%29" class="lazyload"> 在点 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x" class="lazyload"> 处进行泰勒的二阶展开，可得到如下等式：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f%28x%2B%5CDelta+x%29+%5Capprox+f%28x%29+%2B+f%27%28x%29%5CDelta+x+%2B+%5Cfrac12+f%27%27%28x%29%5CDelta+x%5E2++%5C%5C" class="lazyload"></p>
-<p>我们把 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_i%5E%7Bt-1%7D" class="lazyload"> 视为 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x" class="lazyload"> ， <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f_t%28x_i%29" class="lazyload"> 视为 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5CDelta+x" class="lazyload"> ，故可以将目标函数写为：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=Obj%5E%7B%28t%29%7D+%3D+%5Csum_%7Bi%3D1%7D%5En+%5Cleft%5B+l%28y_i%2C+%5Chat%7By%7D_i%5E%7Bt-1%7D%29+%2B+g_if_t%28x_i%29+%2B+%5Cfrac12h_if_t%5E2%28x_i%29+%5Cright%5D+%2B+%5Csum_%7Bi%3D1%7D%5Et++%5COmega%28f_i%29+%5C%5C" class="lazyload"></p>
-<p>其中 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=g_%7Bi%7D" class="lazyload"> 为损失函数的一阶导， <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=h_%7Bi%7D" class="lazyload"> 为损失函数的二阶导，<strong>注意这里的导是对 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_i%5E%7Bt-1%7D" class="lazyload"> 求导</strong>。</p>
+<p>根据泰勒公式我们把函数 <img src="https://www.zhihu.com/equation?tex=f%28x%2B%5CDelta+x%29" alt="[公式]"> 在点 <img src="https://www.zhihu.com/equation?tex=x" alt="[公式]"> 处进行泰勒的二阶展开，可得到如下等式：</p>
+<p><img src="https://www.zhihu.com/equation?tex=f%28x%2B%5CDelta+x%29+%5Capprox+f%28x%29+%2B+f%27%28x%29%5CDelta+x+%2B+%5Cfrac12+f%27%27%28x%29%5CDelta+x%5E2++%5C%5C" alt="[公式]"></p>
+<p>我们把 <img src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_i%5E%7Bt-1%7D" alt="[公式]"> 视为 <img src="https://www.zhihu.com/equation?tex=x" alt="[公式]"> ， <img src="https://www.zhihu.com/equation?tex=f_t%28x_i%29" alt="[公式]"> 视为 <img src="https://www.zhihu.com/equation?tex=%5CDelta+x" alt="[公式]"> ，故可以将目标函数写为：</p>
+<p><img src="https://www.zhihu.com/equation?tex=Obj%5E%7B%28t%29%7D+%3D+%5Csum_%7Bi%3D1%7D%5En+%5Cleft%5B+l%28y_i%2C+%5Chat%7By%7D_i%5E%7Bt-1%7D%29+%2B+g_if_t%28x_i%29+%2B+%5Cfrac12h_if_t%5E2%28x_i%29+%5Cright%5D+%2B+%5Csum_%7Bi%3D1%7D%5Et++%5COmega%28f_i%29+%5C%5C" alt="[公式]"></p>
+<p>其中 <img src="https://www.zhihu.com/equation?tex=g_%7Bi%7D" alt="[公式]"> 为损失函数的一阶导， <img src="https://www.zhihu.com/equation?tex=h_%7Bi%7D" alt="[公式]"> 为损失函数的二阶导，<strong>注意这里的导是对 <img src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_i%5E%7Bt-1%7D" alt="[公式]"> 求导</strong>。</p>
 <p>我们以平方损失函数为例：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Csum_%7Bi%3D1%7D%5En+%5Cleft%28y_i+-+%28%5Chat%7By%7D_i%5E%7Bt-1%7D+%2B+f_t%28x_i%29%29+%5Cright%29%5E2++%5C%5C" class="lazyload"></p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Csum_%7Bi%3D1%7D%5En+%5Cleft%28y_i+-+%28%5Chat%7By%7D_i%5E%7Bt-1%7D+%2B+f_t%28x_i%29%29+%5Cright%29%5E2++%5C%5C" alt="[公式]"></p>
 <p>则：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=++%5Cbegin%7Balign%7D++++++g_i+%26%3D+%5Cfrac%7B%5Cpartial+%28%5Chat%7By%7D%5E%7Bt-1%7D+-+y_i%29%5E2%7D%7B%5Cpartial+%7B%5Chat%7By%7D%5E%7Bt-1%7D%7D%7D+%3D+2%28%5Chat%7By%7D%5E%7Bt-1%7D+-+y_i%29+%5C%5C++++++h_i+%26%3D%5Cfrac%7B%5Cpartial%5E2%28%5Chat%7By%7D%5E%7Bt-1%7D+-+y_i%29%5E2%7D%7B%7B%5Chat%7By%7D%5E%7Bt-1%7D%7D%7D+%3D+2++++%5Cend%7Balign%7D++%5C%5C" class="lazyload"></p>
-<p>由于在第 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=t" class="lazyload"> 步时 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_i%5E%7Bt-1%7D" class="lazyload"> 其实是一个已知的值，所以 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=l%28y_i%2C+%5Chat%7By%7D_i%5E%7Bt-1%7D%29" class="lazyload"> 是一个常数，其对函数的优化不会产生影响，因此目标函数可以写成：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=+Obj%5E%7B%28t%29%7D+%5Capprox+%5Csum_%7Bi%3D1%7D%5En+%5Cleft%5B+g_if_t%28x_i%29+%2B+%5Cfrac12h_if_t%5E2%28x_i%29+%5Cright%5D+%2B+%5Csum_%7Bi%3D1%7D%5Et++%5COmega%28f_i%29+%5C%5C" class="lazyload"></p>
-<p>所以<strong>我们只需要求出每一步损失函数的一阶导和二阶导的值（由于前一步的 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D%5E%7Bt-1%7D" class="lazyload"> 是已知的，所以这两个值就是常数），然后最优化目标函数，就可以得到每一步的 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f%28x%29" class="lazyload"> ，最后根据加法模型得到一个整体模型。</strong></p>
-<h4 id="基于决策树的目标函数"><a href="#基于决策树的目标函数" class="headerlink" title="基于决策树的目标函数"></a>基于决策树的目标函数</h4><p>损失函数可由预测值 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_%7Bi%7D" class="lazyload"> 与真实值 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=y_%7Bi%7D" class="lazyload"> 进行表示：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=L+%3D+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%7Bl%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%29%7D+%5C%5C" class="lazyload"></p>
-<p>其中， <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=n" class="lazyload"> 为样本的数量。</p>
-<p>我们知道模型的预测精度由模型的偏差和方差共同决定，损失函数代表了模型的偏差，想要方差小则需要在目标函数中添加正则项，用于防止过拟合。所以目标函数由模型的损失函数 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=L" class="lazyload"> 与抑制模型复杂度的正则项 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5COmega" class="lazyload"> 组成，目标函数的定义如下：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=Obj+%3D+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%7Bl%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%29%7D+%2B+%5Csum_%7Bi%3D1%7D%5E%7Bt%7D%7B%5COmega%28f_%7Bi%7D%29%7D+%5C%5C" class="lazyload"></p>
-<p>其中，<img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=+%5Csum_%7Bi%3D1%7D%5E%7Bt%7D%7B%5COmega%28f_%7Bi%7D%29%7D" class="lazyload"> 是将全部 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=t" class="lazyload"> 棵树的复杂度进行求和，添加到目标函数中作为正则化项，用于防止模型过度拟合。</p>
-<p>由于XGBoost是boosting族中的算法，所以遵从前向分步加法，以第 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=t" class="lazyload"> 步的模型为例，模型对第 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=i" class="lazyload"> 个样本 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x_%7Bi%7D" class="lazyload"> 的预测值为：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_%7Bi%7D%5E%7B%28t%29%7D+%3D+%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D+%2B+f_%7Bt%7D%28x_%7Bi%7D%29+%5C%5C" class="lazyload"></p>
-<p>其中， <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D" class="lazyload"> 是由第 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=+t-1+" class="lazyload"> 步的模型给出的预测值，是已知常数， <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=+f_%7Bt%7D%28x_%7Bi%7D%29+" class="lazyload"> 是这次需要加入的新模型的预测值。此时，目标函数就可以写成：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Cbegin%7Bequation%7D+%5Cbegin%7Baligned%7D+Obj%5E%7B%28t%29%7D+%26%3D+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%7Bl%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t%29%7D%29%7D+%2B+%5Csum_%7Bi%3D1%7D%5E%7Bt%7D%7B%5COmega%28f_%7Bi%7D%29%7D+%5C%5C+%26+%3D+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%7Bl%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%2Bf_%7Bt%7D%28x_%7Bi%7D%29%29%7D+%2B+%5Csum_%7Bi%3D1%7D%5E%7Bt%7D%7B%5COmega%28f_%7Bi%7D%29%7D+%5C%5C+%26%3D%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%7Bl%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%2Bf_%7Bt%7D%28x_%7Bi%7D%29%29%7D+%2B+%5COmega%28f_%7Bt%7D%29+%2Bconstant++%5Cend%7Baligned%7D+%5Cend%7Bequation%7D+%5C%5C" class="lazyload"></p>
-<p>注意上式中，只有一个变量，那就是第 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=t" class="lazyload"> 棵树<img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f_%7Bt%7D%28x_%7Bi%7D%29" class="lazyload"> ，其余都是已知量或可通过已知量可以计算出来的。细心的同学可能会问，上式中的第二行到第三行是如何得到的呢？这里我们将正则化项进行拆分，由于前<img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=t-1" class="lazyload"> 棵树的结构已经确定，因此前<img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=+t-1+" class="lazyload"> 棵树的复杂度之和可以用一个常量表示，如下所示：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Cbegin%7Bequation%7D+%5Cbegin%7Baligned%7D+%5Csum_%7Bi%3D1%7D%5E%7Bt%7D%7B%5COmega%28f_%7Bi%7D%29%7D+%26%3D%5COmega%28f_%7Bt%7D%29+%2B+%5Csum_%7Bi%3D1%7D%5E%7Bt-1%7D%7B%5COmega%28f_%7Bi%7D%29%7D+%5C%5C+%26%3D+%5COmega%28f_%7Bt%7D%29+%2B+constant+%5Cend%7Baligned%7D+%5Cend%7Bequation%7D+%5C%5C" class="lazyload"></p>
-<h4 id="泰勒公式展开"><a href="#泰勒公式展开" class="headerlink" title="泰勒公式展开"></a><strong>泰勒公式展开</strong></h4><p>泰勒公式是将一个在 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x%3Dx_%7B0%7D" class="lazyload"> 处具有<img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=+n" class="lazyload"> 阶导数的函数<img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f%28x%29" class="lazyload"> 利用关于<img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%28x-x_%7B0%7D%29" class="lazyload"> 的 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=n" class="lazyload"> 次多项式来逼近函数的方法。若函数<img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f%28x%29" class="lazyload"> 在包含 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x_%7B0%7D" class="lazyload"> 的某个闭区间 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Ba%2Cb%5D" class="lazyload"> 上具有 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=n" class="lazyload"> 阶导数，且在开区间 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%28a%2Cb%29" class="lazyload"> 上具有 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=n%2B1+" class="lazyload"> 阶导数，则对闭区间 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Ba%2Cb%5D" class="lazyload"> 上任意一点 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x" class="lazyload"> 有：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f%28x%29+%3D+%5Csum_%7Bi%3D0%7D%5E%7Bn%7D%7B%5Cfrac%7Bf%5E%7B%28i%29%7D%28x_%7B0%7D%29%7D%7Bi%21%7D%7D%28x-x_%7B0%7D%29%5E%7Bi%7D%2BR_%7Bn%7D%28x%29+%5C%5C" class="lazyload"></p>
-<p>其中的多项式称为函数在 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x_%7B0%7D" class="lazyload"> 处的泰勒展开式，<img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=R_%7Bn%7D%28x%29" class="lazyload"> 是泰勒公式的余项且是 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%28x-x_%7B0%7D%29%5E%7Bn%7D" class="lazyload"> 的高阶无穷小。</p>
-<p>根据泰勒公式，把函数 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f%28x%2B%5CDelta+x%29" class="lazyload"> 在点 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x" class="lazyload"> 处进行泰勒的二阶展开，可得如下等式：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f%28x%2B%5CDelta+x%29+%5Capprox+f%28x%29%2Bf%27%28x%29%5CDelta+x+%2B+%5Cfrac%7B1%7D%7B2%7D+f%27%27%28x%29%5CDelta+x%5E%7B2%7D+%5C%5C" class="lazyload"></p>
-<p>回到XGBoost的目标函数上来， <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f%28x%29" class="lazyload"> 对应损失函数 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=l%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%2Bf_%7Bt%7D%28x_%7Bi%7D%29%29" class="lazyload"> ， <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x" class="lazyload"> 对应前 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=t-1+" class="lazyload"> 棵树的预测值 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D" class="lazyload"> ，<img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5CDelta+x" class="lazyload"> 对应于我们正在训练的第 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=t" class="lazyload"> 棵树 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f_%7Bt%7D%28x_%7Bi%7D%29" class="lazyload"> ，则可以将损失函数写为：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=l%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%2Bf_%7Bt%7D%28x_%7Bi%7D%29%29+%3D+l%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29+%2B+g_%7Bi%7Df_%7Bt%7D%28x_%7Bi%7D%29+%2B+%5Cfrac%7B1%7D%7B2%7Dh_%7Bi%7Df_%7Bt%7D%5E%7B2%7D%28x_%7Bi%7D%29+%5C%5C" class="lazyload"></p>
-<p>其中， <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=g_%7Bi%7D" class="lazyload"> 为损失函数的一阶导， <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=h_%7Bi%7D" class="lazyload"> 为损失函数的二阶导，注意这里的求导是对 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D" class="lazyload"> 求导。</p>
+<p><img src="https://www.zhihu.com/equation?tex=++%5Cbegin%7Balign%7D++++++g_i+%26%3D+%5Cfrac%7B%5Cpartial+%28%5Chat%7By%7D%5E%7Bt-1%7D+-+y_i%29%5E2%7D%7B%5Cpartial+%7B%5Chat%7By%7D%5E%7Bt-1%7D%7D%7D+%3D+2%28%5Chat%7By%7D%5E%7Bt-1%7D+-+y_i%29+%5C%5C++++++h_i+%26%3D%5Cfrac%7B%5Cpartial%5E2%28%5Chat%7By%7D%5E%7Bt-1%7D+-+y_i%29%5E2%7D%7B%7B%5Chat%7By%7D%5E%7Bt-1%7D%7D%7D+%3D+2++++%5Cend%7Balign%7D++%5C%5C" alt="[公式]"></p>
+<p>由于在第 <img src="https://www.zhihu.com/equation?tex=t" alt="[公式]"> 步时 <img src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_i%5E%7Bt-1%7D" alt="[公式]"> 其实是一个已知的值，所以 <img src="https://www.zhihu.com/equation?tex=l%28y_i%2C+%5Chat%7By%7D_i%5E%7Bt-1%7D%29" alt="[公式]"> 是一个常数，其对函数的优化不会产生影响，因此目标函数可以写成：</p>
+<p><img src="https://www.zhihu.com/equation?tex=+Obj%5E%7B%28t%29%7D+%5Capprox+%5Csum_%7Bi%3D1%7D%5En+%5Cleft%5B+g_if_t%28x_i%29+%2B+%5Cfrac12h_if_t%5E2%28x_i%29+%5Cright%5D+%2B+%5Csum_%7Bi%3D1%7D%5Et++%5COmega%28f_i%29+%5C%5C" alt="[公式]"></p>
+<p>所以<strong>我们只需要求出每一步损失函数的一阶导和二阶导的值（由于前一步的 <img src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D%5E%7Bt-1%7D" alt="[公式]"> 是已知的，所以这两个值就是常数），然后最优化目标函数，就可以得到每一步的 <img src="https://www.zhihu.com/equation?tex=f%28x%29" alt="[公式]"> ，最后根据加法模型得到一个整体模型。</strong></p>
+<h4 id="基于决策树的目标函数"><a href="#基于决策树的目标函数" class="headerlink" title="基于决策树的目标函数"></a>基于决策树的目标函数</h4><p>损失函数可由预测值 <img src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_%7Bi%7D" alt="[公式]"> 与真实值 <img src="https://www.zhihu.com/equation?tex=y_%7Bi%7D" alt="[公式]"> 进行表示：</p>
+<p><img src="https://www.zhihu.com/equation?tex=L+%3D+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%7Bl%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%29%7D+%5C%5C" alt="[公式]"></p>
+<p>其中， <img src="https://www.zhihu.com/equation?tex=n" alt="[公式]"> 为样本的数量。</p>
+<p>我们知道模型的预测精度由模型的偏差和方差共同决定，损失函数代表了模型的偏差，想要方差小则需要在目标函数中添加正则项，用于防止过拟合。所以目标函数由模型的损失函数 <img src="https://www.zhihu.com/equation?tex=L" alt="[公式]"> 与抑制模型复杂度的正则项 <img src="https://www.zhihu.com/equation?tex=%5COmega" alt="[公式]"> 组成，目标函数的定义如下：</p>
+<p><img src="https://www.zhihu.com/equation?tex=Obj+%3D+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%7Bl%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%29%7D+%2B+%5Csum_%7Bi%3D1%7D%5E%7Bt%7D%7B%5COmega%28f_%7Bi%7D%29%7D+%5C%5C" alt="[公式]"></p>
+<p>其中，<img src="https://www.zhihu.com/equation?tex=+%5Csum_%7Bi%3D1%7D%5E%7Bt%7D%7B%5COmega%28f_%7Bi%7D%29%7D" alt="[公式]"> 是将全部 <img src="https://www.zhihu.com/equation?tex=t" alt="[公式]"> 棵树的复杂度进行求和，添加到目标函数中作为正则化项，用于防止模型过度拟合。</p>
+<p>由于XGBoost是boosting族中的算法，所以遵从前向分步加法，以第 <img src="https://www.zhihu.com/equation?tex=t" alt="[公式]"> 步的模型为例，模型对第 <img src="https://www.zhihu.com/equation?tex=i" alt="[公式]"> 个样本 <img src="https://www.zhihu.com/equation?tex=x_%7Bi%7D" alt="[公式]"> 的预测值为：</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_%7Bi%7D%5E%7B%28t%29%7D+%3D+%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D+%2B+f_%7Bt%7D%28x_%7Bi%7D%29+%5C%5C" alt="[公式]"></p>
+<p>其中， <img src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D" alt="[公式]"> 是由第 <img src="https://www.zhihu.com/equation?tex=+t-1+" alt="[公式]"> 步的模型给出的预测值，是已知常数， <img src="https://www.zhihu.com/equation?tex=+f_%7Bt%7D%28x_%7Bi%7D%29+" alt="[公式]"> 是这次需要加入的新模型的预测值。此时，目标函数就可以写成：</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Cbegin%7Bequation%7D+%5Cbegin%7Baligned%7D+Obj%5E%7B%28t%29%7D+%26%3D+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%7Bl%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t%29%7D%29%7D+%2B+%5Csum_%7Bi%3D1%7D%5E%7Bt%7D%7B%5COmega%28f_%7Bi%7D%29%7D+%5C%5C+%26+%3D+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%7Bl%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%2Bf_%7Bt%7D%28x_%7Bi%7D%29%29%7D+%2B+%5Csum_%7Bi%3D1%7D%5E%7Bt%7D%7B%5COmega%28f_%7Bi%7D%29%7D+%5C%5C+%26%3D%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%7Bl%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%2Bf_%7Bt%7D%28x_%7Bi%7D%29%29%7D+%2B+%5COmega%28f_%7Bt%7D%29+%2Bconstant++%5Cend%7Baligned%7D+%5Cend%7Bequation%7D+%5C%5C" alt="[公式]"></p>
+<p>注意上式中，只有一个变量，那就是第 <img src="https://www.zhihu.com/equation?tex=t" alt="[公式]"> 棵树<img src="https://www.zhihu.com/equation?tex=f_%7Bt%7D%28x_%7Bi%7D%29" alt="[公式]"> ，其余都是已知量或可通过已知量可以计算出来的。细心的同学可能会问，上式中的第二行到第三行是如何得到的呢？这里我们将正则化项进行拆分，由于前<img src="https://www.zhihu.com/equation?tex=t-1" alt="[公式]"> 棵树的结构已经确定，因此前<img src="https://www.zhihu.com/equation?tex=+t-1+" alt="[公式]"> 棵树的复杂度之和可以用一个常量表示，如下所示：</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Cbegin%7Bequation%7D+%5Cbegin%7Baligned%7D+%5Csum_%7Bi%3D1%7D%5E%7Bt%7D%7B%5COmega%28f_%7Bi%7D%29%7D+%26%3D%5COmega%28f_%7Bt%7D%29+%2B+%5Csum_%7Bi%3D1%7D%5E%7Bt-1%7D%7B%5COmega%28f_%7Bi%7D%29%7D+%5C%5C+%26%3D+%5COmega%28f_%7Bt%7D%29+%2B+constant+%5Cend%7Baligned%7D+%5Cend%7Bequation%7D+%5C%5C" alt="[公式]"></p>
+<h4 id="泰勒公式展开"><a href="#泰勒公式展开" class="headerlink" title="泰勒公式展开"></a><strong>泰勒公式展开</strong></h4><p>泰勒公式是将一个在 <img src="https://www.zhihu.com/equation?tex=x%3Dx_%7B0%7D" alt="[公式]"> 处具有<img src="https://www.zhihu.com/equation?tex=+n" alt="[公式]"> 阶导数的函数<img src="https://www.zhihu.com/equation?tex=f%28x%29" alt="[公式]"> 利用关于<img src="https://www.zhihu.com/equation?tex=%28x-x_%7B0%7D%29" alt="[公式]"> 的 <img src="https://www.zhihu.com/equation?tex=n" alt="[公式]"> 次多项式来逼近函数的方法。若函数<img src="https://www.zhihu.com/equation?tex=f%28x%29" alt="[公式]"> 在包含 <img src="https://www.zhihu.com/equation?tex=x_%7B0%7D" alt="[公式]"> 的某个闭区间 <img src="https://www.zhihu.com/equation?tex=%5Ba%2Cb%5D" alt="[公式]"> 上具有 <img src="https://www.zhihu.com/equation?tex=n" alt="[公式]"> 阶导数，且在开区间 <img src="https://www.zhihu.com/equation?tex=%28a%2Cb%29" alt="[公式]"> 上具有 <img src="https://www.zhihu.com/equation?tex=n%2B1+" alt="[公式]"> 阶导数，则对闭区间 <img src="https://www.zhihu.com/equation?tex=%5Ba%2Cb%5D" alt="[公式]"> 上任意一点 <img src="https://www.zhihu.com/equation?tex=x" alt="[公式]"> 有：</p>
+<p><img src="https://www.zhihu.com/equation?tex=f%28x%29+%3D+%5Csum_%7Bi%3D0%7D%5E%7Bn%7D%7B%5Cfrac%7Bf%5E%7B%28i%29%7D%28x_%7B0%7D%29%7D%7Bi%21%7D%7D%28x-x_%7B0%7D%29%5E%7Bi%7D%2BR_%7Bn%7D%28x%29+%5C%5C" alt="[公式]"></p>
+<p>其中的多项式称为函数在 <img src="https://www.zhihu.com/equation?tex=x_%7B0%7D" alt="[公式]"> 处的泰勒展开式，<img src="https://www.zhihu.com/equation?tex=R_%7Bn%7D%28x%29" alt="[公式]"> 是泰勒公式的余项且是 <img src="https://www.zhihu.com/equation?tex=%28x-x_%7B0%7D%29%5E%7Bn%7D" alt="[公式]"> 的高阶无穷小。</p>
+<p>根据泰勒公式，把函数 <img src="https://www.zhihu.com/equation?tex=f%28x%2B%5CDelta+x%29" alt="[公式]"> 在点 <img src="https://www.zhihu.com/equation?tex=x" alt="[公式]"> 处进行泰勒的二阶展开，可得如下等式：</p>
+<p><img src="https://www.zhihu.com/equation?tex=f%28x%2B%5CDelta+x%29+%5Capprox+f%28x%29%2Bf%27%28x%29%5CDelta+x+%2B+%5Cfrac%7B1%7D%7B2%7D+f%27%27%28x%29%5CDelta+x%5E%7B2%7D+%5C%5C" alt="[公式]"></p>
+<p>回到XGBoost的目标函数上来， <img src="https://www.zhihu.com/equation?tex=f%28x%29" alt="[公式]"> 对应损失函数 <img src="https://www.zhihu.com/equation?tex=l%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%2Bf_%7Bt%7D%28x_%7Bi%7D%29%29" alt="[公式]"> ， <img src="https://www.zhihu.com/equation?tex=x" alt="[公式]"> 对应前 <img src="https://www.zhihu.com/equation?tex=t-1+" alt="[公式]"> 棵树的预测值 <img src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D" alt="[公式]"> ，<img src="https://www.zhihu.com/equation?tex=%5CDelta+x" alt="[公式]"> 对应于我们正在训练的第 <img src="https://www.zhihu.com/equation?tex=t" alt="[公式]"> 棵树 <img src="https://www.zhihu.com/equation?tex=f_%7Bt%7D%28x_%7Bi%7D%29" alt="[公式]"> ，则可以将损失函数写为：</p>
+<p><img src="https://www.zhihu.com/equation?tex=l%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%2Bf_%7Bt%7D%28x_%7Bi%7D%29%29+%3D+l%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29+%2B+g_%7Bi%7Df_%7Bt%7D%28x_%7Bi%7D%29+%2B+%5Cfrac%7B1%7D%7B2%7Dh_%7Bi%7Df_%7Bt%7D%5E%7B2%7D%28x_%7Bi%7D%29+%5C%5C" alt="[公式]"></p>
+<p>其中， <img src="https://www.zhihu.com/equation?tex=g_%7Bi%7D" alt="[公式]"> 为损失函数的一阶导， <img src="https://www.zhihu.com/equation?tex=h_%7Bi%7D" alt="[公式]"> 为损失函数的二阶导，注意这里的求导是对 <img src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D" alt="[公式]"> 求导。</p>
 <p>我们以平方损失函数为例：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=l%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29+%3D+%28y_%7Bi%7D-%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29%5E%7B2%7D+%5C%5C" class="lazyload"></p>
+<p><img src="https://www.zhihu.com/equation?tex=l%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29+%3D+%28y_%7Bi%7D-%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29%5E%7B2%7D+%5C%5C" alt="[公式]"></p>
 <p>则：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=g_%7Bi%7D+%3D+%5Cfrac%7B%5Cpartial+l%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29%7D%7B%5Cpartial+%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D+%7D+%3D++-2%28y_%7Bi%7D-%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29+%5C%5C" class="lazyload"></p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=h_%7Bi%7D+%3D+%5Cfrac%7B%5Cpartial+%5E%7B2%7D+l%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29%7D%7B%5Cpartial+%28%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29%5E%7B2%7D+%7D+%3D++2+%5C%5C" class="lazyload"></p>
+<p><img src="https://www.zhihu.com/equation?tex=g_%7Bi%7D+%3D+%5Cfrac%7B%5Cpartial+l%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29%7D%7B%5Cpartial+%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D+%7D+%3D++-2%28y_%7Bi%7D-%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29+%5C%5C" alt="[公式]"></p>
+<p><img src="https://www.zhihu.com/equation?tex=h_%7Bi%7D+%3D+%5Cfrac%7B%5Cpartial+%5E%7B2%7D+l%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29%7D%7B%5Cpartial+%28%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29%5E%7B2%7D+%7D+%3D++2+%5C%5C" alt="[公式]"></p>
 <p>将上述的二阶展开式，带入到XGBoost的目标函数中，可以得到目标函数的近似值：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=Obj%5E%7B%28t%29%7D+%5Csimeq+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%7B%5Bl%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7Bt-1%7D%29%2Bg_%7Bi%7Df_%7Bt%7D%28x_%7Bi%7D%29%2B%5Cfrac%7B1%7D%7B2%7Dh_%7Bi%7Df_%7Bt%7D%5E%7B2%7D%28x_%7Bi%7D%29%5D%7D+%2B+%5COmega%28f_%7Bt%7D%29%2Bconstant+%5C%5C" class="lazyload"></p>
-<p>由于在第 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=t" class="lazyload"> 步时 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D" class="lazyload"> 其实是一个已知的值，所以 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=l%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29+" class="lazyload"> 是一个常数，其对函数的优化不会产生影响。因此，去掉全部的常数项，得到目标函数为：</p>
-<p><img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=Obj%5E%7B%28t%29%7D+%5Csimeq+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%7B%5Bg_%7Bi%7Df_%7Bt%7D%28x_%7Bi%7D%29%2B%5Cfrac%7B1%7D%7B2%7Dh_%7Bi%7Df_%7Bt%7D%5E%7B2%7D%28x_%7Bi%7D%29%5D%7D%2B%5COmega%28f_%7Bt%7D%29+%5C%5C" class="lazyload"></p>
-<p>所以我们只需要求出每一步损失函数的一阶导和二阶导的值（由于前一步的 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D%5E%7B%28t-1%29%7D" class="lazyload"> 是已知的，所以这两个值就是常数），然后最优化目标函数，就可以得到每一步的 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=f%28x%29" class="lazyload"> ，最后根据加法模型得到一个整体模型。</p>
+<p><img src="https://www.zhihu.com/equation?tex=Obj%5E%7B%28t%29%7D+%5Csimeq+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%7B%5Bl%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7Bt-1%7D%29%2Bg_%7Bi%7Df_%7Bt%7D%28x_%7Bi%7D%29%2B%5Cfrac%7B1%7D%7B2%7Dh_%7Bi%7Df_%7Bt%7D%5E%7B2%7D%28x_%7Bi%7D%29%5D%7D+%2B+%5COmega%28f_%7Bt%7D%29%2Bconstant+%5C%5C" alt="[公式]"></p>
+<p>由于在第 <img src="https://www.zhihu.com/equation?tex=t" alt="[公式]"> 步时 <img src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D" alt="[公式]"> 其实是一个已知的值，所以 <img src="https://www.zhihu.com/equation?tex=l%28y_%7Bi%7D%2C%5Chat%7By%7D_%7Bi%7D%5E%7B%28t-1%29%7D%29+" alt="[公式]"> 是一个常数，其对函数的优化不会产生影响。因此，去掉全部的常数项，得到目标函数为：</p>
+<p><img src="https://www.zhihu.com/equation?tex=Obj%5E%7B%28t%29%7D+%5Csimeq+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%7B%5Bg_%7Bi%7Df_%7Bt%7D%28x_%7Bi%7D%29%2B%5Cfrac%7B1%7D%7B2%7Dh_%7Bi%7Df_%7Bt%7D%5E%7B2%7D%28x_%7Bi%7D%29%5D%7D%2B%5COmega%28f_%7Bt%7D%29+%5C%5C" alt="[公式]"></p>
+<p>所以我们只需要求出每一步损失函数的一阶导和二阶导的值（由于前一步的 <img src="https://www.zhihu.com/equation?tex=%5Chat%7By%7D%5E%7B%28t-1%29%7D" alt="[公式]"> 是已知的，所以这两个值就是常数），然后最优化目标函数，就可以得到每一步的 <img src="https://www.zhihu.com/equation?tex=f%28x%29" alt="[公式]"> ，最后根据加法模型得到一个整体模型。</p>
 <h3 id="一棵树的生长细节"><a href="#一棵树的生长细节" class="headerlink" title="一棵树的生长细节"></a>一棵树的生长细节</h3><h4 id="分裂结点"><a href="#分裂结点" class="headerlink" title="分裂结点"></a>分裂结点</h4><p>在实际训练过程中，当建立第 t 棵树时，XGBoost采用贪心法进行树结点的分裂：</p>
 <p>从树深为0时开始：</p>
 <ul>
@@ -160,11 +670,11 @@ function activateLightMode(){
 <li>每次分裂后，原来的一个叶子结点继续分裂为左右两个子叶子结点，原叶子结点中的样本集将根据该结点的判断规则分散到左右两个叶子结点中；</li>
 <li>新分裂一个结点后，我们需要检测这次分裂是否会给损失函数带来增益，增益的定义如下：</li>
 </ul>
-<p><img alt="img" data-src="https://pic4.zhimg.com/80/v2-61e13bb229a8574a8ff9a1f9d8fcc87b_hd.jpg" class="lazyload"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-61e13bb229a8574a8ff9a1f9d8fcc87b_hd.jpg" alt="img"></p>
 <p>如果增益Gain&gt;0，即分裂为两个叶子节点后，目标函数下降了，那么我们会考虑此次分裂的结果。</p>
 <p>但是，在一个结点分裂时，可能有很多个分裂点，每个分裂点都会产生一个增益，如何才能寻找到最优的分裂点呢？接下来会讲到。</p>
 <h4 id="寻找最佳分裂点"><a href="#寻找最佳分裂点" class="headerlink" title="寻找最佳分裂点"></a>寻找最佳分裂点</h4><blockquote>
-<p>在实际训练过程中，当建立第 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=t" class="lazyload"> 棵树时，一个非常关键的问题是如何找到叶子节点的最优切分点，XGBoost支持两种分裂节点的方法——<strong>贪心算法</strong>和<strong>近似算法</strong>。</p>
+<p>在实际训练过程中，当建立第 <img src="https://www.zhihu.com/equation?tex=t" alt="[公式]"> 棵树时，一个非常关键的问题是如何找到叶子节点的最优切分点，XGBoost支持两种分裂节点的方法——<strong>贪心算法</strong>和<strong>近似算法</strong>。</p>
 </blockquote>
 <h6 id="贪心算法"><a href="#贪心算法" class="headerlink" title="贪心算法"></a>贪心算法</h6><p>  从树的深度为0开始：</p>
 <blockquote>
@@ -177,16 +687,16 @@ function activateLightMode(){
 </blockquote>
 <p> <strong>那么如何计算每个特征的分裂收益呢？</strong></p>
 <p>  假设我们在某一节点完成特征分裂，则分裂前的目标函数可以写为：</p>
-<p>  <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=Obj_%7B1%7D+%3D-%5Cfrac12+%5B%5Cfrac%7B%28G_L%2BG_R%29%5E2%7D%7BH_L%2BH_R%2B%5Clambda%7D%5D+%2B+%5Cgamma++%5C%5C" class="lazyload"></p>
+<p>  <img src="https://www.zhihu.com/equation?tex=Obj_%7B1%7D+%3D-%5Cfrac12+%5B%5Cfrac%7B%28G_L%2BG_R%29%5E2%7D%7BH_L%2BH_R%2B%5Clambda%7D%5D+%2B+%5Cgamma++%5C%5C" alt="[公式]"></p>
 <p>  分裂后的目标函数为：</p>
-<p>  <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=Obj_2+%3D++-%5Cfrac12+%5B+%5Cfrac%7BG_L%5E2%7D%7BH_L%2B%5Clambda%7D+%2B+%5Cfrac%7BG_R%5E2%7D%7BH_R%2B%5Clambda%7D%5D+%2B2%5Cgamma+%5C%5C" class="lazyload"></p>
+<p>  <img src="https://www.zhihu.com/equation?tex=Obj_2+%3D++-%5Cfrac12+%5B+%5Cfrac%7BG_L%5E2%7D%7BH_L%2B%5Clambda%7D+%2B+%5Cfrac%7BG_R%5E2%7D%7BH_R%2B%5Clambda%7D%5D+%2B2%5Cgamma+%5C%5C" alt="[公式]"></p>
 <p>  则对于目标函数来说，分裂后的收益为：</p>
-<p>  <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=Gain%3D%5Cfrac12+%5Cleft%5B+%5Cfrac%7BG_L%5E2%7D%7BH_L%2B%5Clambda%7D+%2B+%5Cfrac%7BG_R%5E2%7D%7BH_R%2B%5Clambda%7D+-+%5Cfrac%7B%28G_L%2BG_R%29%5E2%7D%7BH_L%2BH_R%2B%5Clambda%7D%5Cright%5D+-+%5Cgamma+%5C%5C" class="lazyload"></p>
+<p>  <img src="https://www.zhihu.com/equation?tex=Gain%3D%5Cfrac12+%5Cleft%5B+%5Cfrac%7BG_L%5E2%7D%7BH_L%2B%5Clambda%7D+%2B+%5Cfrac%7BG_R%5E2%7D%7BH_R%2B%5Clambda%7D+-+%5Cfrac%7B%28G_L%2BG_R%29%5E2%7D%7BH_L%2BH_R%2B%5Clambda%7D%5Cright%5D+-+%5Cgamma+%5C%5C" alt="[公式]"></p>
 <p>  <strong>注意：</strong>该特征收益也可作为特征重要性输出的重要依据。</p>
 <p>  <strong>对于每次分裂，我们都需要枚举所有特征可能的分割方案，如何高效地枚举所有的分割呢？</strong></p>
-<p>  假设我们要枚举某个特征所有 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=x+%3C+a" class="lazyload"> 这样条件的样本，对于某个特定的分割点 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=a" class="lazyload"> 我们要计算 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=a" class="lazyload"> 左边和右边的导数和。</p>
-<p>  <img alt="img" data-src="https://pic2.zhimg.com/80/v2-973173d22eeb508eb1b6f26acbf9f2d1_hd.jpg" class="lazyload"></p>
-<p>  我们可以发现对于所有的分裂点 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=a" class="lazyload"> ，只要做一遍从左到右的扫描就可以枚举出所有分割的梯度和 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=G_L" class="lazyload"> 、 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=G_R" class="lazyload"> 。然后用上面的公式计算每个分割方案的收益就可以了。</p>
+<p>  假设我们要枚举某个特征所有 <img src="https://www.zhihu.com/equation?tex=x+%3C+a" alt="[公式]"> 这样条件的样本，对于某个特定的分割点 <img src="https://www.zhihu.com/equation?tex=a" alt="[公式]"> 我们要计算 <img src="https://www.zhihu.com/equation?tex=a" alt="[公式]"> 左边和右边的导数和。</p>
+<p>  <img src="https://pic2.zhimg.com/80/v2-973173d22eeb508eb1b6f26acbf9f2d1_hd.jpg" alt="img"></p>
+<p>  我们可以发现对于所有的分裂点 <img src="https://www.zhihu.com/equation?tex=a" alt="[公式]"> ，只要做一遍从左到右的扫描就可以枚举出所有分割的梯度和 <img src="https://www.zhihu.com/equation?tex=G_L" alt="[公式]"> 、 <img src="https://www.zhihu.com/equation?tex=G_R" alt="[公式]"> 。然后用上面的公式计算每个分割方案的收益就可以了。</p>
 <p>  观察分裂后的收益，我们会发现节点划分不一定会使得结果变好，因为我们有一个引入新叶子的惩罚项，也就是说引入的分割带来的增益如果小于一个阀值的时候，我们可以剪掉这个分割。</p>
 <p>上面是一种贪心的方法，每次进行分裂尝试都要遍历一遍全部候选分割点，也叫做全局扫描法。</p>
 <p>但当数据量过大导致内存无法一次载入或者在分布式情况下，贪心算法的效率就会变得很低，全局扫描法不再适用。</p>
@@ -211,36 +721,36 @@ function activateLightMode(){
 <li><p><strong>Local：</strong>每次分裂前将重新提出候选切分点。</p>
 <p>直观上来看，Local策略需要更多的计算步骤，而Global策略因为节点已有划分所以需要更多的候选点。</p>
 <p>下图给出不同种分裂策略的AUC变化曲线，横坐标为迭代次数，纵坐标为测试集AUC，eps为近似算法的精度，其倒数为桶的数量。</p>
-<p><img alt="img" data-src="https://pic4.zhimg.com/80/v2-3081183127c025ee9f3a1436bb873b07_hd.jpg" class="lazyload"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-3081183127c025ee9f3a1436bb873b07_hd.jpg" alt="img"></p>
 <p>从上图我们可以看到， Global 策略在候选点数多时（eps 小）可以和 Local 策略在候选点少时（eps 大）具有相似的精度。此外我们还发现，在eps取值合理的情况下，<strong>分位数策略</strong>可以获得与贪心算法相同的精度。</p>
-<p>近似算法简单来说，就是根据特征 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=k" class="lazyload"> 的分布来确定 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=l" class="lazyload"> 个候选切分点 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=S_%7Bk%7D+%3D+%5Cleft%5C%7B+s_%7Bk1%7D%2C+s_%7Bk2%7D%2C...%2C+s_%7Bkl%7D+%5Cright%5C%7D" class="lazyload"> ，然后根据这些候选切分点把相应的样本放入对应的桶中，对每个桶的 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=G%2CH" class="lazyload"> 进行累加。最后在候选切分点集合上贪心查找。该算法描述如下：</p>
-<p><img alt="img" data-src="https://pic1.zhimg.com/80/v2-1fe2882f8ef3b0a80068c57905ceaba0_hd.jpg" class="lazyload"></p>
+<p>近似算法简单来说，就是根据特征 <img src="https://www.zhihu.com/equation?tex=k" alt="[公式]"> 的分布来确定 <img src="https://www.zhihu.com/equation?tex=l" alt="[公式]"> 个候选切分点 <img src="https://www.zhihu.com/equation?tex=S_%7Bk%7D+%3D+%5Cleft%5C%7B+s_%7Bk1%7D%2C+s_%7Bk2%7D%2C...%2C+s_%7Bkl%7D+%5Cright%5C%7D" alt="[公式]"> ，然后根据这些候选切分点把相应的样本放入对应的桶中，对每个桶的 <img src="https://www.zhihu.com/equation?tex=G%2CH" alt="[公式]"> 进行累加。最后在候选切分点集合上贪心查找。该算法描述如下：</p>
+<p><img src="https://pic1.zhimg.com/80/v2-1fe2882f8ef3b0a80068c57905ceaba0_hd.jpg" alt="img"></p>
 </li>
 </ul>
 <p>  <strong>算法讲解：</strong></p>
 <ul>
-<li><p><strong>第一个for循环：</strong>对特征k根据该特征分布的分位数找到切割点的候选集合 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=S_k%3D%5C%7Bs_%7Bk1%7D%2Cs_%7Bk2%7D%2C...%2Cs_%7Bkl%7D+%5C%7D" class="lazyload"> 。这样做的目的是提取出部分的切分点不用遍历所有的切分点。其中获取某个特征k的候选切割点的方式叫<code>proposal</code>(策略)。XGBoost 支持 Global 策略和 Local 策略。</p>
+<li><p><strong>第一个for循环：</strong>对特征k根据该特征分布的分位数找到切割点的候选集合 <img src="https://www.zhihu.com/equation?tex=S_k%3D%5C%7Bs_%7Bk1%7D%2Cs_%7Bk2%7D%2C...%2Cs_%7Bkl%7D+%5C%7D" alt="[公式]"> 。这样做的目的是提取出部分的切分点不用遍历所有的切分点。其中获取某个特征k的候选切割点的方式叫<code>proposal</code>(策略)。XGBoost 支持 Global 策略和 Local 策略。</p>
 </li>
-<li><p><strong>第二个for循环：</strong>将每个特征的取值映射到由该特征对应的候选点集划分的分桶区间，即 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%7Bs_%7Bk%2Cv%7D%E2%89%A5x_%7Bjk%7D%3Es_%7Bk%2Cv%E2%88%921%7D%7D" class="lazyload"> 。对每个桶区间内的样本统计值 G,H并进行累加，最后在这些累计的统计量上寻找最佳分裂点。这样做的目的是获取每个特征的候选分割点的 G,H值。</p>
+<li><p><strong>第二个for循环：</strong>将每个特征的取值映射到由该特征对应的候选点集划分的分桶区间，即 <img src="https://www.zhihu.com/equation?tex=%7Bs_%7Bk%2Cv%7D%E2%89%A5x_%7Bjk%7D%3Es_%7Bk%2Cv%E2%88%921%7D%7D" alt="[公式]"> 。对每个桶区间内的样本统计值 G,H并进行累加，最后在这些累计的统计量上寻找最佳分裂点。这样做的目的是获取每个特征的候选分割点的 G,H值。</p>
 <p>下图给出近似算法的具体例子，以三分位为例：</p>
-<p><img alt="img" data-src="https://pic2.zhimg.com/80/v2-cfecb2f6ad675e6e3bf536562e5c06dd_hd.jpg" class="lazyload"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-cfecb2f6ad675e6e3bf536562e5c06dd_hd.jpg" alt="img"></p>
 <p>根据样本特征进行排序，然后基于分位数进行划分，并统计三个桶内的 G,H 值，最终求解节点划分的增益。</p>
 </li>
 </ul>
 <h4 id="停止生长"><a href="#停止生长" class="headerlink" title="停止生长"></a>停止生长</h4><p>一棵树不会一直生长下去，下面是一些常见的限制条件。</p>
 <p><strong>(1) 当新引入的一次分裂所带来的增益Gain&lt;0时，放弃当前的分裂。这是训练损失和模型结构复杂度的博弈过程。</strong></p>
-<p><img alt="img" data-src="https://pic1.zhimg.com/80/v2-46c88b4258c2b9740d89c87d203ed0c0_hd.jpg" class="lazyload"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-46c88b4258c2b9740d89c87d203ed0c0_hd.jpg" alt="img"></p>
 <p><strong>(2) 当树达到最大深度时，停止建树，因为树的深度太深容易出现过拟合，这里需要设置一个超参数max_depth。</strong></p>
 <p><strong>(3) 当引入一次分裂后，重新计算新生成的左、右两个叶子结点的样本权重和。如果任一个叶子结点的样本权重低于某一个阈值，也会放弃此次分裂。</strong>这涉及到一个超参数:最小样本权重和，是指如果一个叶子节点包含的样本数量太少也会放弃分裂，防止树分的太细，这也是过拟合的一种措施。</p>
 <p>每个叶子结点的样本权值和计算方式如下：</p>
-<img alt="img" style="zoom:33%;" data-src="https://pic3.zhimg.com/80/v2-4ecca09165ffb7a76123401d2009191a_hd.jpg" class="lazyload">
+<img src="https://pic3.zhimg.com/80/v2-4ecca09165ffb7a76123401d2009191a_hd.jpg" alt="img" style="zoom:33%;" />
 
 <p>总结推导过程：</p>
-<p><img alt="总结推导过程" data-src="https://pic2.zhimg.com/80/v2-def00357a06b469b6144d6acb8ab75a9_hd.jpg" class="lazyload"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-def00357a06b469b6144d6acb8ab75a9_hd.jpg" alt="总结推导过程"></p>
 <h2 id="算法工程优化"><a href="#算法工程优化" class="headerlink" title="算法工程优化"></a>算法工程优化</h2><h3 id="对内存的优化：列块并行学习"><a href="#对内存的优化：列块并行学习" class="headerlink" title="对内存的优化：列块并行学习"></a>对内存的优化：<strong>列块并行学习</strong></h3><p>在树生成过程中，最耗时的一个步骤就是在每次寻找最佳分裂点时都需要对特征的值进行排序。而 XGBoost 在训练之前会根据特征对数据进行排序，然后保存到<strong>块结构</strong>中，并在每个块结构中都采用了稀疏矩阵存储格式（Compressed Sparse Columns Format，CSC）进行存储，后面的训练过程中会重复地使用块结构，可以大大减小计算量。</p>
 <p>作者提出通过按特征进行分块并排序，在块里面保存排序后的特征值及对应样本的引用，以便于获取样本的一阶、二阶导数值。具体流程为：</p>
 <ul>
-<li><p>整体训练数据可以看做一个 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=n%5Ctimes+m" class="lazyload"> 的超大规模稀疏矩阵</p>
+<li><p>整体训练数据可以看做一个 <img src="https://www.zhihu.com/equation?tex=n%5Ctimes+m" alt="[公式]"> 的超大规模稀疏矩阵</p>
 </li>
 <li><p>按照mini-batch的方式横向分割，可以切成很多个“Block”</p>
 </li>
@@ -250,17 +760,17 @@ function activateLightMode(){
 </li>
 </ul>
 <p>具体方式如图：</p>
-<p><img alt=" 列分块的升序排列优化示意图" data-src="https://pic2.zhimg.com/80/v2-3a93e4d9940cf6e2e9fd89dfa38dc62d_hd.jpg" class="lazyload"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-3a93e4d9940cf6e2e9fd89dfa38dc62d_hd.jpg" alt=" 列分块的升序排列优化示意图"></p>
 <p>通过顺序访问排序后的块遍历样本特征的特征值，方便进行切分点的查找。此外分块存储后多个特征之间互不干涉，可以使用多线程同时对不同的特征进行切分点查找，即特征的并行化处理。在对节点进行分裂时需要选择增益最大的特征作为分裂，这时各个特征的增益计算可以同时进行，这也是 XGBoost 能够实现分布式或者多线程计算的原因。</p>
 <h3 id="对CPU-Cache的优化：缓存优化"><a href="#对CPU-Cache的优化：缓存优化" class="headerlink" title="对CPU Cache的优化：缓存优化"></a>对<strong>CPU Cache</strong>的优化：缓存优化</h3><p>针对一个具体的块(block)，其中存储了排序好的特征值，以及指向特征值所属样本的索引指针，算法需要间接地利用索引指针来获得样本的梯度值。列块并行学习的设计可以减少节点分裂时的计算量，在顺序访问特征值时，访问的是一块连续的内存空间，但通过特征值持有的索引（样本索引）访问样本获取一阶、二阶导数时，这个访问操作访问的内存空间并不连续，这样可能造成cpu缓存命中率低，影响算法效率。由于块中数据是按特征值来排序的，当索引指针指向内存中不连续的样本时，无法充分利用CPU缓存来提速。</p>
 <p>为了解决缓存命中率低的问题，XGBoost 提出了两种优化思路。</p>
 <p><strong>（1）提前取数（Prefetching）</strong></p>
 <p>对于精确搜索，利用多线程的方式，给每个线程划分一个连续的缓存空间，当training线程在按特征值的顺序计算梯度的累加时，prefetching线程可以提前将接下来的一批特征值对应的梯度加载到CPU缓存中。为每个线程分配一个连续的缓存区，将需要的梯度信息存放在缓冲区中，这样就实现了非连续空间到连续空间的转换，提高了算法效率。</p>
 <p><strong>（2）合理设置分块大小</strong></p>
-<p>对于近似分桶搜索，按行分块时需要准确地选择块的大小。块太小会导致每个线程的工作量太少，切换线程的成本过高，不利于并行计算；块太大导致缓存命中率低，需要花费更多时间在读取数据上。经过反复实验，作者找到一个合理的<code>block_size</code>为 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=2%5E%7B16%7D" class="lazyload"> <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=2%5E%7B16%7D" class="lazyload">。</p>
+<p>对于近似分桶搜索，按行分块时需要准确地选择块的大小。块太小会导致每个线程的工作量太少，切换线程的成本过高，不利于并行计算；块太大导致缓存命中率低，需要花费更多时间在读取数据上。经过反复实验，作者找到一个合理的<code>block_size</code>为 <img src="https://www.zhihu.com/equation?tex=2%5E%7B16%7D" alt="[公式]"> <img src="https://www.zhihu.com/equation?tex=2%5E%7B16%7D" alt="[公式]">。</p>
 <h3 id="对IO的优化：核外块计算"><a href="#对IO的优化：核外块计算" class="headerlink" title="对IO的优化：核外块计算"></a>对IO的优化：核外块计算</h3><p>当数据量非常大时，我们不能把所有的数据都加载到内存中。那么就必须将一部分需要加载进内存的数据先存放在硬盘中，当需要时再加载进内存。这样操作具有很明显的瓶颈，即硬盘的IO操作速度远远低于内存的处理速度，肯定会存在大量等待硬盘IO操作的情况。针对这个问题作者提出了“核外”计算的优化方法。具体操作为，将数据集分成多个块存放在硬盘中，使用一个独立的线程专门从硬盘读取数据，加载到内存中，这样算法在内存中处理数据就可以和从硬盘读取数据同时进行。此外，XGBoost 还用了两种方法来降低硬盘读写的开销：</p>
 <ul>
-<li><strong>块压缩</strong>（<strong>Block Compression</strong>）。论文使用的是按列进行压缩，读取的时候用另外的线程解压。对于行索引，只保存第一个索引值，然后用16位的整数保存与该block第一个索引的差值。作者通过测试在block设置为 <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=2%5E%7B16%7D" class="lazyload"> 个样本大小时，压缩比率几乎达到26% <img alt="[公式]" data-src="https://www.zhihu.com/equation?tex=%5Csim" class="lazyload"> 29%。</li>
+<li><strong>块压缩</strong>（<strong>Block Compression</strong>）。论文使用的是按列进行压缩，读取的时候用另外的线程解压。对于行索引，只保存第一个索引值，然后用16位的整数保存与该block第一个索引的差值。作者通过测试在block设置为 <img src="https://www.zhihu.com/equation?tex=2%5E%7B16%7D" alt="[公式]"> 个样本大小时，压缩比率几乎达到26% <img src="https://www.zhihu.com/equation?tex=%5Csim" alt="[公式]"> 29%。</li>
 <li><strong>块分区</strong>（<strong>Block Sharding</strong> ）。块分区是将特征block分区存放在不同的硬盘上，以此来增加硬盘IO的吞吐量。</li>
 </ul>
 <h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
@@ -413,14 +923,14 @@ function activateLightMode(){
 <ul>
 <li>如果在训练中没有缺失值而在预测中出现缺失，那么会自动将缺失值的划分方向放到右子结点。</li>
 </ul>
-<img alt="img" style="zoom:33%;" data-src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0fkqnx5yOhtlvx8dFgk1DvVfp2pmTsZ0yX0A2usH3afam4cJb7lQNIJGb3N2VZicclrfoRqM6MHhtQ/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" class="lazyload">
+<img src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0fkqnx5yOhtlvx8dFgk1DvVfp2pmTsZ0yX0A2usH3afam4cJb7lQNIJGb3N2VZicclrfoRqM6MHhtQ/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img" style="zoom:33%;" />
 
 <p>find_split时，缺失值处理的伪代码</p>
 <h3 id="XGBoost中叶子结点的权重如何计算出来"><a href="#XGBoost中叶子结点的权重如何计算出来" class="headerlink" title="XGBoost中叶子结点的权重如何计算出来"></a>XGBoost中叶子结点的权重如何计算出来</h3><p>XGBoost目标函数最终推导形式如下：</p>
-<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0fDfLgXV02BLFJ9eaFEJB0ERQaHDopzOeSvCyaPGicmHqArjzlJYDejcTs9YJoAFdAqwyVrdpUPZQA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0fDfLgXV02BLFJ9eaFEJB0ERQaHDopzOeSvCyaPGicmHqArjzlJYDejcTs9YJoAFdAqwyVrdpUPZQA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
 <p>利用一元二次函数求最值的知识，当目标函数达到最小值Obj<em>时，每个叶子结点的权重为wj</em>。</p>
 <p>具体公式如下：</p>
-<p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0fDfLgXV02BLFJ9eaFEJB0EURBYpwF4xF4x2lLh7BroeKUjRqk17VXpkZqPEjaskia4kiazjs9nyg0A/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0fDfLgXV02BLFJ9eaFEJB0EURBYpwF4xF4x2lLh7BroeKUjRqk17VXpkZqPEjaskia4kiazjs9nyg0A/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
 <h3 id="XGBoost中的一棵树的停止生长条件"><a href="#XGBoost中的一棵树的停止生长条件" class="headerlink" title="XGBoost中的一棵树的停止生长条件"></a>XGBoost中的一棵树的停止生长条件</h3><ul>
 <li>当新引入的一次分裂所带来的增益Gain&lt;0时，放弃当前的分裂。这是训练损失和模型结构复杂度的博弈过程。</li>
 <li>当树达到最大深度时，停止建树，因为树的深度太深容易出现过拟合，这里需要设置一个超参数max_depth。</li>
@@ -541,7 +1051,7 @@ function activateLightMode(){
 <li>数据量较大，也可以用神经网络</li>
 <li>避免使用距离度量相关的模型，如KNN和SVM</li>
 </ul>
-<h3 id="XGBoost和LightGBM的区别"><a href="#XGBoost和LightGBM的区别" class="headerlink" title="XGBoost和LightGBM的区别"></a>XGBoost和LightGBM的区别</h3><p><img alt="img" data-src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0cassUTLvbQlGic1CW6ialKxxJ2S8XI3VokUBf5TBOSDG8zb6gZXe0q63b4TyDlDPCX9G6cPXlmR4cw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" class="lazyload"></p>
+<h3 id="XGBoost和LightGBM的区别"><a href="#XGBoost和LightGBM的区别" class="headerlink" title="XGBoost和LightGBM的区别"></a>XGBoost和LightGBM的区别</h3><p><img src="https://mmbiz.qpic.cn/mmbiz_png/90dLE6ibsg0cassUTLvbQlGic1CW6ialKxxJ2S8XI3VokUBf5TBOSDG8zb6gZXe0q63b4TyDlDPCX9G6cPXlmR4cw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
 <p>（1）树生长策略：XGB采用<code>level-wise</code>的分裂策略，LGB采用<code>leaf-wise</code>的分裂策略。XGB对每一层所有节点做无差别分裂，但是可能有些节点增益非常小，对结果影响不大，带来不必要的开销。Leaf-wise是在所有叶子节点中选取分裂收益最大的节点进行的，但是很容易出现过拟合问题，所以需要对最大深度做限制 。</p>
 <p>（2）分割点查找算法：XGB使用特征预排序算法，LGB使用基于直方图的切分点算法，其优势如下：</p>
 <ul>
@@ -587,14 +1097,618 @@ function activateLightMode(){
 <p>【20】《百面机器学习》诸葛越主编、葫芦娃著，P295-P297。</p>
 <p>【21】<a href="https://zhuanlan.zhihu.com/p/86816771" target="_blank" rel="noopener">灵魂拷问，你看过Xgboost原文吗？ - 小雨姑娘的文章 - 知乎</a></p>
 <p>【22】<a href="https://www.zhihu.com/question/277638585/answer/522272201" target="_blank" rel="noopener">为什么xgboost泰勒二阶展开后效果就比较好了呢？ - Zsank的回答 - 知乎</a> </p>
-</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined" target="_blank" rel="noopener">Leon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://dataquaner.github.io/2019/12/25/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8807%EF%BC%89%EF%BC%9A%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91%E7%AE%97%E6%B3%95XGBOOST/">https://dataquaner.github.io/2019/12/25/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8807%EF%BC%89%EF%BC%9A%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91%E7%AE%97%E6%B3%95XGBOOST/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://dataquaner.github.io">DataQuaner</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/XGBoost/">XGBoost    </a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/js/social-share.min.js"></script></div></div><div class="post-reward"><a class="reward-button"><i class="fa fa-qrcode"></i> 打赏<div class="reward-main"><ul class="reward-all"><li class="reward-item"><img class="lazyload post-qr-code__img" src="/img/wechat.jpg"><div class="post-qr-code__desc">微信</div></li><li class="reward-item"><img class="lazyload post-qr-code__img" src="/img/alipay.jpg"><div class="post-qr-code__desc">支付宝</div></li></ul></div></a></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2019/12/25/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8803%EF%BC%89%EF%BC%9A%E5%86%B3%E7%AD%96%E6%A0%91%E7%9A%84%E5%89%AA%E6%9E%9D/"><img class="prev_cover lazyload" data-src="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png" onerror="onerror=null;src='/img/404.jpg'"><div class="label">上一篇</div><div class="prev_info"><span>机器学习系列之决策树算法（03）：决策树的剪枝</span></div></a></div><div class="next-post pull_right"><a href="/2019/12/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8805%EF%BC%89%EF%BC%9A%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91%E7%AE%97%E6%B3%95GBDT/"><img class="next_cover lazyload" data-src="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png" onerror="onerror=null;src='/img/404.jpg'"><div class="label">下一篇</div><div class="next_info"><span>机器学习系列之决策树算法（05）：梯度提升树算法GBDT</span></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fa fa-fw fa-thumbs-up" aria-hidden="true"></i><span> 相关推荐</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2019/12/25/xgboost算模型输出的解释/" title="xgboost算法模型输出的解释"><img class="relatedPosts_cover lazyload"data-src="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png"><div class="relatedPosts_title">xgboost算法模型输出的解释</div></a></div><div class="relatedPosts_item"><a href="/2019/12/27/机器学习系列之决策树算法（07）：梯度提升树算法XGBOOST实战：原生接口和sklearn接口的区别/" title="机器学习系列之决策树算法（07）：梯度提升树算法XGBoost实战：原生接口和sklearn接口区别"><img class="relatedPosts_cover lazyload"data-src="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png"><div class="relatedPosts_title">机器学习系列之决策树算法（07）：梯度提升树算法XGBoost实战：原生接口和sklearn接口区别</div></a></div><div class="relatedPosts_item"><a href="/2020/01/16/机器学习系列之决策树算法（10）：决策树模型，XGBoost，LightGBM和CatBoost模型可视化/" title="机器学习系列之决策树算法（10）：决策树模型，XGBoost，LightGBM和CatBoost模型可视化"><img class="relatedPosts_cover lazyload"data-src="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png"><div class="relatedPosts_title">机器学习系列之决策树算法（10）：决策树模型，XGBoost，LightGBM和CatBoost模型可视化</div></a></div><div class="relatedPosts_item"><a href="/2019/12/26/机器学习系列之决策树算法（07）：梯度提升树算法XGBOOST实战/" title="机器学习系列之决策树算法（07）：梯度提升树算法XGBoost实战"><img class="relatedPosts_cover lazyload"data-src="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png"><div class="relatedPosts_title">机器学习系列之决策树算法（07）：梯度提升树算法XGBoost实战</div></a></div><div class="relatedPosts_item"><a href="/2019/12/24/机器学习系列之决策树算法（09）：ID3、C4.5、CART、随机森林、bagging、boosting、Adaboost、GBDT、xgboost算法总结/" title="机器学习系列之决策树算法（09）：ID3、C4.5、CART、随机森林、bagging、boosting、Adaboost、GBDT、xgboost算法总结"><img class="relatedPosts_cover lazyload"data-src="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png"><div class="relatedPosts_title">机器学习系列之决策树算法（09）：ID3、C4.5、CART、随机森林、bagging、boosting、Adaboost、GBDT、xgboost算法总结</div></a></div></div><div class="clear_both"></div></div><hr><div id="post-comment"><div class="comment_headling"><i class="fa fa-comments fa-fw" aria-hidden="true"></i><span> 评论</span></div><div id="disqus_thread"></div><script>var unused = null;
-var disqus_config = function () {
-  this.page.url = 'https://dataquaner.github.io/2019/12/25/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8807%EF%BC%89%EF%BC%9A%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91%E7%AE%97%E6%B3%95XGBOOST/';
-  this.page.identifier = '2019/12/25/机器学习系列之决策树算法（07）：梯度提升树算法XGBOOST/';
-  this.page.title = '机器学习系列之决策树算法（07）：梯度提升树算法XGBoost';
-}
-var d = document, s = d.createElement('script');
-s.src = "https://" + 'dataquaner' +".disqus.com/embed.js";
-s.setAttribute('data-timestamp', '' + +new Date());
-(d.head || d.body).appendChild(s);</script></div></div></div><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2020 By Leon</div><div class="framework-info"><span>驱动 </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://dataquaner.github.io/">blog</a>!</div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="阅读模式"></i><i class="fa fa-plus" id="font_plus" title="放大字体"></i><i class="fa fa-minus" id="font_minus" title="缩小字体"></i><a class="translate_chn_to_cht" id="translateLink" href="javascript:translatePage();" title="简繁转换" target="_self">繁</a><i class="darkmode fa fa-moon-o" id="darkmode" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><a id="to_comment" href="#post-comment" title="直达评论"><i class="scroll_to_comment fa fa-comments">  </i></a><i class="fa fa-list-ul close" id="mobile-toc-button" title="目录" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/baidupush.js"> </script><script src="/js/tw_cn.js"></script><script>translateInitilization()
-</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@latest/lazysizes.min.js" async=""></script></body></html>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://dataquaner.github.io" rel="external nofollow noreferrer">Leon</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://dataquaner.github.io/2019/12/25/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8807%EF%BC%89%EF%BC%9A%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91%E7%AE%97%E6%B3%95XGBOOST/">https://dataquaner.github.io/2019/12/25/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8807%EF%BC%89%EF%BC%9A%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91%E7%AE%97%E6%B3%95XGBOOST/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://dataquaner.github.io" target="_blank">Leon</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/XGBoost/">
+                                    <span class="chip bg-color">XGBoost</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2019/12/25/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8803%EF%BC%89%EF%BC%9A%E5%86%B3%E7%AD%96%E6%A0%91%E7%9A%84%E5%89%AA%E6%9E%9D/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="机器学习系列之决策树算法（03）：决策树的剪枝">
+                        
+                        <span class="card-title">机器学习系列之决策树算法（03）：决策树的剪枝</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            1. 前言上一篇文章介绍了决策树的生成详细过程，由于决策树生成算法过多地考虑如何提高对训练数据的正确分类，从而构建过于复杂的决策树，这样产生的决策树往往对训练数据的分类很准确，却对未知的测试数据的分类没有那么准确，即出现过拟合现象。我们需要
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-12-25
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Machine-Learning/" class="post-category">
+                                    Machine Learning
+                                </a>
+                            
+                            <a href="/categories/Machine-Learning/Decision-Tree/" class="post-category">
+                                    Decision Tree
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Decision-Tree/">
+                        <span class="chip bg-color">Decision Tree</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/12/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95%EF%BC%8809%EF%BC%89%EF%BC%9AID3%E3%80%81C4.5%E3%80%81CART%E3%80%81%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E3%80%81bagging%E3%80%81boosting%E3%80%81Adaboost%E3%80%81GBDT%E3%80%81xgboost%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="机器学习系列之决策树算法（09）：ID3、C4.5、CART、随机森林、bagging、boosting、Adaboost、GBDT、xgboost算法总结">
+                        
+                        <span class="card-title">机器学习系列之决策树算法（09）：ID3、C4.5、CART、随机森林、bagging、boosting、Adaboost、GBDT、xgboost算法总结</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            最近心血来潮，整理了一下和树有关的方法和模型，请多担待！
+决策树首先，决策树是一个有监督的分类模型，其本质是选择一个能带来最大信息增益的特征值进行树的分割，直到到达结束条件或者叶子结点纯度到达一定阈值。下图是决策树的一个简单例子
+
+按照分割
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-24
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Machine-Learning/" class="post-category">
+                                    Machine Learning
+                                </a>
+                            
+                            <a href="/categories/Machine-Learning/XGBoost/" class="post-category">
+                                    XGBoost
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/XGBoost/">
+                        <span class="chip bg-color">XGBoost</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2019</span>
+            <a href="https://dataquaner.github.io" target="_blank">Leon</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1181062873@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1181062873" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1181062873" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

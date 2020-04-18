@@ -494,7 +494,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="第一部分：Flink-面试基础篇"><a href="#第一部分：Flink-面试基础篇" class="headerlink" title="第一部分：Flink 面试基础篇"></a>第一部分：Flink 面试基础篇</h1><h2 id="1-简单介绍一下-Flink"><a href="#1-简单介绍一下-Flink" class="headerlink" title="1. 简单介绍一下 Flink"></a><strong>1. 简单介绍一下 Flink</strong></h2><p>​        Flink 是一个框架和分布式处理引擎，用于对无界和有界数据流进行有状态计算。并且 Flink 提供了数据分布、容错机制以及资源管理等核心功能。</p>
+                <h1 id="第一部分：Flink-面试基础篇"><a href="#第一部分：Flink-面试基础篇" class="headerlink" title="第一部分：Flink 面试基础篇"></a><strong>第一部分：Flink 面试基础篇</strong></h1><h2 id="1-简单介绍一下-Flink"><a href="#1-简单介绍一下-Flink" class="headerlink" title="1. 简单介绍一下 Flink"></a><strong>1. 简单介绍一下 Flink</strong></h2><p>​        Flink 是一个框架和分布式处理引擎，用于对无界和有界数据流进行有状态计算。并且 Flink 提供了数据分布、容错机制以及资源管理等核心功能。</p>
 <p>​        Flink提供了诸多高抽象层的API以便用户编写分布式任务：</p>
 <ul>
 <li><p>DataSet API， 对静态数据进行批处理操作，将静态数据抽象成分布式的数据集，用户可以方便地使用Flink提供的各种操作符对分布式数据集进行处理，支持Java、Scala和Python。</p>
@@ -560,8 +560,7 @@
 <li><strong>CustomPartitionerWrapper</strong>用户自定义分区器。需要用户自己实现Partitioner接口，来定义自己的分区逻辑。</li>
 </ul>
 </blockquote>
-<p><strong>11. Flink的并行度了解吗？Flink的并行度设置是怎样的？</strong></p>
-<p>​        Flink中的任务被分为多个并行任务来执行，其中每个并行的实例处理一部分数据。这些并行实例的数量被称为并行度。</p>
+<h2 id="11-Flink的并行度了解吗？Flink的并行度设置是怎样的？"><a href="#11-Flink的并行度了解吗？Flink的并行度设置是怎样的？" class="headerlink" title="11. Flink的并行度了解吗？Flink的并行度设置是怎样的？"></a><strong>11. Flink的并行度了解吗？Flink的并行度设置是怎样的？</strong></h2><p>​        Flink中的任务被分为多个并行任务来执行，其中每个并行的实例处理一部分数据。这些并行实例的数量被称为并行度。</p>
 <p>​      我们在实际生产环境中可以从四个不同层面设置并行度：</p>
 <ul>
 <li><p>操作算子层面(Operator Level)</p>
@@ -574,14 +573,12 @@
 </li>
 </ul>
 <p>需要注意的优先级：算子层面&gt;环境层面&gt;客户端层面&gt;系统层面。</p>
-<p><strong>12. Flink的Slot和parallelism有什么区别？</strong></p>
-<p>官网上十分经典的图：</p>
+<h2 id="12-Flink的Slot和parallelism有什么区别？"><a href="#12-Flink的Slot和parallelism有什么区别？" class="headerlink" title="12. Flink的Slot和parallelism有什么区别？"></a><strong>12. Flink的Slot和parallelism有什么区别？</strong></h2><p>官网上十分经典的图：</p>
 <p><img src="https://pic2.zhimg.com/80/v2-d4ee22523e404ce88195bf5c4696f361_1440w.jpg" alt="img"></p>
 <p>slot是指taskmanager的并发执行能力，假设我们将 taskmanager.numberOfTaskSlots 配置为3那么每一个 taskmanager 中分配3个 TaskSlot, 3个 taskmanager 一共有9个TaskSlot。</p>
 <p><img src="https://pic4.zhimg.com/80/v2-855ff152aad46e75981864e13df3740b_1440w.jpg" alt="img"></p>
 <p>parallelism是指taskmanager实际使用的并发能力。假设我们把 parallelism.default 设置为1，那么9个 TaskSlot 只能用1个，有8个空闲。</p>
-<p><strong>13. Flink有没有重启策略？说说有哪几种？</strong></p>
-<p>Flink 实现了多种重启策略。</p>
+<h2 id="13-Flink有没有重启策略？说说有哪几种？"><a href="#13-Flink有没有重启策略？说说有哪几种？" class="headerlink" title="13. Flink有没有重启策略？说说有哪几种？"></a><strong>13. Flink有没有重启策略？说说有哪几种？</strong></h2><p>Flink 实现了多种重启策略。</p>
 <ul>
 <li><p>固定延迟重启策略（Fixed Delay Restart Strategy）</p>
 </li>
@@ -625,8 +622,7 @@ env.execute()<span aria-hidden="true" class="line-numbers-rows"><span></span><sp
 <li><p>count-sliding-window 有重叠数据的数量窗口，设置方式举例：countWindow(5,3)</p>
 </li>
 </ul>
-<p><strong>17. 说说Flink中的状态存储？</strong></p>
-<p>​        Flink在做计算的过程中经常需要存储中间状态，来避免数据丢失和状态恢复。选择的状态存储策略不同，会影响状态持久化如何和 checkpoint 交互。</p>
+<h2 id="17-说说Flink中的状态存储？"><a href="#17-说说Flink中的状态存储？" class="headerlink" title="17. 说说Flink中的状态存储？"></a><strong>17. 说说Flink中的状态存储？</strong></h2><p>​        Flink在做计算的过程中经常需要存储中间状态，来避免数据丢失和状态恢复。选择的状态存储策略不同，会影响状态持久化如何和 checkpoint 交互。</p>
 <p>​        Flink提供了三种状态存储方式：MemoryStateBackend、FsStateBackend、RocksDBStateBackend。</p>
 <h2 id="18-Flink-中的时间有哪几类"><a href="#18-Flink-中的时间有哪几类" class="headerlink" title="18. Flink 中的时间有哪几类"></a><strong>18. Flink 中的时间有哪几类</strong></h2><p>​        Flink 中的时间和其他流式计算系统的时间一样分为三类：事件时间，摄入时间，处理时间三种。</p>
 <ul>
@@ -666,7 +662,7 @@ env.execute()<span aria-hidden="true" class="line-numbers-rows"><span></span><sp
 </li>
 </ul>
 </blockquote>
-<h1 id="第二部分：Flink-面试进阶篇"><a href="#第二部分：Flink-面试进阶篇" class="headerlink" title="第二部分：Flink 面试进阶篇"></a>第二部分：Flink 面试进阶篇</h1><h2 id="1-Flink是如何支持批流一体的？"><a href="#1-Flink是如何支持批流一体的？" class="headerlink" title="1. Flink是如何支持批流一体的？"></a><strong>1. Flink是如何支持批流一体的？</strong></h2><p><img src="https://pic2.zhimg.com/80/v2-36a937f492576709a89e8f25c1bed4a9_1440w.jpg" alt="img"></p>
+<h1 id="第二部分：Flink-面试进阶篇"><a href="#第二部分：Flink-面试进阶篇" class="headerlink" title="第二部分：Flink 面试进阶篇"></a><strong>第二部分：Flink 面试进阶篇</strong></h1><h2 id="1-Flink是如何支持批流一体的？"><a href="#1-Flink是如何支持批流一体的？" class="headerlink" title="1. Flink是如何支持批流一体的？"></a><strong>1. Flink是如何支持批流一体的？</strong></h2><p><img src="https://pic2.zhimg.com/80/v2-36a937f492576709a89e8f25c1bed4a9_1440w.jpg" alt="img"></p>
 <p>​       本道面试题考察的其实就是一句话：Flink的开发者认为批处理是流处理的一种特殊情况。批处理是有限的流处理。Flink 使用一个引擎支持了DataSet API 和 DataStream API。</p>
 <h2 id="2-Flink是如何做到高效的数据交换的？"><a href="#2-Flink是如何做到高效的数据交换的？" class="headerlink" title="2. Flink是如何做到高效的数据交换的？"></a><strong>2. Flink是如何做到高效的数据交换的？</strong></h2><p>​         在一个Flink Job中，数据需要在不同的task中进行交换，整个数据交换是有 TaskManager 负责的，TaskManager 的网络组件首先从缓冲buffer中收集records，然后再发送。Records 并不是一个一个被发送的，二是积累一个批次再发送，batch 技术可以更加高效的利用网络资源。</p>
 <h2 id="3-Flink是如何做容错的？"><a href="#3-Flink是如何做容错的？" class="headerlink" title="3. Flink是如何做容错的？"></a><strong>3. Flink是如何做容错的？</strong></h2><p>​        Flink 实现容错主要靠强大的CheckPoint机制和State机制。Checkpoint 负责定时制作分布式快照、对程序中的状态进行备份；State 用来存储计算过程中的中间状态。</p>
@@ -742,8 +738,7 @@ env.execute()<span aria-hidden="true" class="line-numbers-rows"><span></span><sp
 <p>​      Flink中的反压使用了高效有界的分布式阻塞队列，下游消费变慢会导致发送端阻塞。</p>
 <p>​      二者最大的区别是Flink是逐级反压，而Storm是直接从源头降速。</p>
 <h2 id="14-Operator-Chains（算子链）这个概念你了解吗？"><a href="#14-Operator-Chains（算子链）这个概念你了解吗？" class="headerlink" title="14. Operator Chains（算子链）这个概念你了解吗？"></a><strong>14. Operator Chains（算子链）这个概念你了解吗？</strong></h2><p>​      为了更高效地分布式执行，Flink会尽可能地将operator的subtask链接（chain）在一起形成task。每个task在一个线程中执行。将operators链接成task是非常有效的优化：它能减少线程之间的切换，减少消息的序列化/反序列化，减少数据在缓冲区的交换，减少了延迟的同时提高整体的吞吐量。这就是我们所说的算子链。</p>
-<p><strong>15. Flink什么情况下才会把Operator chain在一起形成算子链？</strong></p>
-<p>​    两个operator chain在一起的的条件：</p>
+<h2 id="15-Flink什么情况下才会把Operator-chain在一起形成算子链？"><a href="#15-Flink什么情况下才会把Operator-chain在一起形成算子链？" class="headerlink" title="15. Flink什么情况下才会把Operator chain在一起形成算子链？"></a><strong>15. Flink什么情况下才会把Operator chain在一起形成算子链？</strong></h2><p>​    两个operator chain在一起的的条件：</p>
 <ul>
 <li><p>上下游的并行度一致</p>
 </li>
@@ -760,8 +755,7 @@ env.execute()<span aria-hidden="true" class="line-numbers-rows"><span></span><sp
 <li><p>用户没有禁用 chain</p>
 </li>
 </ul>
-<p><strong>16. 说说Flink1.9的新特性？</strong></p>
-<ul>
+<h2 id="16-说说Flink1-9的新特性？"><a href="#16-说说Flink1-9的新特性？" class="headerlink" title="16. 说说Flink1.9的新特性？"></a><strong>16. 说说Flink1.9的新特性？</strong></h2><ul>
 <li><p>支持hive读写，支持UDF</p>
 </li>
 <li><p>Flink SQL TopN和GroupBy等优化</p>
@@ -771,9 +765,8 @@ env.execute()<span aria-hidden="true" class="line-numbers-rows"><span></span><sp
 <li><p>Flink state查询</p>
 </li>
 </ul>
-<p><strong>17. 消费kafka数据的时候，如何处理脏数据？</strong></p>
-<p>   可以在处理前加一个fliter算子，将不符合规则的数据过滤出去。</p>
-<h1 id="第三部分：Flink-面试源码篇"><a href="#第三部分：Flink-面试源码篇" class="headerlink" title="第三部分：Flink 面试源码篇"></a>第三部分：Flink 面试源码篇</h1><h2 id="1-Flink-Job的提交流程"><a href="#1-Flink-Job的提交流程" class="headerlink" title="1. Flink Job的提交流程"></a><strong>1. Flink Job的提交流程</strong></h2><p>​       用户提交的Flink Job会被转化成一个DAG任务运行，分别是：StreamGraph、JobGraph、ExecutionGraph，Flink中JobManager与TaskManager，JobManager与Client的交互是基于Akka工具包的，是通过消息驱动。整个Flink Job的提交还包含着ActorSystem的创建，JobManager的启动，TaskManager的启动和注册。</p>
+<h2 id="17-消费kafka数据的时候，如何处理脏数据？"><a href="#17-消费kafka数据的时候，如何处理脏数据？" class="headerlink" title="17. 消费kafka数据的时候，如何处理脏数据？"></a><strong>17. 消费kafka数据的时候，如何处理脏数据？</strong></h2><p>   可以在处理前加一个fliter算子，将不符合规则的数据过滤出去。</p>
+<h1 id="第三部分：Flink-面试源码篇"><a href="#第三部分：Flink-面试源码篇" class="headerlink" title="第三部分：Flink 面试源码篇"></a><strong>第三部分：Flink 面试源码篇</strong></h1><h2 id="1-Flink-Job的提交流程"><a href="#1-Flink-Job的提交流程" class="headerlink" title="1. Flink Job的提交流程"></a><strong>1. Flink Job的提交流程</strong></h2><p>​       用户提交的Flink Job会被转化成一个DAG任务运行，分别是：StreamGraph、JobGraph、ExecutionGraph，Flink中JobManager与TaskManager，JobManager与Client的交互是基于Akka工具包的，是通过消息驱动。整个Flink Job的提交还包含着ActorSystem的创建，JobManager的启动，TaskManager的启动和注册。</p>
 <h2 id="2-Flink所谓”三层图”结构是哪几个”图”？"><a href="#2-Flink所谓”三层图”结构是哪几个”图”？" class="headerlink" title="2. Flink所谓”三层图”结构是哪几个”图”？"></a><strong>2. Flink所谓”三层图”结构是哪几个”图”？</strong></h2><blockquote>
 <p>一个Flink任务的DAG生成计算图大致经历以下三个过程：</p>
 <ul>

@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>【Hive日常问题】导入数据成功，查询显示NULL</title>
+      <link href="/2020/05/06/hive-ri-chang-wen-ti-dao-ru-shu-ju-cheng-gong-cha-xun-xian-shi-null/"/>
+      <url>/2020/05/06/hive-ri-chang-wen-ti-dao-ru-shu-ju-cheng-gong-cha-xun-xian-shi-null/</url>
+      
+        <content type="html"><![CDATA[<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a><strong>问题描述</strong></h2><p>hive导入数据成功，但是查询结果为NULL：</p><pre class="line-numbers language-powershell"><code class="language-powershell">load <span class="token keyword">data</span> local inpath <span class="token string">'/user/hive/student.txt'</span> into table hive_test<span class="token punctuation">.</span>students<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><pre class="line-numbers language-powershell"><code class="language-powershell">Loading <span class="token keyword">data</span> to table hive_test<span class="token punctuation">.</span>studentsOK<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> hive_test<span class="token punctuation">.</span>students<span class="token punctuation">;</span>OK<span class="token boolean">NULL</span>    <span class="token boolean">NULL</span><span class="token boolean">NULL</span>    <span class="token boolean">NULL</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><h2 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h2><p>查其原因是创建表格时没有对导入的数据格式没有处理，比如每行数据以tab键隔开，以换行键结尾，就要以如下语句创建表格：</p><p>OK<br>NULL    NULL<br>NULL    NULL<br>查其原因是创建表格时没有对导入的数据格式没有处理，比如每行数据以tab键隔开，以换行键结尾，就要以如下语句创建表格：</p><pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> students<span class="token punctuation">(</span>id <span class="token keyword">int</span><span class="token punctuation">,</span> name string<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> students<span class="token punctuation">(</span>id <span class="token keyword">int</span><span class="token punctuation">,</span> name string<span class="token punctuation">)</span> <span class="token keyword">ROW</span> FORMAT DELIMITED <span class="token keyword">FIELDS</span> <span class="token keyword">TERMINATED BY</span> <span class="token string">' '</span> <span class="token keyword">LINES</span> <span class="token keyword">TERMINATED BY</span> <span class="token string">'\n'</span> STORED <span class="token keyword">AS</span> TEXTFILE<span class="token punctuation">;</span>OK<span class="token number">1</span>    sun<span class="token number">2</span>    lin<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+      
+      
+      <categories>
+          
+          <category> Data Question </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hive </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Python高级特性之切片</title>
       <link href="/2020/04/25/python-gao-ji-te-xing-zhi-qie-pian/"/>
       <url>/2020/04/25/python-gao-ji-te-xing-zhi-qie-pian/</url>

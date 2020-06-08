@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://dataquaner.github.io/"/>
-  <updated>2020-06-08T14:26:06.375Z</updated>
+  <updated>2020-06-08T14:31:06.843Z</updated>
   <id>https://dataquaner.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://dataquaner.github.io/2020/06/08/1.hadoop-mian-shi-xi-lie-zhi-mapreduce-yuan-li/"/>
     <id>https://dataquaner.github.io/2020/06/08/1.hadoop-mian-shi-xi-lie-zhi-mapreduce-yuan-li/</id>
     <published>2020-06-08T13:14:00.000Z</published>
-    <updated>2020-06-08T14:26:06.375Z</updated>
+    <updated>2020-06-08T14:31:06.843Z</updated>
     
     <content type="html"><![CDATA[<blockquote><p>MapReduce是一个基于集群的计算<strong>平台</strong>，是一个简化分布式编程的计算<strong>框架</strong>，是一个将分布式计算抽象为Map和Reduce两个阶段的编程<strong>模型</strong>。<em>（这句话记住了是可以用来装逼的）</em></p></blockquote><h2 id="1-MapReduce工作流程"><a href="#1-MapReduce工作流程" class="headerlink" title="1.MapReduce工作流程"></a>1.MapReduce工作流程</h2><p>0)   用户提交任务 （含数据）</p><p>1)    集群首先对输入数据源进行<strong>切片</strong></p><p>2)    master 调度 worker 执行 map 任务</p><p>3)    worker 读取输入源片段</p><p>4)    worker 执行 map 任务，将任务输出保存在本地<br>5)    master 调度 worker 执行 reduce 任务，reduce worker 读取 map 任务的输出文件</p><p>6） 执行 reduce 任务，将任务输出保存到 HDFS</p><p><img src="https://img-blog.csdnimg.cn/20181215100217729.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjIzMTM3Mw==,size_16,color_FFFFFF,t_70" alt="MapReduce工作流程"></p><p>由上至下依次执行</p><table><thead><tr><th>过程</th><th>过程描述</th></tr></thead><tbody><tr><td></td><td>用户提交任务job 给集群</td></tr><tr><td>切片</td><td>集群查找源数据 对源数据做基本处理</td></tr><tr><td>分词(每行执行一次map函数)</td><td>集群(yarn的appliction)分配map任务节点worker</td></tr><tr><td>映射</td><td>其中间数据(存在本地)</td></tr><tr><td>分区(partition)</td><td>中间数据</td></tr><tr><td>排序 (或二次排序)</td><td>中间数据</td></tr><tr><td>聚合(combine有无key聚合后key无序)</td><td>中间数据  分组(group) 发生在排序后混洗前(个人理解)</td></tr><tr><td>混洗(shuffle后key有序)</td><td>混洗横跨mapper和reducer，其发生在mapper的输出和reducer的输入阶段</td></tr><tr><td>规约(reduce)</td><td>集群(yarn的appliction)分配reduce任务节点worker</td></tr></tbody></table><p><img src="https://upload-images.jianshu.io/upload_images/12652505-f3e65e7fc499b579.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1172/format/webp" alt="MapReduce工作原理"></p><p>下面针对具体过程详细介绍：</p><h2 id="2-切片split"><a href="#2-切片split" class="headerlink" title="2.切片split"></a>2.切片split</h2><p>​       HDFS 以固定大小的block 为基本单位存储数据，而对于MapReduce 而言，其处理单位是split。split 是一个逻辑概念，它只包含一些元数据信息，比如数据起始位置、数据长度、数据所在节点等。它的划分方法完全由用户自己决定。</p><p><strong>Map任务的数量</strong>：Hadoop为每个split创建一个Map任务，split 的多少决定了Map任务的数目。<strong>大多数情况下，理想的分片大小是一个HDFS块</strong></p><p><strong>Reduce任务的数量：</strong> <strong>最优的Reduce任务个数取决于集群中可用的reduce任务槽(slot)的数目</strong> 通常设置比reduce任务槽数目稍微小一些的Reduce任务个数（这样可以预留一些系统资源处理可能发生的错误）</p><h2 id="3-Map-阶段"><a href="#3-Map-阶段" class="headerlink" title="3.Map()阶段"></a>3.Map()阶段</h2><blockquote><ol><li><p>读取HDFS中的文件。每一行解析成一个&lt;k,v&gt;。每一个键值对调用一次map函数</p></li><li><p>重写map()，对第一步产生的&lt;k,v&gt;进行处理，转换为新的&lt;k,v&gt;输出</p></li><li><p>对输出的key、value进行分区</p></li><li><p>对不同分区的数据，按照key进行排序、分组。相同key的value放到一个集合中</p></li></ol></blockquote><h2 id="4-Reduce阶段"><a href="#4-Reduce阶段" class="headerlink" title="4. Reduce阶段"></a>4. Reduce阶段</h2><blockquote><p>多个map任务的输出，按照不同的分区，通过网络复制到不同的reduce节点上</p></blockquote><blockquote><p>对多个map的输出进行合并、排序。</p></blockquote><blockquote><p>重写reduce函数实现自己的逻辑，对输入的key、value处理，转换成新的key、value输出</p></blockquote><blockquote><p>把reduce的输出保存到文件中</p></blockquote><p>特别说明：</p><blockquote><p>切片 不属于map阶段，但却是map阶段的输入，是集群对输入数据的解析处理</p><p>分词，映射，分区，排序，聚合 都属map阶段</p><p>混洗  横跨map阶段和reduce阶段，其发生在map阶段的输出和reduce的输入阶段</p><p>规约 属reduce阶段 规约结果是reduce阶段的输出，输出格式由集群默认或用户自定义</p><p>分词即map()函数的输入与map阶段的输入略有差别，他的输入是切片结果的kv形式，行号（偏移量）与行内容</p></blockquote><h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5.总结"></a>5.总结</h2><p>执行步骤：</p><p>1）map任务处理——&gt;切片</p><ul><li>读取输入文件内容，解析成key、value对，输入文件的每一行，就是一个key、value对，对应调用一次map函数。</li><li>写自己的逻辑，对输入的key、value（k1,v1）处理，转换成新的key、value(k2,v2)输出。</li></ul><p>2）reduce任务处理——&gt;计算</p><ul><li>在reduce之前，有一个shuffle的过程对多个map任务的输出进行合并、排序、分组等操作。</li><li>写reduce函数自己的逻辑，对输入的key、value（k2,{v2,…}）处理，转换成新的key、value(k3,v3)输出。</li><li>把reduce的输出保存到文件中。</li></ul><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
     
@@ -36,7 +36,7 @@
     </summary>
     
     
-      <category term="Data Question" scheme="https://dataquaner.github.io/categories/Data-Question/"/>
+      <category term="Hadoop" scheme="https://dataquaner.github.io/categories/Hadoop/"/>
     
     
       <category term="MapReduce" scheme="https://dataquaner.github.io/tags/MapReduce/"/>

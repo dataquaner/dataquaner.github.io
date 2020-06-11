@@ -430,16 +430,16 @@ graphviz安装包下载地址 https://www.graphviz">
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/LightGBM/">
-                                <span class="chip bg-color">LightGBM</span>
-                            </a>
-                        
                             <a href="/tags/XGBoost/">
                                 <span class="chip bg-color">XGBoost</span>
                             </a>
                         
                             <a href="/tags/GBDT/">
                                 <span class="chip bg-color">GBDT</span>
+                            </a>
+                        
+                            <a href="/tags/LightGBM/">
+                                <span class="chip bg-color">LightGBM</span>
                             </a>
                         
                             <a href="/tags/CatBoost/">
@@ -603,7 +603,7 @@ cat_clf<span class="token punctuation">.</span>fit<span class="token punctuation
 binary_features <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">*</span> model<span class="token punctuation">.</span>binary_feature_count
 <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>model<span class="token punctuation">.</span>float_feature_count<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">for</span> j <span class="token keyword">in</span> range<span class="token punctuation">(</span>model<span class="token punctuation">.</span>border_counts<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        binary_features<span class="token punctuation">[</span>binary_feature_index<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>float_features<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">></span> model<span class="token punctuation">.</span>borders<span class="token punctuation">[</span>binary_feature_index<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token keyword">else</span> <span class="token number">0</span>
+        binary_features<span class="token punctuation">[</span>binary_feature_index<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>float_features<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">&gt;</span> model<span class="token punctuation">.</span>borders<span class="token punctuation">[</span>binary_feature_index<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token keyword">else</span> <span class="token number">0</span>
         binary_feature_index <span class="token operator">+=</span> <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>输入的参数float_features存储输入的数值型特征值。model.binary_feature_count表示booster中所有树的节点总数。model.border_counts存储每个feature对应的节点数量，model.borders存储所有节点的判断边界。显然，CatBoost并没有按照二叉树结构从左到右，从上到下的存储结构。此段代码的功能，生成所有节点的判断结果。如果特征值大于判断边界，表示为1，否则为0。存储在binary_features中。</p>
 <p>第二个for循环部分</p>
@@ -713,7 +713,7 @@ os<span class="token punctuation">.</span>environ<span class="token punctuation"
 <span class="token keyword">for</span> depth <span class="token keyword">in</span> range<span class="token punctuation">(</span>current_tree_depth<span class="token punctuation">)</span><span class="token punctuation">:</span>
     node_name <span class="token operator">=</span> str<span class="token punctuation">(</span>node_feature_list<span class="token punctuation">[</span>current_tree_depth <span class="token operator">-</span> <span class="token number">1</span> <span class="token operator">-</span> depth<span class="token punctuation">]</span><span class="token punctuation">)</span>
     node_border <span class="token operator">=</span> str<span class="token punctuation">(</span>node_feature_borders<span class="token punctuation">[</span>current_tree_depth <span class="token operator">-</span> <span class="token number">1</span> <span class="token operator">-</span> depth<span class="token punctuation">]</span><span class="token punctuation">)</span>
-    label <span class="token operator">=</span> <span class="token string">'column_'</span> <span class="token operator">+</span> node_name <span class="token operator">+</span> <span class="token string">'>'</span> <span class="token operator">+</span> node_border
+    label <span class="token operator">=</span> <span class="token string">'column_'</span> <span class="token operator">+</span> node_name <span class="token operator">+</span> <span class="token string">'&gt;'</span> <span class="token operator">+</span> node_border
     <span class="token keyword">if</span> depth <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
         dot<span class="token punctuation">.</span>node<span class="token punctuation">(</span>str<span class="token punctuation">(</span>depth<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'_0'</span><span class="token punctuation">,</span> label<span class="token punctuation">)</span>
     <span class="token keyword">else</span><span class="token punctuation">:</span>
@@ -742,7 +742,7 @@ path <span class="token operator">=</span> dot<span class="token punctuation">.<
         current_tree_depth<span class="token punctuation">,</span> node_feature_list<span class="token punctuation">,</span> node_feature_borders<span class="token punctuation">,</span> tree_leaf_values <span class="token operator">=</span> catboost_tree<span class="token punctuation">.</span>get_tree_info<span class="token punctuation">(</span>tree_id<span class="token punctuation">)</span>
         route <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
         <span class="token keyword">for</span> depth <span class="token keyword">in</span> range<span class="token punctuation">(</span>current_tree_depth<span class="token punctuation">)</span><span class="token punctuation">:</span>
-            route<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token number">1</span> <span class="token keyword">if</span> float_features<span class="token punctuation">[</span>node_feature_list<span class="token punctuation">[</span>depth<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">></span> node_feature_borders<span class="token punctuation">[</span>depth<span class="token punctuation">]</span> <span class="token keyword">else</span> <span class="token number">0</span><span class="token punctuation">)</span>
+            route<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token number">1</span> <span class="token keyword">if</span> float_features<span class="token punctuation">[</span>node_feature_list<span class="token punctuation">[</span>depth<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">&gt;</span> node_feature_borders<span class="token punctuation">[</span>depth<span class="token punctuation">]</span> <span class="token keyword">else</span> <span class="token number">0</span><span class="token punctuation">)</span>
 
         index <span class="token operator">=</span> <span class="token number">0</span>
         <span class="token keyword">for</span> depth <span class="token keyword">in</span> range<span class="token punctuation">(</span>current_tree_depth<span class="token punctuation">)</span><span class="token punctuation">:</span>
@@ -850,16 +850,16 @@ path <span class="token operator">=</span> dot<span class="token punctuation">.<
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/LightGBM/">
-                                    <span class="chip bg-color">LightGBM</span>
-                                </a>
-                            
                                 <a href="/tags/XGBoost/">
                                     <span class="chip bg-color">XGBoost</span>
                                 </a>
                             
                                 <a href="/tags/GBDT/">
                                     <span class="chip bg-color">GBDT</span>
+                                </a>
+                            
+                                <a href="/tags/LightGBM/">
+                                    <span class="chip bg-color">LightGBM</span>
                                 </a>
                             
                                 <a href="/tags/CatBoost/">
@@ -1320,7 +1320,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">83.2k</span>&nbsp;字
+                class="white-color">84.4k</span>&nbsp;字
             
             
             

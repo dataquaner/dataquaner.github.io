@@ -466,7 +466,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.1k
+                    4.2k
                 </div>
                 
 
@@ -530,7 +530,7 @@
 <h2 id="5-数据倾斜的处理方法"><a href="#5-数据倾斜的处理方法" class="headerlink" title="5. 数据倾斜的处理方法"></a>5. 数据倾斜的处理方法</h2><p>​         发现数据倾斜的时候，不要急于提高executor的资源，修改参数或是修改程序，首先要检查数据本身，是否存在异常数据。</p>
 <h3 id="5-1-检查数据，找出异常的key"><a href="#5-1-检查数据，找出异常的key" class="headerlink" title="5.1 检查数据，找出异常的key"></a>5.1 检查数据，找出异常的key</h3><p>​          如果任务长时间卡在最后1个(几个)任务，首先要对key进行抽样分析，判断是哪些key造成的。</p>
 <p>选取key，对数据进行抽样，统计出现的次数，根据出现次数大小排序取出前几个</p>
-<pre class="line-numbers language-scala"><code class="language-scala">df<span class="token punctuation">.</span>select<span class="token punctuation">(</span><span class="token string">"key"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>sample<span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">,</span><span class="token number">0.1</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token punctuation">(</span>k<span class="token keyword">=></span><span class="token punctuation">(</span>k<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>reduceBykey<span class="token punctuation">(</span>_<span class="token operator">+</span>_<span class="token punctuation">)</span><span class="token punctuation">.</span>map<span class="token punctuation">(</span>k<span class="token keyword">=></span><span class="token punctuation">(</span>k<span class="token punctuation">.</span>_2<span class="token punctuation">,</span>k<span class="token punctuation">.</span>_1<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>sortByKey<span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">.</span>take<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-scala"><code class="language-scala">df<span class="token punctuation">.</span>select<span class="token punctuation">(</span><span class="token string">"key"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>sample<span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">,</span><span class="token number">0.1</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token punctuation">(</span>k<span class="token keyword">=&gt;</span><span class="token punctuation">(</span>k<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>reduceBykey<span class="token punctuation">(</span>_<span class="token operator">+</span>_<span class="token punctuation">)</span><span class="token punctuation">.</span>map<span class="token punctuation">(</span>k<span class="token keyword">=&gt;</span><span class="token punctuation">(</span>k<span class="token punctuation">.</span>_2<span class="token punctuation">,</span>k<span class="token punctuation">.</span>_1<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>sortByKey<span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">.</span>take<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>​        如果发现多数数据分布都较为平均，而个别数据比其他数据大上若干个数量级，则说明发生了数据倾斜。</p>
 <p>经过分析，倾斜的数据主要有以下三种情况:</p>
 <ul>
@@ -1152,7 +1152,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">83.2k</span>&nbsp;字
+                class="white-color">84.4k</span>&nbsp;字
             
             
             

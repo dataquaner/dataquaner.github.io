@@ -506,7 +506,7 @@
 <h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><h4 id="方法一：合并后排序"><a href="#方法一：合并后排序" class="headerlink" title="方法一：合并后排序"></a>方法一：合并后排序</h4><h5 id="直觉"><a href="#直觉" class="headerlink" title="直觉"></a>直觉</h5><p>​      最朴素的解法就是将两个数组合并之后再排序。</p>
 <p>​      该算法只需要一行(Java是2行)，时间复杂度较差，为O((n + m)log(n + m))。这是由于这种方法没有利用两个数组本身已经有序这一点。</p>
 <h5 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h5><h6 id="Python版"><a href="#Python版" class="headerlink" title="Python版"></a>Python版</h6><pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Solution</span><span class="token punctuation">:</span>
-    <span class="token keyword">def</span> <span class="token function">merge</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> nums1<span class="token punctuation">:</span> List<span class="token punctuation">[</span>int<span class="token punctuation">]</span><span class="token punctuation">,</span> m<span class="token punctuation">:</span> int<span class="token punctuation">,</span> nums2<span class="token punctuation">:</span> List<span class="token punctuation">[</span>int<span class="token punctuation">]</span><span class="token punctuation">,</span> n<span class="token punctuation">:</span> int<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> None<span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">merge</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> nums1<span class="token punctuation">:</span> List<span class="token punctuation">[</span>int<span class="token punctuation">]</span><span class="token punctuation">,</span> m<span class="token punctuation">:</span> int<span class="token punctuation">,</span> nums2<span class="token punctuation">:</span> List<span class="token punctuation">[</span>int<span class="token punctuation">]</span><span class="token punctuation">,</span> n<span class="token punctuation">:</span> int<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> None<span class="token punctuation">:</span>
         <span class="token triple-quoted-string string">"""
         Do not return anything, modify nums1 in-place instead.
         """</span>
@@ -588,7 +588,7 @@
         p <span class="token operator">=</span> m <span class="token operator">+</span> n <span class="token operator">-</span> <span class="token number">1</span>
 
         <span class="token comment" spellcheck="true"># while there are still elements to compare</span>
-        <span class="token keyword">while</span> p1 <span class="token operator">&gt;=</span> <span class="token number">0</span> <span class="token operator">and</span> p2 <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">:</span>
+        <span class="token keyword">while</span> p1 <span class="token operator">>=</span> <span class="token number">0</span> <span class="token operator">and</span> p2 <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">:</span>
             <span class="token keyword">if</span> nums1<span class="token punctuation">[</span>p1<span class="token punctuation">]</span> <span class="token operator">&lt;</span> nums2<span class="token punctuation">[</span>p2<span class="token punctuation">]</span><span class="token punctuation">:</span>
                 nums1<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">=</span> nums2<span class="token punctuation">[</span>p2<span class="token punctuation">]</span>
                 p2 <span class="token operator">-=</span> <span class="token number">1</span>
@@ -609,7 +609,7 @@
     <span class="token keyword">int</span> p <span class="token operator">=</span> m <span class="token operator">+</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
 
     <span class="token comment" spellcheck="true">// while there are still elements to compare</span>
-    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>p1 <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>p2 <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>p1 <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>p2 <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
       <span class="token comment" spellcheck="true">// compare two elements from nums1 and nums2 </span>
       <span class="token comment" spellcheck="true">// and add the largest one in nums1 </span>
       nums1<span class="token punctuation">[</span>p<span class="token operator">--</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span>nums1<span class="token punctuation">[</span>p1<span class="token punctuation">]</span> <span class="token operator">&lt;</span> nums2<span class="token punctuation">[</span>p2<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">?</span> nums2<span class="token punctuation">[</span>p2<span class="token operator">--</span><span class="token punctuation">]</span> <span class="token operator">:</span> nums1<span class="token punctuation">[</span>p1<span class="token operator">--</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
@@ -1156,7 +1156,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">84.4k</span>&nbsp;字
+                class="white-color">102.3k</span>&nbsp;字
             
             
             

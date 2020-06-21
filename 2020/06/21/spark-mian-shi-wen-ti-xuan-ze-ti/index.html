@@ -1,0 +1,1508 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Spark面试问题梳理：选择题, 大数据 bigdata Algorithm DataQuaner 人工智能 大数据圈儿">
+    <meta name="description" content="1. Spark 的四大组件下面哪个不是 (D )A.Spark Streaming    B. Mlib 
+C Graphx    D.Spark R
+2. 下面哪个端口不是 spark 自带服务的端口 (C )A.8080 B.4040">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Spark面试问题梳理：选择题 | DataQuaner</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="alternate" href="/atom.xml" title="DataQuaner" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">DataQuaner</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">DataQuaner</div>
+        <div class="logo-desc">
+            
+            Data|Algorithm|Business
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/dataquaner/dataquaner.github.io" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/dataquaner/dataquaner.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Spark面试问题梳理：选择题</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Spark/">
+                                <span class="chip bg-color">Spark</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Spark/" class="post-category">
+                                Spark
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-06-21
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2020-06-21
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    8.1k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    30 分
+                </div>
+                
+				
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="1-Spark-的四大组件下面哪个不是-D"><a href="#1-Spark-的四大组件下面哪个不是-D" class="headerlink" title="1. Spark 的四大组件下面哪个不是 (D )"></a>1. <strong>Spark 的四大组件下面哪个不是 (D )</strong></h2><p>A.Spark Streaming    B. Mlib </p>
+<p>C Graphx    D.Spark R</p>
+<h2 id="2-下面哪个端口不是-spark-自带服务的端口-C"><a href="#2-下面哪个端口不是-spark-自带服务的端口-C" class="headerlink" title="2. 下面哪个端口不是 spark 自带服务的端口 (C )"></a>2. 下面哪个端口不是 spark 自带服务的端口 (C )</h2><p>A.8080 B.4040 C.8090 D.18080</p>
+<p>备注：8080：spark集群web ui端口，4040：sparkjob监控端口，18080：jobhistory端口</p>
+<h2 id="3-spark-1-4-版本的最大变化-B"><a href="#3-spark-1-4-版本的最大变化-B" class="headerlink" title="3. spark 1.4 版本的最大变化 (B )"></a><strong>3. spark 1.4 版本的最大变化 (B )</strong></h2><p>A spark sql Release 版本  B .引入 Spark R </p>
+<p>C DataFrame D.支持动态资源分配</p>
+<h2 id="4-Spark-Job-默认的调度模式-A"><a href="#4-Spark-Job-默认的调度模式-A" class="headerlink" title="4. Spark Job 默认的调度模式 (A )"></a>4. Spark Job 默认的调度模式 (A )</h2><p>A FIFO   B FAIR   </p>
+<p>C 无   D 运行时指定</p>
+<blockquote>
+<p>备注：Spark中的调度模式主要有两种：FIFO和FAIR。默认情况下Spark的调度模式是FIFO（先进先出），谁先提交谁先执行，后面的任务需要等待前面的任务执行。而FAIR（公平调度）模式支持在调度池中为任务进行分组，不同的调度池权重不同，任务可以按照权重来决定执行顺序。使用哪种调度器由参数spark.scheduler.mode来设置，可选的参数有FAIR和FIFO，默认是FIFO。</p>
+</blockquote>
+<h2 id="5-哪个不是本地模式运行的条件-D"><a href="#5-哪个不是本地模式运行的条件-D" class="headerlink" title="5.哪个不是本地模式运行的条件 ( D)"></a>5.哪个不是本地模式运行的条件 ( D)</h2><p>A spark.localExecution.enabled=true  </p>
+<p>B 显式指定本地运行</p>
+<p>C finalStage 无父 Stage</p>
+<p>D partition默认值</p>
+<blockquote>
+<p>备注：【问题】Spark在windows能跑集群模式吗？</p>
+<p>我认为是可以的，但是需要详细了解cmd命令行的写法。目前win下跑spark的单机模式是没有问题的。</p>
+</blockquote>
+<blockquote>
+<p>【关键点】spark启动机制容易被windows的命令行cmd坑</p>
+<p>　　1、带空格、奇怪字符的安装路径，cmd不能识别。最典型的坑就是安装在Program Files文件夹下的程序，因为Program和Files之间有个空格，所以cmd竟不能识别。之前就把JDK安装在了Program Files下面，然后启动spark的时候，总是提示我找不到JDK。我明明配置了环境变量了啊？这就是所谓了《已经配置环境变量，spark 仍然找不到Java》的错误问题。至于奇怪的字符，如感叹号!，我经常喜欢用来将重要的文件夹排在最前面，但cmd命令提示符不能识别。</p>
+<p>　　2、是否需要配置hadoop的路径的问题——答案是需要用HDFS或者yarn就配，不需要用则不需配置。目前大多数的应用场景里面，Spark大规模集群基本安装在Linux服务器上，而自己用windows跑spark的情景，则大多基于学习或者实验性质，如果我们所要读取的数据文件从本地windows系统的硬盘读取（比如说d:\data\ml.txt），基本上不需要配置hadoop路径。我们都知道，在编spark程序的时候，可以指定spark的启动模式，而启动模式有这么三中（以python代码举例）：</p>
+<p>　　　（2.1）本地情况，conf = SparkConf().setMaster(“local[*]”) ——&gt;也就是拿本机的spark来跑程序</p>
+<p>　　　（2.2）远程情况，conf = SparkConf().setMaster(“spark://remotehost:7077”) ——&gt;远程spark主机</p>
+<p>　　　（2.3）yarn情况，conf = SparkConf().setMaster(“yarn-client”) ——&gt;远程或本地 yarn集群代理spark</p>
+<p>针对这3种情况，配置hadoop安装路径都有什么作用呢？（2.1）本地的情况，直接拿本机安装的spark来运行spark程序（比如d:\spark-1.6.2），则配不配制hadoop路径取决于是否需要使用hdfs。java程序的情况就更为简单，只需要导入相应的hadoop的jar包即可，是否配置hadoop路径并不重要。（2.2）的情况大体跟（2.1）的情况相同，虽然使用的远程spark，但如果使用本地数据，则运算的元数据也是从本地上传到远程spark集群的，无需配置hdfs。而（2.3）的情况就大不相同，经过我搜遍baidu、google、bing引擎，均没找到SparkConf直接配置远程yarn地址的方法，唯一的一个帖子介绍可以使用yarn://remote:8032的形式，则会报错“无法解析 地址”。查看Spark的官方说明，Spark其实是通过hadoop路径下的etc\hadoop文件夹中的配置文件来寻找yarn集群的。因此，需要使用yarn来运行spark的情况，在spark那配置好hadoop的目录就尤为重要。后期经过虚拟机的验证，表明，只要windows本地配置的host地址等信息与linux服务器端相同（注意应更改hadoop-2/etc/hadoop 下各种文件夹的配置路径，使其与windows本地一致），是可以直接在win下用yarn-client提交spark任务到远程集群的。</p>
+<p>3、是否需要配置环境变量的问题，若初次配置，可以考虑在IDE里面配置，或者在程序本身用setProperty函数进行配置。因为配置windows下的hadoop、spark环境是个非常头疼的问题，有可能路径不对而导致无法找到相应要调用的程序。待实验多次成功率提高以后，再直接配置windows的全局环境变量不迟。</p>
+<p>　　4、使用Netbeans这个IDE的时候，有遇到Netbeans不能清理构建的问题。原因，极有可能是导入了重复的库，spark里面含有hadoop包，记得检查冲突。同时，在清理构建之前，记得重新编译一遍程序，再进行清理并构建。</p>
+<p>　　５、经常遇到WARN YarnClusterScheduler: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources资源不足无法运行的问题，添加conf.set(“spark.executor.memory”, “512m”);语句进行资源限制。先前在虚拟机跑spark，由于本身机子性能不高，给虚拟机设置的内存仅仅2G，导致hadoop和spark双开之后系统资源严重不足。因此可以缩小每个executor的运算规模。其他资源缺乏问题的解决方法参考<a href="http://blog.sina.com.cn/s/blog_4b1452dd0102wyzo.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_4b1452dd0102wyzo.html</a></p>
+</blockquote>
+<h2 id="6-下面哪个不是-RDD-的特点-C"><a href="#6-下面哪个不是-RDD-的特点-C" class="headerlink" title="6.下面哪个不是 RDD 的特点 (C )"></a>6.下面哪个不是 RDD 的特点 (C )</h2><p>A. 可分区   B 可序列化   C 可修改   D 可持久化</p>
+<h2 id="7-关于广播变量，下面哪个是错误的-D"><a href="#7-关于广播变量，下面哪个是错误的-D" class="headerlink" title="7. 关于广播变量，下面哪个是错误的 (D )"></a>7. 关于广播变量，下面哪个是错误的 (D )</h2><p>A 任何函数调用    B 是只读的  </p>
+<p>C 存储在各个节点    D 存储在磁盘或 HDFS</p>
+<h2 id="8-关于累加器，下面哪个是错误的-D"><a href="#8-关于累加器，下面哪个是错误的-D" class="headerlink" title="8. 关于累加器，下面哪个是错误的 (D )"></a>8. 关于累加器，下面哪个是错误的 (D )</h2><p>A 支持加法 B 支持数值类型 </p>
+<p>C 可并行 D 不支持自定义类型</p>
+<h2 id="9-Spark-支持的分布式部署方式中哪个是错误的-D"><a href="#9-Spark-支持的分布式部署方式中哪个是错误的-D" class="headerlink" title="9.Spark 支持的分布式部署方式中哪个是错误的 (D )"></a>9.Spark 支持的分布式部署方式中哪个是错误的 (D )</h2><p>A standalone B spark on mesos  </p>
+<p>C spark on YARN D Spark on local</p>
+<h2 id="10-Stage-的-Task-的数量由什么决定-A"><a href="#10-Stage-的-Task-的数量由什么决定-A" class="headerlink" title="10.Stage 的 Task 的数量由什么决定 (A )"></a>10.Stage 的 Task 的数量由什么决定 (A )</h2><p>A Partition B Job C Stage D TaskScheduler</p>
+<h2 id="11-下面哪个操作是窄依赖-B"><a href="#11-下面哪个操作是窄依赖-B" class="headerlink" title="11.下面哪个操作是窄依赖 (B )"></a>11.下面哪个操作是窄依赖 (B )</h2><p>A join B filter </p>
+<p>C group D sort</p>
+<h2 id="12-下面哪个操作肯定是宽依赖-C"><a href="#12-下面哪个操作肯定是宽依赖-C" class="headerlink" title="12.下面哪个操作肯定是宽依赖 (C )"></a>12.下面哪个操作肯定是宽依赖 (C )</h2><p>A map B flatMap </p>
+<p>C reduceByKey D sample</p>
+<h2 id="13-spark-的-master-和-worker-通过什么方式进行通信的？-D"><a href="#13-spark-的-master-和-worker-通过什么方式进行通信的？-D" class="headerlink" title="13.spark 的 master 和 worker 通过什么方式进行通信的？ (D )"></a>13.spark 的 master 和 worker 通过什么方式进行通信的？ (D )</h2><p>A http B nio C netty D Akka</p>
+<blockquote>
+<p>备注：从spark1.3.1之后，netty完全代替 了akka</p>
+<p>一直以来，基于Akka实现的RPC通信框架是Spark引以为豪的主要特性，也是与Hadoop等分布式计算框架对比过程中一大亮点，但是时代和技术都在演化，从Spark1.3.1版本开始，为了解决大数据块（如shuffle）的传输问题，Spark引入了Netty通信框架，到了1.6.0版本，Netty居然完全取代了Akka，承担Spark内部所有的RPC通信以及数据流传输。</p>
+<p>那么Akka又是什么东西？从Akka出现背景来说，它是基于Actor的RPC通信系统，它的核心概念也是Message，它是基于协程的，性能不容置疑；基于scala的偏函数，易用性也没有话说，但是它毕竟只是RPC通信，无法适用大的package/stream的数据传输，这也是Spark早期引入Netty的原因。</p>
+<p>那么Netty为什么可以取代Akka？首先不容置疑的是Akka可以做到的，Netty也可以做到，但是Netty可以做到，Akka却无法做到，原因是啥？在软件栈中，Akka相比Netty要Higher一点，它专门针对RPC做了很多事情，而Netty相比更加基础一点，可以为不同的应用层通信协议（RPC，FTP，HTTP等）提供支持，在早期的Akka版本，底层的NIO通信就是用的Netty；其次一个优雅的工程师是不会允许一个系统中容纳两套通信框架，恶心！最后，虽然Netty没有Akka协程级的性能优势，但是Netty内部高效的Reactor线程模型，无锁化的串行设计，高效的序列化，零拷贝，内存池等特性也保证了Netty不会存在性能问题。</p>
+<p>那么Spark是怎么用Netty来取代Akka呢？一句话，利用偏函数的特性，基于Netty“仿造”出一个简约版本的Actor模型！！</p>
+</blockquote>
+<h2 id="14-默认的存储级别-A"><a href="#14-默认的存储级别-A" class="headerlink" title="14. 默认的存储级别 (A )"></a>14. 默认的存储级别 (A )</h2><p>A MEMORY_ONLY B MEMORY_ONLY_SER</p>
+<p>C MEMORY_AND_DISK D MEMORY_AND_DISK_SER</p>
+<pre class="line-numbers language-scala"><code class="language-scala">备注：
+
+<span class="token comment" spellcheck="true">//不会保存任务数据 </span>
+<span class="token keyword">val</span> NONE <span class="token operator">=</span> <span class="token keyword">new</span> StorageLevel<span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">//直接将RDD的partition保存在该节点的Disk上 </span>
+<span class="token keyword">val</span> DISK_ONLY <span class="token operator">=</span> <span class="token keyword">new</span> StorageLevel<span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">//直接将RDD的partition保存在该节点的Disk上,在其他节点上保存一个相同的备份 </span>
+<span class="token keyword">val</span> DISK_ONLY_2 <span class="token operator">=</span> <span class="token keyword">new</span> StorageLevel<span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">//将RDD的partition对应的原生的Java Object保存在JVM中,如果RDD太大导致它的部分partition不能存储在内存中 //那么这些partition将不会缓存,并且需要的时候被重新计算,默认缓存的级别 </span>
+<span class="token keyword">val</span> MEMORY_ONLY <span class="token operator">=</span> <span class="token keyword">new</span> StorageLevel<span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">//将RDD的partition对应的原生的Java Object保存在JVM中,在其他节点上保存一个相同的备份 </span>
+<span class="token keyword">val</span> MEMORY_ONLY_2 <span class="token operator">=</span> <span class="token keyword">new</span> StorageLevel<span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> 
+<span class="token keyword">val</span> MEMORY_ONLY_SER <span class="token operator">=</span> <span class="token keyword">new</span> StorageLevel<span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token keyword">val</span> MEMORY_ONLY_SER_2 <span class="token operator">=</span> <span class="token keyword">new</span> StorageLevel<span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">//将RDD的partition反序列化后的对象存储在JVM中,如果RDD太大导致它的部分partition不能存储在内存中 //超出的partition将被保存在Disk上,并且在需要时读取 </span>
+<span class="token keyword">val</span> MEMORY_AND_DISK <span class="token operator">=</span> <span class="token keyword">new</span> StorageLevel<span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">//在其他节点上保存一个相同的备份 </span>
+<span class="token keyword">val</span> MEMORY_AND_DISK_2 <span class="token operator">=</span> <span class="token keyword">new</span> StorageLevel<span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token keyword">val</span> MEMORY_AND_DISK_SER <span class="token operator">=</span> <span class="token keyword">new</span> StorageLevel<span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token keyword">val</span> MEMORY_AND_DISK_SER_2 <span class="token operator">=</span> <span class="token keyword">new</span> StorageLevel<span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">//将RDD的partition序列化后存储在Tachyon中 </span>
+<span class="token keyword">val</span> OFF_HEAP <span class="token operator">=</span> <span class="token keyword">new</span> StorageLevel<span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="15-spark-deploy-recoveryMode-不支持那种-D"><a href="#15-spark-deploy-recoveryMode-不支持那种-D" class="headerlink" title="15 spark.deploy.recoveryMode 不支持那种 (D )"></a>15 spark.deploy.recoveryMode 不支持那种 (D )</h2><p>A.ZooKeeper B. FileSystem </p>
+<p>D NONE D Hadoop</p>
+<h2 id="16-下列哪个不是-RDD-的缓存方法-C"><a href="#16-下列哪个不是-RDD-的缓存方法-C" class="headerlink" title="16.下列哪个不是 RDD 的缓存方法 (C )"></a>16.下列哪个不是 RDD 的缓存方法 (C )</h2><p>A persist() B Cache() </p>
+<p>C Memory()</p>
+<h2 id="17-Task-运行在下来哪里个选项中-Executor-上的工作单元-C"><a href="#17-Task-运行在下来哪里个选项中-Executor-上的工作单元-C" class="headerlink" title="17.Task 运行在下来哪里个选项中 Executor 上的工作单元 (C )"></a>17.Task 运行在下来哪里个选项中 Executor 上的工作单元 (C )</h2><p>A Driver program B. spark master </p>
+<p>C.worker node D Cluster manager</p>
+<h2 id="18-hive-的元数据存储在-derby-和-MySQL-中有什么区别-B"><a href="#18-hive-的元数据存储在-derby-和-MySQL-中有什么区别-B" class="headerlink" title="18.hive 的元数据存储在 derby 和 MySQL 中有什么区别 (B )"></a>18.hive 的元数据存储在 derby 和 MySQL 中有什么区别 (B )</h2><p>A.没区别 B.多会话</p>
+<p>C.支持网络环境 D数据库的区别</p>
+<pre class="line-numbers language-sql"><code class="language-sql">备注：  Hive 将元数据存储在 RDBMS 中，一般常用 MySQL 和 Derby。默认情况下，Hive 元数据保存在内嵌的 Derby 数据库中，只能允许一个会话连接，只适合简单的测试。实际生产环境中不适用， 为了支持多用户会话，则需要一个独立的元数据库，使用 MySQL 作为元数据库，Hive 内部对 MySQL 提供了很好的支持。
+
+内置的derby主要问题是并发性能很差，可以理解为单线程操作。
+
+Derby还有一个特性。更换目录执行操作，会找不到相关表等<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="19-DataFrame-和-RDD-最大的区别-B"><a href="#19-DataFrame-和-RDD-最大的区别-B" class="headerlink" title="19.DataFrame 和 RDD 最大的区别 (B )"></a>19.DataFrame 和 RDD 最大的区别 (B )</h2><p>A.科学统计支持 B.多了 schema </p>
+<p>C.存储方式不一样 D.外部数据源支持</p>
+<blockquote>
+<p>备注：</p>
+<p><strong>上图直观体现了RDD与DataFrame的区别</strong>：左侧的RDD[Person]虽然以Person为类型参数，但Spark框架本身不了解Person类的内部结构。而右侧的DataFrame却提供了详细的结构信息，使得Spark SQL可以清楚地知道该数据集中包含哪些列，每列的名称和类型各是什么。DataFrame多了数据的结构信息，即schema。RDD是分布式的Java对象的集合。DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点是提升执行效率、减少数据读取以及执行计划的优化，比如filter下推、裁剪等。</p>
+<p><strong>提升执行效率</strong>： RDD API是函数式的，强调不变性，在大部分场景下倾向于创建新对象而不是修改老对象。这一特点虽然带来了干净整洁的API，却也使得Spark应用程序在运行期倾向于创建大量临时对象，对GC造成压力。在现有RDD API的基础之上，我们固然可以利用mapPartitions方法来重载RDD单个分片内的数据创建方式，用复用可变对象的方式来减小对象分配和GC的开销，但这牺牲了代码的可读性，而且要求开发者对Spark运行时机制有一定的了解，门槛较高。另一方面，Spark SQL在框架内部已经在各种可能的情况下尽量重用对象，这样做虽然在内部会打破了不变性，但在将数据返回给用户时，还会重新转为不可变数据。利用 DataFrame API进行开发，可以免费地享受到这些优化效果。</p>
+<p><strong>减少数据读取</strong>：分析大数据，最快的方法就是 ——忽略它。这里的“忽略”并不是熟视无睹，而是根据查询条件进行恰当的剪枝。</p>
+</blockquote>
+<blockquote>
+<p>上文讨论分区表时提到的分区剪 枝便是其中一种——当查询的过滤条件中涉及到分区列时，我们可以根据查询条件剪掉肯定不包含目标数据的分区目录，从而减少IO。</p>
+<p>  对于一些“智能”数据格 式，Spark SQL还可以根据数据文件中附带的统计信息来进行剪枝。简单来说，在这类数据格式中，数据是分段保存的，每段数据都带有最大值、最小值、null值数量等 一些基本的统计信息。当统计信息表名某一数据段肯定不包括符合查询条件的目标数据时，该数据段就可以直接跳过（例如某整数列a某段的最大值为100，而查询条件要求a &gt; 200）。</p>
+<p>  此外，Spark SQL也可以充分利用RCFile、ORC、Parquet等列式存储格式的优势，仅扫描查询真正涉及的列，忽略其余列的数据。</p>
+<p> 为了说明查询优化，我们来看上图展示的人口数据分析的示例。图中构造了两个DataFrame，将它们join之后又做了一次filter操作。如果原封不动地执行这个执行计划，最终的执行效率是不高的。因为join是一个代价较大的操作，也可能会产生一个较大的数据集。如果我们能将filter下推到 join下方，先对DataFrame进行过滤，再join过滤后的较小的结果集，便可以有效缩短执行时间。而Spark SQL的查询优化器正是这样做的。简而言之，逻辑查询计划优化就是一个利用基于关系代数的等价变换，将高成本的操作替换为低成本操作的过程。</p>
+<p>得到的优化执行计划在转换成物 理执行计划的过程中，还可以根据具体的数据源的特性将过滤条件下推至数据源内。最右侧的物理执行计划中Filter之所以消失不见，就是因为溶入了用于执行最终的读取操作的表扫描节点内。</p>
+<p>对于普通开发者而言，查询优化 器的意义在于，即便是经验并不丰富的程序员写出的次优的查询，也可以被尽量转换为高效的形式予以执行。</p>
+</blockquote>
+<ul>
+<li><p><strong>RDD和Dataset</strong></p>
+<p>​    DataSet以Catalyst逻辑执行计划表示，并且数据以编码的二进制形式被存储，不需要反序列化就可以执行sorting、shuffle等操作。</p>
+<p>​    DataSet创立需要一个显式的Encoder，把对象序列化为二进制，可以把对象的scheme映射为Spark</p>
+<p>SQl类型，然而RDD依赖于运行时反射机制。</p>
+</li>
+<li><p><strong>DataFrame和Dataset</strong></p>
+<p>​    Dataset可以认为是DataFrame的一个特例，主要区别是Dataset每一个record存储的是一个强类型值而不是一个Row。因此具有如下三个特点：</p>
+<p>​    DataSet可以在编译时检查类型</p>
+<p>并且是面向对象的编程接口。</p>
+</li>
+</ul>
+<h2 id="20-Master-的-ElectedLeader-事件后做了哪些操作-D"><a href="#20-Master-的-ElectedLeader-事件后做了哪些操作-D" class="headerlink" title="20.Master 的 ElectedLeader 事件后做了哪些操作 (D )"></a>20.Master 的 ElectedLeader 事件后做了哪些操作 (D )</h2><p>A. 通知 driver B.通知 worker </p>
+<p>C.注册 application D.直接 ALIVE</p>
+<h2 id="34-cache后面能不能接其他算子-它是不是action操作？"><a href="#34-cache后面能不能接其他算子-它是不是action操作？" class="headerlink" title="34.cache后面能不能接其他算子,它是不是action操作？"></a>34.cache后面能不能接其他算子,它是不是action操作？</h2><p>答：cache可以接其他算子，但是接了算子之后，起不到缓存应有的效果，因为会重新触发cache。</p>
+<p>cache不是action操作</p>
+<h2 id="35-reduceByKey是不是action？"><a href="#35-reduceByKey是不是action？" class="headerlink" title="35.reduceByKey是不是action？"></a>35.reduceByKey是不是action？</h2><p>答：不是，很多人都会以为是action，reduce rdd是action</p>
+<h2 id="36-数据本地性是在哪个环节确定的？"><a href="#36-数据本地性是在哪个环节确定的？" class="headerlink" title="36.数据本地性是在哪个环节确定的？"></a>36.数据本地性是在哪个环节确定的？</h2><p>具体的task运行在那他机器上，dag划分stage的时候确定的</p>
+<h2 id="37-RDD的弹性表现在哪几点？"><a href="#37-RDD的弹性表现在哪几点？" class="headerlink" title="37.RDD的弹性表现在哪几点？"></a>37.RDD的弹性表现在哪几点？</h2><p>1）自动的进行内存和磁盘的存储切换；</p>
+<p>2）基于Lingage的高效容错；</p>
+<p>3）task如果失败会自动进行特定次数的重试；</p>
+<p>4）stage如果失败会自动进行特定次数的重试，而且只会计算失败的分片；</p>
+<p>5）checkpoint和persist，数据计算之后持久化缓存</p>
+<p>6）数据调度弹性，DAG TASK调度和资源无关</p>
+<p>7）数据分片的高度弹性，a.分片很多碎片可以合并成大的，b.par</p>
+<h2 id="38-常规的容错方式有哪几种类型？"><a href="#38-常规的容错方式有哪几种类型？" class="headerlink" title="38.常规的容错方式有哪几种类型？"></a>38.常规的容错方式有哪几种类型？</h2><p>1）.数据检查点,会发生拷贝，浪费资源</p>
+<p>2）.记录数据的更新，每次更新都会记录下来，比较复杂且比较消耗性能</p>
+<h2 id="39-RDD通过Linage（记录数据更新）的方式为何很高效？"><a href="#39-RDD通过Linage（记录数据更新）的方式为何很高效？" class="headerlink" title="39.RDD通过Linage（记录数据更新）的方式为何很高效？"></a>39.RDD通过Linage（记录数据更新）的方式为何很高效？</h2><p>1）lazy记录了数据的来源，RDD是不可变的，且是lazy级别的，且rDD</p>
+<p>之间构成了链条，lazy是弹性的基石。由于RDD不可变，所以每次操作就</p>
+<p>产生新的rdd，不存在全局修改的问题，控制难度下降，所有有计算链条</p>
+<p>将复杂计算链条存储下来，计算的时候从后往前回溯</p>
+<p>900步是上一个stage的结束，要么就checkpoint</p>
+<p>2）记录原数据，是每次修改都记录，代价很大</p>
+<p>如果修改一个集合，代价就很小，官方说rdd是</p>
+<p>粗粒度的操作，是为了效率，为了简化，每次都是</p>
+<p>操作数据集合，写或者修改操作，都是基于集合的</p>
+<p>rdd的写操作是粗粒度的，rdd的读操作既可以是粗粒度的</p>
+<p>也可以是细粒度，读可以读其中的一条条的记录。</p>
+<p>3）简化复杂度，是高效率的一方面，写的粗粒度限制了使用场景</p>
+<p>如网络爬虫，现实世界中，大多数写是粗粒度的场景</p>
+<h2 id="40-RDD有哪些缺陷？"><a href="#40-RDD有哪些缺陷？" class="headerlink" title="40.RDD有哪些缺陷？"></a>40.RDD有哪些缺陷？</h2><p>1）不支持细粒度的写和更新操作（如网络爬虫），spark写数据是粗粒度的</p>
+<p>所谓粗粒度，就是批量写入数据，为了提高效率。但是读数据是细粒度的也就是</p>
+<p>说可以一条条的读</p>
+<p>2）不支持增量迭代计算，Flink支持</p>
+<h2 id="41-说一说Spark程序编写的一般步骤？"><a href="#41-说一说Spark程序编写的一般步骤？" class="headerlink" title="41.说一说Spark程序编写的一般步骤？"></a>41.说一说Spark程序编写的一般步骤？</h2><p>答：初始化，资源，数据源，并行化，rdd转化，action算子打印输出结果或者也可以存至相应的数据存储介质，具体的可看下图：</p>
+<p>file:///E:/%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6/%E6%9C%89%E9%81%93%E7%AC%94%E8%AE%B0%E6%96%87%E4%BB%B6/qq19B99AF2399E52F466CC3CF7E3B24ED5/069fa7b471f54e038440faf63233acce/640.webp</p>
+<h2 id="42-Spark有哪两种算子？"><a href="#42-Spark有哪两种算子？" class="headerlink" title="42. Spark有哪两种算子？"></a>42. Spark有哪两种算子？</h2><p>答：Transformation（转化）算子和Action（执行）算子。</p>
+<h2 id="43-Spark提交你的jar包时所用的命令是什么？"><a href="#43-Spark提交你的jar包时所用的命令是什么？" class="headerlink" title="43. Spark提交你的jar包时所用的命令是什么？"></a>43. Spark提交你的jar包时所用的命令是什么？</h2><p>答：spark-submit。</p>
+<h2 id="44-Spark有哪些聚合类的算子-我们应该尽量避免什么类型的算子？"><a href="#44-Spark有哪些聚合类的算子-我们应该尽量避免什么类型的算子？" class="headerlink" title="44. Spark有哪些聚合类的算子,我们应该尽量避免什么类型的算子？"></a>44. Spark有哪些聚合类的算子,我们应该尽量避免什么类型的算子？</h2><p>答：在我们的开发过程中，能避免则尽可能避免使用reduceByKey、join、distinct、repartition等会进行shuffle的算子，尽量使用map类的非shuffle算子。这样的话，没有shuffle操作或者仅有较少shuffle操作的Spark作业，可以大大减少性能开销。</p>
+<h2 id="45-你所理解的Spark的shuffle过程？"><a href="#45-你所理解的Spark的shuffle过程？" class="headerlink" title="45. 你所理解的Spark的shuffle过程？"></a>45. 你所理解的Spark的shuffle过程？</h2><p>答：从下面三点去展开</p>
+<p>1）shuffle过程的划分</p>
+<p>2）shuffle的中间结果如何存储</p>
+<p>3）shuffle的数据如何拉取过来</p>
+<p>可以参考这篇博文：<a href="http://www.cnblogs.com/jxhd1/p/6528540.html" target="_blank" rel="noopener">http://www.cnblogs.com/jxhd1/p/6528540.html</a></p>
+<blockquote>
+<p><strong>Shuffle后续优化方向</strong>：通过上面的介绍，我们了解到，Shuffle过程的主要存储介质是磁盘，尽量的减少IO是Shuffle的主要优化方向。我们脑海中都有那个经典的存储金字塔体系，Shuffle过程为什么把结果都放在磁盘上，那是因为现在内存再大也大不过磁盘，内存就那么大，还这么多张嘴吃，当然是分配给最需要的了。如果具有“土豪”内存节点，减少Shuffle IO的最有效方式无疑是尽量把数据放在内存中。下面列举一些现在看可以优化的方面，期待经过我们不断的努力，TDW计算引擎运行地更好。</p>
+<p><strong>MapReduce Shuffle后续优化方向</strong>：压缩：对数据进行压缩，减少写读数据量；</p>
+<p>减少不必要的排序：并不是所有类型的Reduce需要的数据都是需要排序的，排序这个nb的过程如果不需要最好还是不要的好；<br>内存化：Shuffle的数据不放在磁盘而是尽量放在内存中，除非逼不得已往磁盘上放；当然了如果有性能和内存相当的第三方存储系统，那放在第三方存储系统上也是很好的；这个是个大招；<br>网络框架：netty的性能据说要占优了；<br><strong>本节点上的数据不走网络框架</strong>：对于本节点上的Map输出，Reduce直接去读吧，不需要绕道网络框架。<br>Spark Shuffle后续优化方向：Spark作为MapReduce的进阶架构，对于Shuffle过程已经是优化了的，特别是对于那些具有争议的步骤已经做了优化，但是Spark的Shuffle对于我们来说在一些方面还是需要优化的。</p>
+<p>压缩：对数据进行压缩，减少写读数据量；<br><strong>内存化</strong>：Spark历史版本中是有这样设计的：Map写数据先把数据全部写到内存中，写完之后再把数据刷到磁盘上；考虑内存是紧缺资源，后来修改成把数据直接写到磁盘了；对于具有较大内存的集群来讲，还是尽量地往内存上写吧，内存放不下了再放磁盘。</p>
+</blockquote>
+<h2 id="46-你如何从Kafka中获取数据？"><a href="#46-你如何从Kafka中获取数据？" class="headerlink" title="46. 你如何从Kafka中获取数据？"></a>46. 你如何从Kafka中获取数据？</h2><p><strong>1) 基于Receiver的方式</strong></p>
+<p>这种方式使用Receiver来获取数据。Receiver是使用Kafka的高层次Consumer API来实现的。receiver从Kafka中获取的数据都是存储在Spark Executor的内存中的，然后Spark Streaming启动的job会去处理那些数据。</p>
+<p><strong>2) 基于Direct的方式</strong></p>
+<p>这种新的不基于Receiver的直接方式，是在Spark 1.3中引入的，从而能够确保更加健壮的机制。替代掉使用Receiver来接收数据后，这种方式会周期性地查询Kafka，来获得每个topic+partition的最新的offset，从而定义每个batch的offset的范围。当处理数据的job启动时，就会使用Kafka的简单consumer api来获取Kafka指定offset范围的数据</p>
+<h2 id="47-对于Spark中的数据倾斜问题你有什么好的方案？"><a href="#47-对于Spark中的数据倾斜问题你有什么好的方案？" class="headerlink" title="47. 对于Spark中的数据倾斜问题你有什么好的方案？"></a>47. 对于Spark中的数据倾斜问题你有什么好的方案？</h2><p>1）前提是定位数据倾斜，是OOM了，还是任务执行缓慢，看日志，看WebUI</p>
+<p>2)解决方法，有多个方面</p>
+<p>· 避免不必要的shuffle，如使用广播小表的方式，将reduce-side-join提升为map-side-join</p>
+<p>·分拆发生数据倾斜的记录，分成几个部分进行，然后合并join后的结果</p>
+<p>·改变并行度，可能并行度太少了，导致个别task数据压力大</p>
+<p>·两阶段聚合，先局部聚合，再全局聚合</p>
+<p>·自定义paritioner，分散key的分布，使其更加均匀</p>
+<p>详细解决方案参考博文《Spark数据倾斜优化方法》</p>
+<h2 id="48-RDD创建有哪几种方式？"><a href="#48-RDD创建有哪几种方式？" class="headerlink" title="48.RDD创建有哪几种方式？"></a>48.RDD创建有哪几种方式？</h2><p>1).使用程序中的集合创建rdd</p>
+<p>2).使用本地文件系统创建rdd</p>
+<p>3).使用hdfs创建rdd，</p>
+<p>4).基于数据库db创建rdd</p>
+<p>5).基于Nosql创建rdd，如hbase</p>
+<p>6).基于s3创建rdd，</p>
+<p>7).基于数据流，如socket创建rdd</p>
+<p>如果只回答了前面三种，是不够的，只能说明你的水平还是入门级的，实践过程中有很多种创建方式。</p>
+<h2 id="49-Spark并行度怎么设置比较合适"><a href="#49-Spark并行度怎么设置比较合适" class="headerlink" title="49.Spark并行度怎么设置比较合适"></a>49.Spark并行度怎么设置比较合适</h2><p>答：spark并行度，每个core承载2<del>4个partition,如，32个core，那么64</del>128之间的并行度，也就是</p>
+<p>设置64~128个partion，并行读和数据规模无关，只和内存使用量和cpu使用</p>
+<p>时间有关</p>
+<h2 id="50-Spark中数据的位置是被谁管理的？"><a href="#50-Spark中数据的位置是被谁管理的？" class="headerlink" title="50.Spark中数据的位置是被谁管理的？"></a>50.Spark中数据的位置是被谁管理的？</h2><p>答：每个数据分片都对应具体物理位置，数据的位置是被blockManager，无论</p>
+<p>数据是在磁盘，内存还是tacyan，都是由blockManager管理</p>
+<p>答：Spark中的数据本地性有三种：</p>
+<p>a.PROCESS_LOCAL是指读取缓存在本地节点的数据</p>
+<p>b.NODE_LOCAL是指读取本地节点硬盘数据</p>
+<p>c.ANY是指读取非本地节点数据</p>
+<p>通常读取数据PROCESS_LOCAL&gt;NODE_LOCAL&gt;ANY，尽量使数据以PROCESS_LOCAL或NODE_LOCAL方式读取。其中PROCESS_LOCAL还和cache有关，如果RDD经常用的话将该RDD cache到内存中，注意，由于cache是lazy的，所以必须通过一个action的触发，才能真正的将该RDD cache到内存中。</p>
+<h2 id="52-rdd有几种操作类型？"><a href="#52-rdd有几种操作类型？" class="headerlink" title="52.rdd有几种操作类型？"></a>52.rdd有几种操作类型？</h2><p>1）transformation，rdd由一种转为另一种rdd</p>
+<p>2）action，</p>
+<p>3）cronroller，crontroller是控制算子,cache,persist，对性能和效率的有很好的支持</p>
+<p>三种类型，不要回答只有2中操作</p>
+<h2 id="53-Spark如何处理不能被序列化的对象？"><a href="#53-Spark如何处理不能被序列化的对象？" class="headerlink" title="53.Spark如何处理不能被序列化的对象？"></a>53.Spark如何处理不能被序列化的对象？</h2><p>将不能序列化的内容封装成object</p>
+<h2 id="54-collect功能是什么，其底层是怎么实现的？"><a href="#54-collect功能是什么，其底层是怎么实现的？" class="headerlink" title="54.collect功能是什么，其底层是怎么实现的？"></a>54.collect功能是什么，其底层是怎么实现的？</h2><p>答：driver通过collect把集群中各个节点的内容收集过来汇总成结果，collect返回结果是Array类型的，collect把各个节点上的数据抓过来，抓过来数据是Array型，collect对Array抓过来的结果进行合并，合并后Array中只有一个元素，是tuple类型（KV类型的）的。</p>
+<h2 id="55-Spaek程序执行，有时候默认为什么会产生很多task，怎么修改默认task执行个数？"><a href="#55-Spaek程序执行，有时候默认为什么会产生很多task，怎么修改默认task执行个数？" class="headerlink" title="55.Spaek程序执行，有时候默认为什么会产生很多task，怎么修改默认task执行个数？"></a>55.Spaek程序执行，有时候默认为什么会产生很多task，怎么修改默认task执行个数？</h2><p>答：</p>
+<p>1）因为输入数据有很多task，尤其是有很多小文件的时候，有多少个输入block就会有多少个task启动；</p>
+<p>2）spark中有partition的概念，每个partition都会对应一个task，task越多，在处理大规模数据的时候，就会越有效率。不过task并不是越多越好，如果平时测试，或者数据量没有那么大，则没有必要task数量太多。</p>
+<p>3）参数可以通过spark_home/conf/spark-default.conf配置文件设置:</p>
+<p>spark.sql.shuffle.partitions 50 spark.default.parallelism 10</p>
+<p>第一个是针对spark sql的task数量</p>
+<p>第二个是非spark sql程序设置生效</p>
+<h2 id="56-为什么Spark-Application在没有获得足够的资源，job就开始执行了，可能会导致什么什么问题发生"><a href="#56-为什么Spark-Application在没有获得足够的资源，job就开始执行了，可能会导致什么什么问题发生" class="headerlink" title="56.为什么Spark Application在没有获得足够的资源，job就开始执行了，可能会导致什么什么问题发生?"></a>56.为什么Spark Application在没有获得足够的资源，job就开始执行了，可能会导致什么什么问题发生?</h2><p>答：会导致执行该job时候集群资源不足，导致执行job结束也没有分配足够的资源，分配了部分Executor，该job就开始执行task，应该是task的调度线程和Executor资源申请是异步的；如果想等待申请完所有的资源再执行job的：需要将spark.scheduler.maxRegisteredResourcesWaitingTime设置的很大；spark.scheduler.minRegisteredResourcesRatio 设置为1，但是应该结合实际考虑</p>
+<p>否则很容易出现长时间分配不到资源，job一直不能运行的情况。</p>
+<h2 id="57-map与flatMap的区别"><a href="#57-map与flatMap的区别" class="headerlink" title="57.map与flatMap的区别"></a>57.map与flatMap的区别</h2><blockquote>
+<p>map：对RDD每个元素转换，文件中的每一行数据返回一个数组对象</p>
+<p>flatMap：对RDD每个元素转换，然后再扁平化</p>
+<p>将所有的对象合并为一个对象，文件中的所有行数据仅返回一个数组</p>
+<p>对象，会抛弃值为null的值</p>
+</blockquote>
+<h2 id="58-列举你常用的action？"><a href="#58-列举你常用的action？" class="headerlink" title="58.列举你常用的action？"></a>58.列举你常用的action？</h2><p>collect，reduce,take,count,saveAsTextFile等</p>
+<h2 id="59-Spark为什么要持久化，一般什么场景下要进行persist操作？"><a href="#59-Spark为什么要持久化，一般什么场景下要进行persist操作？" class="headerlink" title="59.Spark为什么要持久化，一般什么场景下要进行persist操作？"></a>59.Spark为什么要持久化，一般什么场景下要进行persist操作？</h2><blockquote>
+<p>为什么要进行持久化？</p>
+<p>spark所有复杂一点的算法都会有persist身影,spark默认数据放在内存，spark很多内容都是放在内存的，非常适合高速迭代，1000个步骤</p>
+<p>只有第一个输入数据，中间不产生临时数据，但分布式系统风险很高，所以容易出错，就要容错，rdd出错或者分片可以根据血统算出来，如果没有对父rdd进行persist 或者cache的化，就需要重头做。</p>
+</blockquote>
+<blockquote>
+<p>以下场景会使用persist</p>
+<p>1）某个步骤计算非常耗时，需要进行persist持久化</p>
+<p>2）计算链条非常长，重新恢复要算很多步骤，很好使，persist</p>
+<p>3）checkpoint所在的rdd要持久化persist，</p>
+<p>lazy级别，框架发现有checnkpoint，checkpoint时单独触发一个job，需要重算一遍，checkpoint前</p>
+<p>要持久化，写个rdd.cache或者rdd.persist，将结果保存起来，再写checkpoint操作，这样执行起来会非常快，不需要重新计算rdd链条了。checkpoint之前一定会进行persist。</p>
+<p>4）shuffle之后为什么要persist，shuffle要进性网络传输，风险很大，数据丢失重来，恢复代价很大</p>
+<p>5）shuffle之前进行persist，框架默认将数据持久化到磁盘，这个是框架自动做的。</p>
+<p>60.为什么要进行序列化</p>
+<p>序列化可以减少数据的体积，减少存储空间，高效存储和传输数据，不好的是使用的时候要反序列化，非常消耗CPU</p>
+</blockquote>
+<h2 id="61-介绍一下join操作优化经验？"><a href="#61-介绍一下join操作优化经验？" class="headerlink" title="61.介绍一下join操作优化经验？"></a>61.介绍一下join操作优化经验？</h2><blockquote>
+<p>答：join其实常见的就分为两类： map-side join 和  reduce-side join。当大表和小表join时，用map-side join能显著提高效率。将多份数据进行关联是数据处理过程中非常普遍的用法，不过在分布式计算系统中，这个问题往往会变的非常麻烦，因为框架提供的 join 操作一般会将所有数据根据 key 发送到所有的 reduce 分区中去，也就是 shuffle 的过程。造成大量的网络以及磁盘IO消耗，运行效率极其低下，这个过程一般被称为 reduce-side-join。如果其中有张表较小的话，我们则可以自己实现在 map 端实现数据关联，跳过大量数据进行 shuffle 的过程，运行时间得到大量缩短，根据不同数据可能会有几倍到数十倍的性能提升。</p>
+<p>备注：这个题目面试中非常非常大概率见到，务必搜索相关资料掌握，这里抛砖引玉。</p>
+</blockquote>
+<h2 id="62-介绍一下cogroup-rdd实现原理，你在什么场景下用过这个rdd？"><a href="#62-介绍一下cogroup-rdd实现原理，你在什么场景下用过这个rdd？" class="headerlink" title="62.介绍一下cogroup rdd实现原理，你在什么场景下用过这个rdd？"></a>62.介绍一下cogroup rdd实现原理，你在什么场景下用过这个rdd？</h2><blockquote>
+<p>答：cogroup的函数实现:这个实现根据两个要进行合并的两个RDD操作,生成一个CoGroupedRDD的实例,这个RDD的返回结果是把相同的key中两个RDD分别进行合并操作,最后返回的RDD的value是一个Pair的实例,这个实例包含两个Iterable的值,第一个值表示的是RDD1中相同KEY的值,第二个值表示的是RDD2中相同key的值.由于做cogroup的操作,需要通过partitioner进行重新分区的操作,因此,执行这个流程时,需要执行一次shuffle的操作(如果要进行合并的两个RDD的都已经是shuffle后的rdd,同时他们对应的partitioner相同时,就不需要执行shuffle,)，</p>
+<p>场景：表关联查询</p>
+</blockquote>
+<p>63下面这段代码输出结果是什么？</p>
+<hr>
+<pre class="line-numbers language-scala"><code class="language-scala"><span class="token keyword">def</span> joinRdd<span class="token punctuation">(</span>sc<span class="token operator">:</span>SparkContext<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">val</span> name<span class="token operator">=</span> Array<span class="token punctuation">(</span>
+
+Tuple2<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token string">"spark"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+Tuple2<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token string">"tachyon"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+Tuple2<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token string">"hadoop"</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">)</span>
+
+<span class="token keyword">val</span> score<span class="token operator">=</span> Array<span class="token punctuation">(</span>
+
+Tuple2<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+Tuple2<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">90</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+Tuple2<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">80</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">)</span>
+
+<span class="token keyword">val</span> namerdd<span class="token operator">=</span>sc<span class="token punctuation">.</span>parallelize<span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">val</span> scorerdd<span class="token operator">=</span>sc<span class="token punctuation">.</span>parallelize<span class="token punctuation">(</span>score<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">val</span> result <span class="token operator">=</span> namerdd<span class="token punctuation">.</span>join<span class="token punctuation">(</span>scorerdd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+result <span class="token punctuation">.</span>collect<span class="token punctuation">.</span>foreach<span class="token punctuation">(</span>println<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span>
+
+答案<span class="token operator">:</span>
+
+<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token punctuation">(</span>Spark<span class="token punctuation">,</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token punctuation">(</span>tachyon<span class="token punctuation">,</span><span class="token number">90</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token punctuation">(</span>hadoop<span class="token punctuation">,</span><span class="token number">80</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://dataquaner.github.io" rel="external nofollow noreferrer">Leon</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://dataquaner.github.io/2020/06/21/spark-mian-shi-wen-ti-xuan-ze-ti/">https://dataquaner.github.io/2020/06/21/spark-mian-shi-wen-ti-xuan-ze-ti/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://dataquaner.github.io" target="_blank">Leon</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Spark/">
+                                    <span class="chip bg-color">Spark</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: 'c5c6577b4ba11079d15e',
+        clientSecret: '525eed73bef797acbfdb9332bc45bdbfe28010da',
+        repo: 'dataquaner.github.io',
+        owner: 'dataquaner',
+        admin: "dataquaner",
+        id: '2020-06-21T14-35-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+    <div class="livere-card card" data-aos="fade-up">
+    <!-- 来必力City版安装代码 -->
+    <div id="lv-container" class="card-content" data-id="city" data-uid="MTAyMC80OTYwOC8yNjA5OQ">
+        <script type="text/javascript">
+            (function (d, s) {
+                let j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') {
+                    return;
+                }
+
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript。</noscript>
+    </div>
+    <!-- City版安装代码已完成 -->
+</div>
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2020/06/21/spark-mian-shi-wen-ti-xuan-ze-ti/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Spark面试问题梳理：选择题">
+                        
+                        <span class="card-title">Spark面试问题梳理：选择题</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            1. Spark 的四大组件下面哪个不是 (D )A.Spark Streaming    B. Mlib 
+C Graphx    D.Spark R
+2. 下面哪个端口不是 spark 自带服务的端口 (C )A.8080 B.4040
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-21
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Spark/" class="post-category">
+                                    Spark
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Spark/">
+                        <span class="chip bg-color">Spark</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/06/21/shi-shang-zui-quan-de-spark-mian-shi-ti/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Spark面试问题梳理">
+                        
+                        <span class="card-title">Spark面试问题梳理</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            问题一：Spark中的RDD是什么，有哪些特性？1.RDD是什么？
+RDD（Resilient Distributed Dataset）叫做分布式数据集，是spark中最基本的数据抽象，它代表一个不可变，可分区，里面的元素可以并行计算的集合
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-21
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Spark/" class="post-category">
+                                    Spark
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Spark/">
+                        <span class="chip bg-color">Spark</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2019</span>
+            <a href="https://dataquaner.github.io" target="_blank">Leon</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">102.3k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "6";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/dataquaner" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:dataquanerleo@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2077689752" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 2077689752" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i["DaoVoiceObject"] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            a.charset = "utf-8";
+            m.parentNode.insertBefore(a, m)
+        })(window, document, "script", ('https:' == document.location.protocol ? 'https:' : 'http:') +
+            "//widget.daovoice.io/widget/6984b559.js", "daovoice")
+        daovoice('init', {
+            app_id: "6de85cbf"
+        });
+        daovoice('update');
+    </script>
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

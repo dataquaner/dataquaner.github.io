@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="归档: 2020/5, 大数据 bigdata Algorithm DataQuaner 人工智能 大数据圈儿">
-    <meta name="description" content="归档: 2020/5 | DataQuaner">
+    <meta name="keywords" content="归档: 2020/9, 大数据 bigdata Algorithm DataQuaner 人工智能 大数据圈儿">
+    <meta name="description" content="归档: 2020/9 | DataQuaner">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>归档: 2020/5 | DataQuaner</title>
+    <title>归档: 2020/9 | DataQuaner</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -447,45 +447,46 @@
             
             
             <div class="cd-timeline-img month" data-aos="zoom-in-up">
-                <a href="/archives/2020/05">05</a>
+                <a href="/archives/2020/09">09</a>
             </div>
             
 
             
             <div class="cd-timeline-img day" data-aos="zoom-in-up">
-                <span>06</span>
+                <span>13</span>
             </div>
             <article class="cd-timeline-content" data-aos="fade-up">
                 <div class="article col s12 m6">
                     <div class="card">
-                        <a href="/2020/05/06/hive-ri-chang-wen-ti-dao-ru-shu-ju-cheng-gong-cha-xun-xian-shi-null/">
+                        <a href="/2020/09/13/hive-ri-chang-shi-yong-wen-ti-ji-lu-hive-jian-biao-dao-zhi-de-orc-xu-lie-hua-cuo-wu/">
                             <div class="card-image">
                                 
                                 
-                                <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="【Hive日常问题】导入数据成功，查询显示NULL">
+                                <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="【hive日常使用问题记录】Hive建表导致的ORC序列化错误">
                                 
-                                <span class="card-title">【Hive日常问题】导入数据成功，查询显示NULL</span>
+                                <span class="card-title">【hive日常使用问题记录】Hive建表导致的ORC序列化错误</span>
                             </div>
                         </a>
                         <div class="card-content article-content">
                             <div class="summary block-with-text">
                                 
-                                    问题描述hive导入数据成功，但是查询结果为NULL：
-load data local inpath '/user/hive/student.txt' into table hive_test.students;
-
-Loading data
+                                    问题描述：hive表在创建时候指定存储格式
+STORED AS ORC 
+tblproperties ('orc.compress'='SNAPPY');
+ 当insert数据到表时抛出异常
+Caused by: java.lang.Cla
                                 
                             </div>
                             <div class="publish-info">
                                 <span class="publish-date">
-                                    <i class="far fa-clock fa-fw icon-date"></i>2020-05-06
+                                    <i class="far fa-clock fa-fw icon-date"></i>2020-09-13
                                 </span>
                                 <span class="publish-author">
                                     
                                     <i class="fas fa-bookmark fa-fw icon-category"></i>
                                     
-                                    <a href="/categories/Data-Question/" class="post-category">
-                                    Data Question
+                                    <a href="/categories/Hive/" class="post-category">
+                                    -- Hive
                                     </a>
                                     
                                     
@@ -496,7 +497,7 @@ Loading data
                         
                         <div class="card-action article-tags">
                             
-                            <a href="/tags/Hive/"><span class="chip bg-color">Hive</span></a>
+                            <a href="/tags/Hive/"><span class="chip bg-color">-- Hive</span></a>
                             
                         </div>
                         

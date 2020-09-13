@@ -4,8 +4,12 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="数据分析">
-    <meta name="description" content="1.前言该讲主要引导读者从全局去了解什么是数据分析？为什么做数据分析？怎么去做数据分析？答案就是：掌握数据，就是掌握规律。当你了解了市场数据，对它进行分析，就可以得到市场规律。当你掌握了产品自身的数据，对它进行分析，就可以了解产品的用户来源">
+    <meta name="keywords" content="【hive日常使用问题记录】Hive建表导致的ORC序列化错误, 大数据 bigdata Algorithm DataQuaner 人工智能 大数据圈儿">
+    <meta name="description" content="问题描述：hive表在创建时候指定存储格式
+STORED AS ORC 
+tblproperties (&#39;orc.compress&#39;=&#39;SNAPPY&#39;);
+ 当insert数据到表时抛出异常
+Caused by: java.lang.Cla">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +17,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>极客时间《数据分析45讲总结》 | DataQuaner</title>
+    <title>【hive日常使用问题记录】Hive建表导致的ORC序列化错误 | DataQuaner</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -305,12 +309,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">极客时间《数据分析45讲总结》</h1>
+                    <h1 class="description center-align post-title">【hive日常使用问题记录】Hive建表导致的ORC序列化错误</h1>
                 </div>
             </div>
         </div>
@@ -427,8 +431,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Data-Analysis/">
-                                <span class="chip bg-color">Data Analysis</span>
+                            <a href="/tags/Hive/">
+                                <span class="chip bg-color">-- Hive</span>
                             </a>
                         
                     </div>
@@ -439,8 +443,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Data-Analysis/" class="post-category">
-                                Data Analysis
+                            <a href="/categories/Hive/" class="post-category">
+                                -- Hive
                             </a>
                         
                     </div>
@@ -452,28 +456,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-12-17
+                    2020-09-13
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-04-11
+                    2020-09-13
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.1k
+                    313
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    1 分
                 </div>
                 
 				
@@ -489,39 +493,27 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1.前言"></a>1.前言</h2><p>该讲主要引导读者从全局去了解什么是数据分析？为什么做数据分析？怎么去做数据分析？答案就是：掌握数据，就是掌握规律。当你了解了市场数据，对它进行分析，就可以得到市场规律。当你掌握了产品自身的数据，对它进行分析，就可以了解产品的用户来源、用户画像等等。所以说数据是个全新的视角。数据分析如此重要，它不仅是新时代的“数据结构 + 算法”，也更是企业争夺人才的高地。 谈到数据分析，我们一般都会从3个方面入手：</p>
-<blockquote>
-<p>数据采集 – 数据源，我们要用的原材料</p>
-<p>数据挖掘 – 它可以说是最“高大上”的部分，也是整个商业价值所在。之所以要进行数据分析，就是要找到其中的规律，来指导我们的业务。因此数据挖掘的核心是挖掘数据的商业价值（所谓的商业智能BI）</p>
-<p>数据的可视化 – 数据领域中的万金油，直观了解数据分析结构</p>
-</blockquote>
-<p>　　数据分析的三驾马车的关系如下：</p>
-<p>　　<img src="https://img2018.cnblogs.com/blog/1169428/201901/1169428-20190119101700106-215720167.png" alt="img"></p>
-<p>　　下面来大致认识下这三驾马车：</p>
-<h2 id="2-数据采集："><a href="#2-数据采集：" class="headerlink" title="2.数据采集："></a>2.数据采集：</h2><p>数据的采集，主要是和数据打交道，用工具对数据进行采集，常用的数据源，如何获取它们。在专栏里，后续会将介绍如何掌握“八爪鱼”这个自动抓取的神器，它可以帮你抓取 99% 的页面源。也会教读者如何编写 Python 爬虫。掌握 Python 爬虫的乐趣是无穷的。它不仅能让你获取微博上的热点评论，自动下载例如“王祖贤”的海报，还能自动给微博加粉丝，让你掌握自动化的快感。</p>
-<p>　　<img src="https://img2018.cnblogs.com/blog/1169428/201901/1169428-20190119102510649-1229981320.png" alt="img"></p>
-<h2 id="3-数据挖掘："><a href="#3-数据挖掘：" class="headerlink" title="3.数据挖掘："></a>3.数据挖掘：</h2><p>数据挖掘，它可以说是知识型的工程，相当于整个专栏中的“算法”部分。首先你要知道它的基本流程、十大算法、以及背后的数学基础。</p>
-<p>掌握了数据挖掘，就好比手握水晶球一样，它会通过历史数据，告诉你未来会发生什么。当然它也会告诉你这件事发生的置信度是怎样的。</p>
-<p>　　<img src="https://img2018.cnblogs.com/blog/1169428/201901/1169428-20190119102828928-1543716662.png" alt="img"></p>
-<h2 id="4-数据可视化"><a href="#4-数据可视化" class="headerlink" title="4.数据可视化"></a>4.数据可视化</h2><p> 　为什么说数据要可视化，因为数据往往是隐性的，尤其是当数据量大的时候很难感知，可视化可以帮我们很好地理解这些数据的结构，以及分析结果的呈现。这是一个非常重要的步骤，也是我们特别感兴趣的一个步骤。</p>
-<p> 数据可视化的两种方法：</p>
-<ul>
-<li><p>　Python ：在 Python 对数据进行清洗、挖掘的过程中，很多的库可以使用，像 Matplotlib、Seaborn 等第三方库进行呈现。</p>
-</li>
-<li><p>　第三方工具：如果你已经生成了 csv 格式文件，想要采用所见即所得的方式进行呈现，可以采用微图、DataV、Data GIF Maker 等第三方工具，它们可以很方便地对数据进行处理，还可以帮你制作呈现的效果。</p>
-<p>　<img src="https://img2018.cnblogs.com/blog/1169428/201901/1169428-20190119103259753-1199946581.png" alt="img"></p>
-</li>
-</ul>
-<p>数据分析包括数据采集、数据挖掘、数据可视化这三个部分。乍看你可能觉得东西很多，无从下手，或者感觉数据挖掘涉及好多算法，有点“高深莫测”，掌握起来是不是会吃力。其实这些都是不必要的烦恼。个人觉得只要内心笃定，认为自己一定能做成，学成，其他一切都是“纸老虎”哈。</p>
-<p>再说下，陈博在文章中提到的如何来快速掌握数据分析，核心就是<strong>认知</strong>。我们只有把知识转化为自己的语言，它才真正变成了我们自己的东西。这个转换的过程就是认知升级的过程。</p>
-<p>　　<img src="https://img2018.cnblogs.com/blog/1169428/201901/1169428-20190119103852266-1630283111.png" alt="img"></p>
-<p>　　我本人也是很赞同这种说法，简单一句就是“知行合一”</p>
-<p>　　<strong>总结</strong></p>
-<ul>
-<li><strong>记录下你每天的认知</strong>　　</li>
-<li><strong>这些认知对应工具的哪些操作</strong></li>
-<li><strong>做更多练习来巩固你的认知</strong></li>
-</ul>
+                <h2 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h2><p><strong>hive表在创建时候指定存储格式</strong></p>
+<pre class="line-numbers language-sql"><code class="language-sql">STORED <span class="token keyword">AS</span> ORC 
+tblproperties <span class="token punctuation">(</span><span class="token string">'orc.compress'</span><span class="token operator">=</span><span class="token string">'SNAPPY'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p> <strong>当insert数据到表时抛出异常</strong></p>
+<pre><code>Caused by: java.lang.ClassCastException: org.apache.hadoop.io.Text cannot be cast to org.apache.hadoop.hive.ql.io.orc.OrcSerde$OrcSerdeRow
+    at org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat$OrcRecordWriter.write(OrcOutputFormat.java:98)
+    at org.apache.hadoop.hive.ql.exec.FileSinkOperator.process(FileSinkOperator.java:743)
+    at org.apache.hadoop.hive.ql.exec.Operator.forward(Operator.java:837)
+    at org.apache.hadoop.hive.ql.exec.SelectOperator.process(SelectOperator.java:97)
+    at org.apache.hadoop.hive.ql.exec.Operator.forward(Operator.java:837)
+    at org.apache.hadoop.hive.ql.exec.TableScanOperator.process(TableScanOperator.java:115)
+    at org.apache.hadoop.hive.ql.exec.MapOperator$MapOpCtx.forward(MapOperator.java:169)
+    at org.apache.hadoop.hive.ql.exec.MapOperator.process(MapOperator.java:561)</code></pre><p> <strong>此时查看表结构</strong></p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">desc</span> formatted persons_orc<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>​    <img src="https://img2018.cnblogs.com/blog/932932/201812/932932-20181218160535441-989917770.png" alt="img"></p>
+<p><strong>可以看到SerDe Library 的格式是LazySimpleSerDe，序列化格式不是orc的,所以抛出异常</strong></p>
+<h2 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h2><p><strong>这里将表的序列化方式修改为orc即可</strong></p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> persons_orc <span class="token keyword">SET</span> FILEFORMAT ORC<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>再看序列化格式已经是orc，使用insert(insert overwrite table persons_orc select * from persons;)插入数据可以ok</strong></p>
+<p><img src="https://img2018.cnblogs.com/blog/932932/201812/932932-20181218160848723-111121235.png" alt="img"></p>
+<p> 可以参考详细解释:<a href="http://www.imooc.com/article/252830" target="_blank" rel="noopener">http://www.imooc.com/article/252830</a></p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -565,7 +557,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://dataquaner.github.io/2019/12/17/ji-ke-shi-jian-shu-ju-fen-xi-45-jiang-zong-jie/">https://dataquaner.github.io/2019/12/17/ji-ke-shi-jian-shu-ju-fen-xi-45-jiang-zong-jie/</a>
+                    <a href="https://dataquaner.github.io/2020/09/13/hive-ri-chang-shi-yong-wen-ti-ji-lu-hive-jian-biao-dao-zhi-de-orc-xu-lie-hua-cuo-wu/">https://dataquaner.github.io/2020/09/13/hive-ri-chang-shi-yong-wen-ti-ji-lu-hive-jian-biao-dao-zhi-de-orc-xu-lie-hua-cuo-wu/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -603,8 +595,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Data-Analysis/">
-                                    <span class="chip bg-color">Data Analysis</span>
+                                <a href="/tags/Hive/">
+                                    <span class="chip bg-color">-- Hive</span>
                                 </a>
                             
                         </div>
@@ -775,7 +767,7 @@
         repo: 'dataquaner.github.io',
         owner: 'dataquaner',
         admin: "dataquaner",
-        id: '2019-12-17T16-05-00',
+        id: '2020-09-13T16-00-00',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -818,49 +810,52 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2019/12/24/ji-qi-xue-xi-xi-lie-zhi-jue-ce-shu-suan-fa-09-id3-c4.5-cart-sui-ji-sen-lin-bagging-boosting-adaboost-gbdt-xgboost-suan-fa-zong-jie/">
+                <a href="/2020/09/13/hive-ri-chang-shi-yong-wen-ti-ji-lu-hive-jian-biao-dao-zhi-de-orc-xu-lie-hua-cuo-wu/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="机器学习系列之决策树算法（09）：ID3、C4.5、CART、随机森林、bagging、boosting、Adaboost、GBDT、xgboost算法总结">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="【hive日常使用问题记录】Hive建表导致的ORC序列化错误">
                         
-                        <span class="card-title">机器学习系列之决策树算法（09）：ID3、C4.5、CART、随机森林、bagging、boosting、Adaboost、GBDT、xgboost算法总结</span>
+                        <span class="card-title">【hive日常使用问题记录】Hive建表导致的ORC序列化错误</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            最近心血来潮，整理了一下和树有关的方法和模型，请多担待！
-决策树首先，决策树是一个有监督的分类模型，其本质是选择一个能带来最大信息增益的特征值进行树的分割，直到到达结束条件或者叶子结点纯度到达一定阈值。下图是决策树的一个简单例子
-
-按照分割
+                            问题描述：hive表在创建时候指定存储格式
+STORED AS ORC 
+tblproperties ('orc.compress'='SNAPPY');
+ 当insert数据到表时抛出异常
+Caused by: java.lang.Cla
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-12-24
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-09-13
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Machine-Learning/" class="post-category">
-                                    Machine Learning
+                            <a href="/categories/Hive/" class="post-category">
+                                    -- Hive
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/XGBoost/">
-                        <span class="chip bg-color">XGBoost</span>
+                    <a href="/tags/Hive/">
+                        <span class="chip bg-color">-- Hive</span>
                     </a>
                     
                 </div>
@@ -874,32 +869,31 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/12/17/ji-qi-xue-xi-xi-lie-zhi-jue-ce-shu-suan-fa-01-jue-ce-shu-te-zheng-xuan-ze/">
+                <a href="/2020/07/06/shu-ju-kai-fa-gong-cheng-shi-mian-shi-zhi-shi-hui-zong-20200705/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="机器学习系列之决策树算法（01）：决策树特征选择">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="大数据开发工程师面试资料汇总">
                         
-                        <span class="card-title">机器学习系列之决策树算法（01）：决策树特征选择</span>
+                        <span class="card-title">大数据开发工程师面试资料汇总</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            1.什么是特征选择【特征选择】顾名思义就是对特征进行选择，以达到提高决策树学习的效率的目的。
-【那么选择的是什么样的特征呢？】这里我们选择的特征需要是对训练数据有分类能力的特征，如果一个特征参与分类与否和随机分类的结果差别不大的话，我们就说
+                            面试
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-17
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-06
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Machine-Learning/" class="post-category">
-                                    Machine Learning
+                            <a href="/categories/Job/" class="post-category">
+                                    Job
                                 </a>
                             
                             
@@ -909,8 +903,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Decision-Tree/">
-                        <span class="chip bg-color">Decision Tree</span>
+                    <a href="/tags/Job/">
+                        <span class="chip bg-color">Job</span>
                     </a>
                     
                 </div>

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://dataquaner.github.io/"/>
-  <updated>2020-07-05T16:21:35.586Z</updated>
+  <updated>2020-09-13T05:19:56.268Z</updated>
   <id>https://dataquaner.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【hive日常使用问题记录】Hive建表导致的ORC序列化错误</title>
+    <link href="https://dataquaner.github.io/2020/09/13/hive-ri-chang-shi-yong-wen-ti-ji-lu-hive-jian-biao-dao-zhi-de-orc-xu-lie-hua-cuo-wu/"/>
+    <id>https://dataquaner.github.io/2020/09/13/hive-ri-chang-shi-yong-wen-ti-ji-lu-hive-jian-biao-dao-zhi-de-orc-xu-lie-hua-cuo-wu/</id>
+    <published>2020-09-13T08:00:00.000Z</published>
+    <updated>2020-09-13T05:19:56.268Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h2><p><strong>hive表在创建时候指定存储格式</strong></p><pre class="line-numbers language-sql"><code class="language-sql">STORED <span class="token keyword">AS</span> ORC tblproperties <span class="token punctuation">(</span><span class="token string">'orc.compress'</span><span class="token operator">=</span><span class="token string">'SNAPPY'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p> <strong>当insert数据到表时抛出异常</strong></p><pre><code>Caused by: java.lang.ClassCastException: org.apache.hadoop.io.Text cannot be cast to org.apache.hadoop.hive.ql.io.orc.OrcSerde$OrcSerdeRow    at org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat$OrcRecordWriter.write(OrcOutputFormat.java:98)    at org.apache.hadoop.hive.ql.exec.FileSinkOperator.process(FileSinkOperator.java:743)    at org.apache.hadoop.hive.ql.exec.Operator.forward(Operator.java:837)    at org.apache.hadoop.hive.ql.exec.SelectOperator.process(SelectOperator.java:97)    at org.apache.hadoop.hive.ql.exec.Operator.forward(Operator.java:837)    at org.apache.hadoop.hive.ql.exec.TableScanOperator.process(TableScanOperator.java:115)    at org.apache.hadoop.hive.ql.exec.MapOperator$MapOpCtx.forward(MapOperator.java:169)    at org.apache.hadoop.hive.ql.exec.MapOperator.process(MapOperator.java:561)</code></pre><p> <strong>此时查看表结构</strong></p><pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">desc</span> formatted persons_orc<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>​    <img src="https://img2018.cnblogs.com/blog/932932/201812/932932-20181218160535441-989917770.png" alt="img"></p><p><strong>可以看到SerDe Library 的格式是LazySimpleSerDe，序列化格式不是orc的,所以抛出异常</strong></p><h2 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h2><p><strong>这里将表的序列化方式修改为orc即可</strong></p><pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> persons_orc <span class="token keyword">SET</span> FILEFORMAT ORC<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p><strong>再看序列化格式已经是orc，使用insert(insert overwrite table persons_orc select * from persons;)插入数据可以ok</strong></p><p><img src="https://img2018.cnblogs.com/blog/932932/201812/932932-20181218160848723-111121235.png" alt="img"></p><p> 可以参考详细解释:<a href="http://www.imooc.com/article/252830" target="_blank" rel="noopener">http://www.imooc.com/article/252830</a></p><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;问题描述：&quot;&gt;&lt;a href=&quot;#问题描述：&quot; class=&quot;headerlink&quot; title=&quot;问题描述：&quot;&gt;&lt;/a&gt;问题描述：&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;hive表在创建时候指定存储格式&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class=&quot;line-num
+      
+    
+    </summary>
+    
+    
+      <category term="-- Hive" scheme="https://dataquaner.github.io/categories/Hive/"/>
+    
+    
+      <category term="-- Hive" scheme="https://dataquaner.github.io/tags/Hive/"/>
+    
+  </entry>
   
   <entry>
     <title>大数据开发工程师面试资料汇总</title>
@@ -508,29 +535,6 @@
     
     
       <category term="XGBoost" scheme="https://dataquaner.github.io/tags/XGBoost/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>LightGBM算法基础系列之基础理论篇（1）</title>
-    <link href="https://dataquaner.github.io/2020/04/11/lightgbm-suan-fa-ji-chu-xi-lie-zhi-ji-chu-li-lun-pian-1/"/>
-    <id>https://dataquaner.github.io/2020/04/11/lightgbm-suan-fa-ji-chu-xi-lie-zhi-ji-chu-li-lun-pian-1/</id>
-    <published>2020-04-11T11:30:37.965Z</published>
-    <updated>2020-04-11T11:30:37.965Z</updated>
-    
-    <content type="html"><![CDATA[<p>这是lightgbm算法基础系列的第一篇，讲述lightgbm基础理论。</p><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
-    
-    <summary type="html">
-    
-      LightGBM分类算法
-    
-    </summary>
-    
-    
-      <category term="Machine Learning" scheme="https://dataquaner.github.io/categories/Machine-Learning/"/>
-    
-    
-      <category term="LightGBM" scheme="https://dataquaner.github.io/tags/LightGBM/"/>
     
   </entry>
   

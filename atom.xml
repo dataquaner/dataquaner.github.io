@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://dataquaner.github.io/"/>
-  <updated>2020-11-11T08:52:10.966Z</updated>
+  <updated>2020-11-12T12:49:52.226Z</updated>
   <id>https://dataquaner.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java程序的层级结构（Controller、Service、Dao、Entity层）</title>
+    <link href="https://dataquaner.github.io/2020/11/12/java-cheng-xu-de-ceng-ji-jie-gou-controller-service-dao-entity-ceng/"/>
+    <id>https://dataquaner.github.io/2020/11/12/java-cheng-xu-de-ceng-ji-jie-gou-controller-service-dao-entity-ceng/</id>
+    <published>2020-11-12T12:47:00.000Z</published>
+    <updated>2020-11-12T12:49:52.226Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="Entity层"><a href="#Entity层" class="headerlink" title="Entity层"></a>Entity层</h3><p>Entity层：实体层，用于存放实体类，与数据库中的属性值基本保持一致，包含有该实体类的属性和对应属性的get、set方法。</p><h3 id="DAO层"><a href="#DAO层" class="headerlink" title="DAO层"></a>DAO层</h3><p>DAO层：持久层，与数据库进行交互。<br>DAO层首先会创建DAO接口，然后在配置文件中定义该接口的具体实现类，接着就可以在模块中调用DAO的接口并进行相应数据业务的处理，不需要去关注该接口的具体实现类是什么。<br>DAO层的数据源和数据库连接的参数都是在配置文件中进行配置的，主要对数据进行持久化操作，对外提供对数据库的增删改查操作。</p><h3 id="Service层"><a href="#Service层" class="headerlink" title="Service层"></a>Service层</h3><p>service层：业务层，用来控制业务。<br>Service层主要负责业务模块的逻辑应用设计，先创建接口，再创建相应的实现类，然后在配置文件里进行配置实现其关联，接着就可以调用service层的接口进行业务逻辑应用的处理。<br>对Service层的业务逻辑进行封装有利于业务逻辑的独立性和重复利用性。</p><h3 id="Controller层"><a href="#Controller层" class="headerlink" title="Controller层"></a>Controller层</h3><p>Controller层：控制层，控制业务逻辑流程。<br>Controller层负责具体的业务模块流程的控制，主要调用Service层里面的接口去控制具体的业务流程，控制的配置也需要在配置文件中进行配置。<br>与Service层不同，Controller层负责具体的业务模块流程的控制，Service层负责业务模块的逻辑应用设置。<br>Controller层一般会与前台的js文件进行数据的交互。</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>具体项目中，主要流程为Controller层调用Service层，Service层调用Dao层，调用的参数在Entity层进行定义。</p><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;Entity层&quot;&gt;&lt;a href=&quot;#Entity层&quot; class=&quot;headerlink&quot; title=&quot;Entity层&quot;&gt;&lt;/a&gt;Entity层&lt;/h3&gt;&lt;p&gt;Entity层：实体层，用于存放实体类，与数据库中的属性值基本保持一致，包含有该实体类的属性和对应属
+      
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://dataquaner.github.io/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="https://dataquaner.github.io/tags/Java/"/>
+    
+  </entry>
   
   <entry>
     <title>Flink三天光速入门</title>
@@ -515,29 +541,6 @@
     
     
       <category term="Decision Tree" scheme="https://dataquaner.github.io/tags/Decision-Tree/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>数据存储之MySQL系列（01）：MySQL体系结构</title>
-    <link href="https://dataquaner.github.io/2020/04/11/shu-ju-cun-chu-zhi-mysql-xi-lie-01-mysql-ti-xi-jie-gou/"/>
-    <id>https://dataquaner.github.io/2020/04/11/shu-ju-cun-chu-zhi-mysql-xi-lie-01-mysql-ti-xi-jie-gou/</id>
-    <published>2020-04-11T11:31:10.255Z</published>
-    <updated>2020-04-11T11:31:10.255Z</updated>
-    
-    <content type="html"><![CDATA[<script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
-    
-    <summary type="html">
-    
-      MySQL
-    
-    </summary>
-    
-    
-      <category term="DataBase" scheme="https://dataquaner.github.io/categories/DataBase/"/>
-    
-    
-      <category term="MySQL" scheme="https://dataquaner.github.io/tags/MySQL/"/>
     
   </entry>
   

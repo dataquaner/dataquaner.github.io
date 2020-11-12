@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="medias, 大数据 bigdata Algorithm DataQuaner 人工智能 大数据圈儿">
-    <meta name="description" content="medias | DataQuaner">
+    <meta name="keywords" content="Java程序的层级结构（Controller、Service、Dao、Entity层）, 大数据 bigdata Algorithm DataQuaner 人工智能 大数据圈儿">
+    <meta name="description" content="Java基础">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>medias | DataQuaner</title>
+    <title>Java程序的层级结构（Controller、Service、Dao、Entity层） | DataQuaner</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -305,12 +305,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">medias</h1>
+                    <h1 class="description center-align post-title">Java程序的层级结构（Controller、Service、Dao、Entity层）</h1>
                 </div>
             </div>
         </div>
@@ -425,12 +425,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Java/">
+                                <span class="chip bg-color">Java</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Java/" class="post-category">
+                                Java
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -439,21 +452,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-04-11
+                    2020-11-12
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-04-11
+                    2020-11-12
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    52
+                    511
                 </div>
                 
 
@@ -476,7 +489,12 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <script>
+                <h3 id="Entity层"><a href="#Entity层" class="headerlink" title="Entity层"></a>Entity层</h3><p>Entity层：实体层，用于存放实体类，与数据库中的属性值基本保持一致，包含有该实体类的属性和对应属性的get、set方法。</p>
+<h3 id="DAO层"><a href="#DAO层" class="headerlink" title="DAO层"></a>DAO层</h3><p>DAO层：持久层，与数据库进行交互。<br>DAO层首先会创建DAO接口，然后在配置文件中定义该接口的具体实现类，接着就可以在模块中调用DAO的接口并进行相应数据业务的处理，不需要去关注该接口的具体实现类是什么。<br>DAO层的数据源和数据库连接的参数都是在配置文件中进行配置的，主要对数据进行持久化操作，对外提供对数据库的增删改查操作。</p>
+<h3 id="Service层"><a href="#Service层" class="headerlink" title="Service层"></a>Service层</h3><p>service层：业务层，用来控制业务。<br>Service层主要负责业务模块的逻辑应用设计，先创建接口，再创建相应的实现类，然后在配置文件里进行配置实现其关联，接着就可以调用service层的接口进行业务逻辑应用的处理。<br>对Service层的业务逻辑进行封装有利于业务逻辑的独立性和重复利用性。</p>
+<h3 id="Controller层"><a href="#Controller层" class="headerlink" title="Controller层"></a>Controller层</h3><p>Controller层：控制层，控制业务逻辑流程。<br>Controller层负责具体的业务模块流程的控制，主要调用Service层里面的接口去控制具体的业务流程，控制的配置也需要在配置文件中进行配置。<br>与Service层不同，Controller层负责具体的业务模块流程的控制，Service层负责业务模块的逻辑应用设置。<br>Controller层一般会与前台的js文件进行数据的交互。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>具体项目中，主要流程为Controller层调用Service层，Service层调用Dao层，调用的参数在Entity层进行定义。</p>
+<script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
             if (!el.dataset.src) { return; }
@@ -519,7 +537,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://dataquaner.github.io/medias/index.html">https://dataquaner.github.io/medias/index.html</a>
+                    <a href="https://dataquaner.github.io/2020/11/12/java-cheng-xu-de-ceng-ji-jie-gou-controller-service-dao-entity-ceng/">https://dataquaner.github.io/2020/11/12/java-cheng-xu-de-ceng-ji-jie-gou-controller-service-dao-entity-ceng/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -556,7 +574,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/Java/">
+                                    <span class="chip bg-color">Java</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -725,7 +747,7 @@
         repo: 'dataquaner.github.io',
         owner: 'dataquaner',
         admin: "dataquaner",
-        id: '2020-04-11T18-11-04',
+        id: '2020-11-12T20-47-00',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -773,37 +795,46 @@
                 <i class="far fa-dot-circle"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/medias/index.html">
+                <a href="/2020/11/12/java-cheng-xu-de-ceng-ji-jie-gou-controller-service-dao-entity-ceng/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="medias">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="Java程序的层级结构（Controller、Service、Dao、Entity层）">
                         
-                        <span class="card-title">medias</span>
+                        <span class="card-title">Java程序的层级结构（Controller、Service、Dao、Entity层）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
-        document.querySelectorAll('.github-emoji')
-          .forEach(el => {
-            if (!el.dataset.src) { return
+                            Java基础
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-11
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-11-12
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            Leon
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Java/" class="post-category">
+                                    Java
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Java/">
+                        <span class="chip bg-color">Java</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -811,40 +842,48 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/medias/index.html">
+                <a href="/2020/11/11/flink-san-tian-ru-men/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="medias">
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="Flink三天光速入门">
                         
-                        <span class="card-title">medias</span>
+                        <span class="card-title">Flink三天光速入门</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
-        document.querySelectorAll('.github-emoji')
-          .forEach(el => {
-            if (!el.dataset.src) { return
+                            1. 初识 Flink在当前数据量激增的时代，各种业务场景都有大量的业务数据产生，对于这些不断产的数据应该如何进行有效的处理，成为当下大多数公司所面临的问题。目前比较流行的大数据处理引擎 Apache Spark，基本上已经取代了 MapR
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-11
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-11-11
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            Leon
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Flink/" class="post-category">
+                                    Flink
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Flink/">
+                        <span class="chip bg-color">Flink</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>

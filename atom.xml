@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://dataquaner.github.io/"/>
-  <updated>2021-02-21T15:21:14.485Z</updated>
+  <updated>2021-03-28T16:11:34.096Z</updated>
   <id>https://dataquaner.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>大数据计算离线实时概念区别梳理</title>
+    <link href="https://dataquaner.github.io/2021/03/26/da-shu-ju-ji-suan-chi-xian-ji-suan-vs-shi-shi-ji-suan-vs-pi-ji-suan-vs-liu-ji-suan/"/>
+    <id>https://dataquaner.github.io/2021/03/26/da-shu-ju-ji-suan-chi-xian-ji-suan-vs-shi-shi-ji-suan-vs-pi-ji-suan-vs-liu-ji-suan/</id>
+    <published>2021-03-26T13:25:00.000Z</published>
+    <updated>2021-03-28T16:11:34.096Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="1-离线计算VS实时计算"><a href="#1-离线计算VS实时计算" class="headerlink" title="1. 离线计算VS实时计算"></a>1. 离线计算VS实时计算</h1><h2 id="离线计算"><a href="#离线计算" class="headerlink" title="离线计算"></a>离线计算</h2><p>​      离线计算，通常也称为“批处理”，表示那些离线批量、延时较高的<strong>静态数据</strong>处理过程。<br>离线计算适用于实时性要求不高的场景，比如离线报表、数据分析等，延时一般在分钟级或小时级，多数场景是定时周期性执行一个Job任务，任务周期可以小到分钟级，比如每五分钟做一次统计分析，大到月级别、年级别，比如每月执行一次任务。我们最熟悉的MapReduce就是一个离线计算框架，Spark SQL也通常用于离线计算任务。</p><h2 id="实时计算"><a href="#实时计算" class="headerlink" title="实时计算"></a>实时计算</h2><p>​      实时计算，通常也称为“实时流计算”、“流式计算”，表示那些实时或者低延时的<strong>动态流数据</strong>处理过程。<br>实时计算通常应用在实时性要求高的场景，比如实时ETL、实时监控等，延时一般都在毫秒级甚至更低。目前比较流行的实时框架有Spark Streaming与Flink。其中，Spark Streaming属于微批处理，是一种把流当作一种批的设计思想，具有非常高的吞吐量但延时也较高，这使得Streaming的场景也得到了一定的限制；Flink则是事件驱动的流处理引擎，是一种把批当作一种有限的流的设计思想，具有高吞吐，低延时，高性能的特点</p><ul><li><p>离线和实时应该指的是：数据处理的延迟；</p></li><li><p>批量和流式指的是：数据处理的方式。</p></li></ul><blockquote><p><strong>首先先说下批量计算和流式计算：</strong></p><p>图中显示了一个计算的基本流程，receiver处负责从数据源接收数据，并发送给下游的task，数据由task处理后由sink端输出。</p><p>以图为例，批量和流式处理数据粒度不一样，批量每次处理一定大小的数据块（输入一般采用文件系统），一个task处理完一个数据块之后，才将处理好的中间数据发送给下游。流式计算则是以record为单位，task在处理完一条记录之后，立马发送给下游。</p><p>假如我们是对一些固定大小的数据做统计，那么采用批量和流式效果基本相同，但是流式有一个好处就是可以实时得到计算中的结果，这对某些应用很有帮助，比如每1分钟统计一下请求server的request次数。</p><p><strong>那问题来了</strong>，既然流式系统也可以做批量系统的事情，而且还提供了更多的功能，那为什么还需要批量系统呢？因为早期的流式系统并不成熟，存在如下问题：</p><p>1.流式系统的吞吐不如批量系统</p><p>2.流式系统无法提供精准的计算</p><p><em>后面的介绍Storm、Spark streaming、Flink主要根据这两点来进行介绍。</em></p><p><strong>批量和流式的区别：</strong></p><p><strong>1.数据处理单位：</strong></p><p>批量计算按数据块来处理数据，每一个task接收一定大小的数据块，比如MR，map任务在处理完一个完整的数据块后（比如128M），然后将中间数据发送给reduce任务。</p><p>流式计算的上游算子处理完一条数据后，会立马发送给下游算子，所以一条数据从进入流式系统到输出结果的时间间隔较短（当然有的流式系统为了保证吞吐，也会对数据做buffer）。</p><p>这样的结果就是：批量计算往往得等任务全部跑完之后才能得到结果，而流式计算则可以实时获取最新的计算结果。</p><p><strong>2.数据源：</strong></p><p>批量计算通常处理的是有限数据（bound data），数据源一般采用文件系统，而流式计算通常处理无限数据（unbound data），一般采用消息队列作为数据源。</p><p><strong>3.任务类型：</strong></p><p>批量计算中的每个任务都是短任务，任务在处理完其负责的数据后关闭，而流式计算往往是长任务，每个work一直运行，持续接受数据源传过来的数据。</p><p><strong>离线=批量？实时=流式？</strong></p><p>习惯上我们认为<strong>离线和批量等价；实时和流式等价</strong>，但其实这种观点并不完全正确。</p><p>假设一种情况：当我们拥有一个非常强大的硬件系统，可以毫秒级的处理Gb级别的数据，那么批量计算也可以毫秒级得到统计结果（当然这种情况非常极端，目前不可能），那我们还能说它是离线计算吗？</p><blockquote><p><strong>*所以说离线和实时应该指的是：数据处理的延迟；批量和流式指的是：数据处理的方式。</strong>两者并没有必然的关系。事实上Spark streaming就是采用小批量（batch）的方式来实现实时计算。*</p></blockquote><p><em>可以参考下面链接：<a href="https://link.zhihu.com/?target=https%3A//www.oreilly.com/ideas/the-world-beyond-batch-streaming-101">https://www.oreilly.com/ideas/the-world-beyond-batch-streaming-101</a>。作者是Google实时计算的负责人，里面阐述了他对批量和实时的理解，并且作者认为批量计算只是流式计算的子集，一个设计良好的流式系统完全可以替代批量系统。本人也从中受到了很多启发。</em></p></blockquote><h1 id="2-实时查询-Vs-即席查询"><a href="#2-实时查询-Vs-即席查询" class="headerlink" title="2. 实时查询 Vs 即席查询"></a>2. 实时查询 Vs 即席查询</h1><h2 id="实时查询"><a href="#实时查询" class="headerlink" title="实时查询"></a>实时查询</h2><p>实时查询，通常也称为<strong>在线查询</strong>，是对不断变化的数据进行实时的查询，要求数据修改后能够快速被查询到。通常我们见到的实时查询多是API的方式，少数以SQL方式。在线查询场景中最常见的生态组件大概就是HBase了，HBase能够提供强一致性的低延时数据访问，非常适合一般的在线业务。</p><h2 id="即席查询"><a href="#即席查询" class="headerlink" title="即席查询"></a>即席查询</h2><p>即席查询，英文名称为Ad hoc query，起初是在数据仓库领域中用户根据特定需求定义的一种实时查询方式。通常情况下，即席查询的表现是借助于大数据SQL查询组件进行交互式查询，比如Hive、Impala、Presto等SQL查询组件。因此严格意义上说，即席查询和上述中的实时查询还是有一定区别的。</p><h1 id="3-OLTP-Vs-OLAP"><a href="#3-OLTP-Vs-OLAP" class="headerlink" title="3. OLTP Vs OLAP"></a>3. OLTP Vs OLAP</h1><h2 id="OLTP"><a href="#OLTP" class="headerlink" title="OLTP"></a>OLTP</h2><p>OLTP（On-Line Transaction Processing），可称为<strong>在线事务处理</strong>，一般应用于在线业务交易系统，比如银行交易、订单交易等。OLTP的主要特点是能够支持频繁的在线操作（增删改），以及快速的访问查询。因为要用于在线交易，所以一般要求支持事务特性。</p><h2 id="OLAP"><a href="#OLAP" class="headerlink" title="OLAP"></a>OLAP</h2><p>OLAP（On-Line Analytical Processing），可称为<strong>在线分析处理</strong>，较多的应用在数据仓库领域，支持复杂查询的数据分析，侧重于为业务提供决策支持。目前常见是的实时OLAP场景，比如Druid（Apache Druid，不同于阿里Druid）、ClickHouse等存储组件能够较好的满足需求。</p><h1 id="4-行式存储-Vs-列式存储"><a href="#4-行式存储-Vs-列式存储" class="headerlink" title="4. 行式存储 Vs 列式存储"></a>4. 行式存储 Vs 列式存储</h1><h2 id="行式存储"><a href="#行式存储" class="headerlink" title="行式存储"></a>行式存储</h2><p>行式存储（Row-based），简称“行存”，我们常见的关系型数据库比如MySQL、Oracle、DB2、SQL Server等都是采用行存的方式。总的来说，<strong>行存有利于写，但缺不利于读，</strong>因为行存是把同一条数据存放在相同位置，这样增删改比较高效，但是查询时会增加io的消耗。从上面举例我们也能看出，<strong>行存一般应用于OLTP场景</strong>。</p><h2 id="列式存储"><a href="#列式存储" class="headerlink" title="列式存储"></a>列式存储</h2><p>列式存储（Column-based），简称“列存”，这里是相对于行式存储的一种数据存储方式，一般应用于分布式存储/数据库中。总的来说，<strong>列存有利于读，但不利于写</strong>，这就意味着写路径上的增删改有一定的性能损耗。常见的列存包括Parquet、Arrow等，其最大特点是能够减少不必要的io消耗，主要表现在列裁剪与列压缩方面。与行存相反，<strong>列存更适应于OLAP场景</strong>。</p><h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>【1】<a href="https://zhuanlan.zhihu.com/p/42783335" target="_blank" rel="noopener">实时计算And 离线计算，都是计算啊，区别搁哪呢？</a></p><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;1-离线计算VS实时计算&quot;&gt;&lt;a href=&quot;#1-离线计算VS实时计算&quot; class=&quot;headerlink&quot; title=&quot;1. 离线计算VS实时计算&quot;&gt;&lt;/a&gt;1. 离线计算VS实时计算&lt;/h1&gt;&lt;h2 id=&quot;离线计算&quot;&gt;&lt;a href=&quot;#离线计算&quot; c
+      
+    
+    </summary>
+    
+    
+      <category term="BigData" scheme="https://dataquaner.github.io/categories/BigData/"/>
+    
+    
+      <category term="DataComputing" scheme="https://dataquaner.github.io/tags/DataComputing/"/>
+    
+  </entry>
   
   <entry>
     <title>大数据开发工程师面试资料汇总</title>
@@ -524,36 +550,6 @@
     </summary>
     
     
-    
-  </entry>
-  
-  <entry>
-    <title>IDEA环境下Git使用总结</title>
-    <link href="https://dataquaner.github.io/2020/04/20/idea-xia-shi-yong-git-cao-zuo/"/>
-    <id>https://dataquaner.github.io/2020/04/20/idea-xia-shi-yong-git-cao-zuo/</id>
-    <published>2020-04-20T13:40:00.000Z</published>
-    <updated>2020-04-20T04:13:12.538Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>工作中多人使用版本控制软件协作开发，常见的应用场景归纳如下：</p><p>假设小组中有两个人，组长小张，组员小袁</p><p>[TOC]</p><h2 id="场景一：小张创建项目并提交到远程Git仓库"><a href="#场景一：小张创建项目并提交到远程Git仓库" class="headerlink" title="场景一：小张创建项目并提交到远程Git仓库"></a>场景一：小张创建项目并提交到远程Git仓库</h2><p>创建好项目，选择VCS - &gt; Import into Version Control -&gt; Create Git Repository</p><p><img src="https://img-blog.csdn.net/20160912161234797" alt="img"></p><p>接下来指定本地仓库的位置，按个人习惯指定即可，例如这里选择了项目源代码同目录</p><p><img src="https://img-blog.csdn.net/20160912161334752" alt="img"></p><p>点击OK后创建完成本地仓库，注意，这里仅仅是本地的。下面把项目源码添加到本地仓库。</p><p>下图是Git与提交有关的三个命令对应的操作，Add命令是把文件从IDE的工作目录添加到本地仓库的stage区，Commit命令把stage区的暂存文件提交到当前分支的仓库，并清空stage区。Push命令把本地仓库的提交同步到远程仓库。</p><p><img src="https://img-blog.csdn.net/20160912164147415" alt="img"></p><p>IDEA中对操作做了一定的简化，Commit和Push可以在一步中完成。</p><p>具体操作，在项目上点击右键，选择Git菜单</p><p><img src="https://img-blog.csdn.net/20160912165901032" alt="img"></p><p><img src="https://img-blog.csdn.net/20160912165911954" alt="img"></p><p><img src="https://img-blog.csdn.net/20160912165921938" alt="img"></p><p>因为是第一次提交，Push前需要指定远程仓库的地址。如下图，点击Define remote后，在弹出的窗口中输入远程仓库地址。</p><p><img src="https://img-blog.csdn.net/20160912165942829" alt="img"></p><h2 id="场景二：小袁从远程Git仓库上获取项目源码"><a href="#场景二：小袁从远程Git仓库上获取项目源码" class="headerlink" title="场景二：小袁从远程Git仓库上获取项目源码"></a>场景二：小袁从远程Git仓库上获取项目源码</h2><p>即克隆项目，操作如下：</p><p><img src="https://img-blog.csdn.net/20160912170148207" alt="img"></p><p>输入小张Push时填写的远程仓库地址</p><p><img src="https://img-blog.csdn.net/20160912170214880" alt="img"></p><p>接下来按向导操作，即可把项目从远程仓库克隆到本地仓库和IDE工作区。</p><h2 id="场景三：小袁修改了部分源码，提交到远程仓库"><a href="#场景三：小袁修改了部分源码，提交到远程仓库" class="headerlink" title="场景三：小袁修改了部分源码，提交到远程仓库"></a>场景三：小袁修改了部分源码，提交到远程仓库</h2><p>这个操作和首次提交的流程基本一致，分别是 Add -&gt; Commit -&gt; Push。请参考场景一</p><h2 id="场景四：小张从远程仓库获取小袁的提交"><a href="#场景四：小张从远程仓库获取小袁的提交" class="headerlink" title="场景四：小张从远程仓库获取小袁的提交"></a>场景四：小张从远程仓库获取小袁的提交</h2><p>获取更新有两个命令：Fetch和Pull，Fetch是从远程仓库下载文件到本地的origin/master，然后可以手动对比修改决定是否合并到本地的master库。Push则是直接下载并合并。如果各成员在工作中都执行修改前先更新的规范，则可以直接使用Pull方式以简化操作。</p><p><img src="https://img-blog.csdn.net/20160912170628933" alt="img"></p><h2 id="场景五：小袁接受了一个新功能的任务，创建了一个分支并在分支上开发"><a href="#场景五：小袁接受了一个新功能的任务，创建了一个分支并在分支上开发" class="headerlink" title="场景五：小袁接受了一个新功能的任务，创建了一个分支并在分支上开发"></a>场景五：小袁接受了一个新功能的任务，创建了一个分支并在分支上开发</h2><p>建分支也是一个常用的操作，例如临时修改bug、开发不确定是否加入的功能等，都可以创建一个分支，再等待合适的时机合并到主干。</p><p>创建流程如下：</p><p><img src="https://img-blog.csdn.net/20160912171844429" alt="img"></p><p>选择New Branch并输入一个分支的名称</p><p><img src="https://img-blog.csdn.net/20160912171858663" alt="img"></p><p>创建完成后注意IDEA的右下角，如下图，Git: wangpangzi_branch表示已经自动切换到wangpangzi_branch分支，当前工作在这个分支上。</p><p>点击后弹出一个小窗口，在Local Branches中有其他可用的本地分支选项，点击后选择Checkout即可切换当前工作的分支。</p><p><img src="https://img-blog.csdn.net/20160912173123122" alt="img"></p><p>如下图，点击Checkout</p><p><img src="https://img-blog.csdn.net/20160912173307202" alt="img"></p><p>注意，这里创建的分支仅仅在本地仓库，如果想让组长小张获取到这个分支，还需要提交到远程仓库。</p><h2 id="场景六：小袁把分支提交到远程Git仓库"><a href="#场景六：小袁把分支提交到远程Git仓库" class="headerlink" title="场景六：小袁把分支提交到远程Git仓库"></a>场景六：小袁把分支提交到远程Git仓库</h2><p>切换到新建的分支，使用Push功能</p><p><img src="https://img-blog.csdn.net/20160912173718844" alt="img"></p><p><img src="https://img-blog.csdn.net/20160912174243815" alt="img"></p><h2 id="场景七：小张获取小袁提交的分支"><a href="#场景七：小张获取小袁提交的分支" class="headerlink" title="场景七：小张获取小袁提交的分支"></a>场景七：小张获取小袁提交的分支</h2><p>使用Pull功能打开更新窗口，点击Remote栏后面的刷新按钮，会在Branches to merge栏中刷新出新的分支。这里并不想做合并，所以不要选中任何分支，直接点击Pull按钮完成操作。</p><p><img src="https://img-blog.csdn.net/20160912174329143" alt="img"></p><p>更新后，再点击右下角，可以看到在Remote Branches区已经有了新的分支，点击后在弹出的子菜单中选择Checkout as new local branch，在本地仓库中创建该分支。完成后在Local Branches区也会出现该分支的选项，可以按上面的方法，点击后选择Checkout切换。</p><p><img src="https://img-blog.csdn.net/20160912174729488" alt="img"></p><h2 id="场景八：小张把分支合并到主干"><a href="#场景八：小张把分支合并到主干" class="headerlink" title="场景八：小张把分支合并到主干"></a>场景八：小张把分支合并到主干</h2><p>新功能开发完成，体验很好，项目组决定把该功能合并到主干上。</p><p>切换到master分支，选择Merge Changes</p><p><img src="https://img-blog.csdn.net/20160912175201306" alt="img"></p><p>选择要合并的分支，点击Merge完成</p><p><img src="https://img-blog.csdn.net/20160912175359903" alt="img"></p><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;目录&quot;&gt;&lt;a href=&quot;#目录&quot; class=&quot;headerlink&quot; title=&quot;目录&quot;&gt;&lt;/a&gt;目录&lt;/h2&gt;&lt;p&gt;工作中多人使用版本控制软件协作开发，常见的应用场景归纳如下：&lt;/p&gt;
-&lt;p&gt;假设小组中有两个人，组长小张，组员小袁&lt;/p&gt;
-&lt;p&gt;[TOC]
-      
-    
-    </summary>
-    
-    
-      <category term="Git" scheme="https://dataquaner.github.io/categories/Git/"/>
-    
-    
-      <category term="IDEA" scheme="https://dataquaner.github.io/tags/IDEA/"/>
-    
-      <category term="Git" scheme="https://dataquaner.github.io/tags/Git/"/>
     
   </entry>
   

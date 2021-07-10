@@ -934,54 +934,51 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/07/07/cong-0-dao-1-shu-ju-zhi-biao-ti-xi-da-jian-shi-jian/">
+                <a href="/2021/07/09/yong-hu-hua-xiang-te-zheng-ji-biao-qian-cun-chu/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="从0到1数据指标体系搭建实践">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="用户画像特征及标签存储">
                         
-                        <span class="card-title">从0到1数据指标体系搭建实践</span>
+                        <span class="card-title">用户画像特征及标签存储</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            前言我们所需要的并不是数据，而是数据背后映射的洞察。
-在业务发展过程中，会产生大量的数据，单看数据是没有价值的，只有和业务相结合转化为信息，再经过处理才能体现其价值。
-对于业务数据而言，通常分为两项：其一是维度，其二是度量，或者说是指标，这
+                            前言*hive 存储 *** 存储数据相关标签表、人群计算表的表结构设计以及ID-Mapping的一种实现方式**
+建立用户画像首先需要建立数据仓库，用于存储用户标签数据。Hive是基于Hadoop的数据仓库工具，依赖于HDFS存储数据，提
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-07
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-07-09
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/DH/" class="post-category">
-                                    DH
-                                </a>
-                            
-                            <a href="/categories/DH/BI/" class="post-category">
-                                    BI
+                            <a href="/categories/Hive/" class="post-category">
+                                    Hive
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%8C%87%E6%A0%87/">
-                        <span class="chip bg-color">指标</span>
+                    <a href="/tags/%E6%A0%87%E7%AD%BE/">
+                        <span class="chip bg-color">标签</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%94%A8%E6%88%B7%E7%94%BB%E5%83%8F/">
+                        <span class="chip bg-color">用户画像</span>
                     </a>
                     
                 </div>
@@ -995,23 +992,22 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/06/01/hive-han-shu-zhi-lateral-view-he-explode-de-qu-bie-he-shi-yong/">
+                <a href="/2021/06/01/hive-han-shu-zhi-zi-ding-yi-han-shu-udf-udaf-udtf-jie-shao-ji-qu-bie/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Hive函数之lateral view 和 explode的区别和使用">
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="Hive函数之自定义函数UDF、UDAF、UDTF介绍及区别">
                         
-                        <span class="card-title">Hive函数之lateral view 和 explode的区别和使用</span>
+                        <span class="card-title">Hive函数之自定义函数UDF、UDAF、UDTF介绍及区别</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            explode将一行数据转换成列数据，可以用于array和map类型的数据。就是将hive一行中复杂的array或者map结构拆分成多行。
-
-用于array的语法如下：
-
-select explode(arraycol) as newcol
+                            前言 Hive中有三种UDF:
+   1、用户定义函数(user-defined function)UDF；
+   2、用户定义聚集函数（user-defined aggregate function ， UDAF ）；
+   3、用户定义
                         
                     </div>
                     <div class="publish-info">
@@ -1037,8 +1033,16 @@ select explode(arraycol) as newcol
                         <span class="chip bg-color">Hive</span>
                     </a>
                     
-                    <a href="/tags/explode/">
-                        <span class="chip bg-color">explode</span>
+                    <a href="/tags/UDF/">
+                        <span class="chip bg-color">UDF</span>
+                    </a>
+                    
+                    <a href="/tags/UDAF/">
+                        <span class="chip bg-color">UDAF</span>
+                    </a>
+                    
+                    <a href="/tags/UDTF/">
+                        <span class="chip bg-color">UDTF</span>
                     </a>
                     
                 </div>
@@ -1188,7 +1192,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">268.1k</span>&nbsp;字
+                class="white-color">270.2k</span>&nbsp;字
             
             
             

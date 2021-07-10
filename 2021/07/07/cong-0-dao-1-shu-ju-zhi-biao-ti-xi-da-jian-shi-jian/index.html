@@ -992,22 +992,23 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/06/01/hive-han-shu-zhi-zi-ding-yi-han-shu-udf-udaf-udtf-jie-shao-ji-qu-bie/">
+                <a href="/2021/06/01/hive-han-shu-zhi-lateral-view-he-explode-de-qu-bie-he-shi-yong/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="Hive函数之自定义函数UDF、UDAF、UDTF介绍及区别">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Hive函数之lateral view 和 explode的区别和使用">
                         
-                        <span class="card-title">Hive函数之自定义函数UDF、UDAF、UDTF介绍及区别</span>
+                        <span class="card-title">Hive函数之lateral view 和 explode的区别和使用</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            前言 Hive中有三种UDF:
-   1、用户定义函数(user-defined function)UDF；
-   2、用户定义聚集函数（user-defined aggregate function ， UDAF ）；
-   3、用户定义
+                            explode将一行数据转换成列数据，可以用于array和map类型的数据。就是将hive一行中复杂的array或者map结构拆分成多行。
+
+用于array的语法如下：
+
+select explode(arraycol) as newcol
                         
                     </div>
                     <div class="publish-info">
@@ -1033,16 +1034,8 @@
                         <span class="chip bg-color">Hive</span>
                     </a>
                     
-                    <a href="/tags/UDF/">
-                        <span class="chip bg-color">UDF</span>
-                    </a>
-                    
-                    <a href="/tags/UDAF/">
-                        <span class="chip bg-color">UDAF</span>
-                    </a>
-                    
-                    <a href="/tags/UDTF/">
-                        <span class="chip bg-color">UDTF</span>
+                    <a href="/tags/explode/">
+                        <span class="chip bg-color">explode</span>
                     </a>
                     
                 </div>

@@ -58,6 +58,33 @@
     
     
     <entry>
+      <title>Hive函数之lateral view 和 explode的区别和使用</title>
+      <link href="/2021/06/01/hive-han-shu-zhi-lateral-view-he-explode-de-qu-bie-he-shi-yong/"/>
+      <url>/2021/06/01/hive-han-shu-zhi-lateral-view-he-explode-de-qu-bie-he-shi-yong/</url>
+      
+        <content type="html"><![CDATA[<h2 id="explode"><a href="#explode" class="headerlink" title="explode"></a>explode</h2><p><strong>将一行数据转换成列数据，可以用于array和map类型的数据。就是将hive一行中复杂的array或者map结构拆分成多行。</strong></p><ol><li>用于<code>array</code>的语法如下：</li></ol><pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> explode<span class="token punctuation">(</span>arraycol<span class="token punctuation">)</span> <span class="token keyword">as</span> newcol <span class="token keyword">from</span> tablename<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><ul><li><p><strong>explode</strong>()：函数中的参数传入的是arrary数据类型的列名。</p></li><li><p><strong>newcol</strong>()：是给转换成的列命名一个新的名字，用于代表转换之后的列名。</p></li><li><p><strong>tablename</strong>()：原表名。</p></li></ul><ol start="2"><li>用于<code>map</code>的语法如下：</li></ol><pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> explode<span class="token punctuation">(</span>mapcol<span class="token punctuation">)</span> <span class="token keyword">as</span> <span class="token punctuation">(</span>keyname<span class="token punctuation">,</span>valuename<span class="token punctuation">)</span> <span class="token keyword">from</span> tablename<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><ul><li><strong>explode()：</strong>函数中的参数传入的是map数据类型的列名。由于map是kay-value结构的，所以它在转换的时候会转换成两列，一列是kay转换而成的，一列是value转换而成的。</li><li><strong>keyname：</strong>表示key转换成的列名称，用于代表key转换之后的列名。</li><li><strong>valuename：</strong>表示value转换成的列名称，用于代表value转换之后的列名称。</li><li>注意：这两个值需要在as之后用括号括起来然后以逗号分隔。</li></ul><h2 id="Lateral-View"><a href="#Lateral-View" class="headerlink" title="Lateral View"></a>Lateral View</h2><p><strong>lateral view是Hive中提供给UDTF的结合，它可以解决UDTF不能添加额外的select列的问题。lateral view其实就是用来和想类似explode这种UDTF函数联用的，lateral view会将UDTF生成的结果放到一个虚拟表中，然后这个虚拟表会和输入行进行join来达到连接UDTF外的select字段的目的。</strong></p><ul><li>格式一</li></ul><pre class="line-numbers language-sql"><code class="language-sql">lateral <span class="token keyword">view</span> udtf<span class="token punctuation">(</span>expression<span class="token punctuation">)</span> tableAlias <span class="token keyword">as</span> columnAlias <span class="token punctuation">(</span><span class="token punctuation">,</span>columnAlias<span class="token punctuation">)</span><span class="token operator">*</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><ul><li><p><strong>lateral view</strong>在UDTF前使用，表示连接UDTF所分裂的字段。</p></li><li><p><strong>UDTF(expression)：</strong>使用的UDTF函数，例如explode()。</p></li><li><p><strong>tableAlias：</strong>表示UDTF函数转换的虚拟表的名称。</p></li><li><p><strong>columnAlias：</strong>表示虚拟表的虚拟字段名称，如果分裂之后有一个列，则写一个即可；如果分裂之后有多个列，按照列的顺序在括号中声明所有虚拟列名，以逗号隔开。</p></li><li><p>格式二</p></li></ul><pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">from</span> basetable <span class="token punctuation">(</span>lateral <span class="token keyword">view</span><span class="token punctuation">)</span><span class="token operator">*</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>在from子句中使用，一般和格式一搭配使用，这个格式只是说明了lateral view的使用位置。from子句后面也可以跟多个lateral view语句，使用空格间隔就可以了。</p><ul><li>格式三</li></ul><pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">from</span> basetable <span class="token punctuation">(</span>lateral <span class="token keyword">view</span> <span class="token keyword">outer</span><span class="token punctuation">)</span><span class="token operator">*</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>它比格式二只是多了一个outer，这个outer的作用是在UDTF转换列的时候将其中的空也给展示出来，UDTF默认是忽略输出空的，加上outer之后，会将空也输出，显示为NULL。这个功能是在Hive0.12是开始支持的。</p><h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ul><li>[<a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+LateralView]" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/Hive/LanguageManual+LateralView]</a>(<a href="https://link.zhihu.com/?target=https%3A//">https://link.zhihu.com/?target=https%3A//</a>   cwiki.apache.org/confluence/display/Hive/LanguageManual%2BLateralView)</li><li><a href="https://link.zhihu.com/?target=https%3A//msd.misuland.com/pd/3070888525579682904">https://msd.misuland.com/pd/307</a></li><li>[<a href="https://cloud.tencent.com/developer/article/1437884]" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1437884]</a></li></ul><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+      
+      
+      <categories>
+          
+          <category> Hive </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hive </tag>
+            
+            <tag> explode </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Hive函数之自定义函数UDF、UDAF、UDTF介绍及区别</title>
       <link href="/2021/06/01/hive-han-shu-zhi-zi-ding-yi-han-shu-udf-udaf-udtf-jie-shao-ji-qu-bie/"/>
       <url>/2021/06/01/hive-han-shu-zhi-zi-ding-yi-han-shu-udf-udaf-udtf-jie-shao-ji-qu-bie/</url>
@@ -81,33 +108,6 @@
             <tag> UDAF </tag>
             
             <tag> UDTF </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Hive函数之lateral view 和 explode的区别和使用</title>
-      <link href="/2021/06/01/hive-han-shu-zhi-lateral-view-he-explode-de-qu-bie-he-shi-yong/"/>
-      <url>/2021/06/01/hive-han-shu-zhi-lateral-view-he-explode-de-qu-bie-he-shi-yong/</url>
-      
-        <content type="html"><![CDATA[<h2 id="explode"><a href="#explode" class="headerlink" title="explode"></a>explode</h2><p><strong>将一行数据转换成列数据，可以用于array和map类型的数据。就是将hive一行中复杂的array或者map结构拆分成多行。</strong></p><ol><li>用于<code>array</code>的语法如下：</li></ol><pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> explode<span class="token punctuation">(</span>arraycol<span class="token punctuation">)</span> <span class="token keyword">as</span> newcol <span class="token keyword">from</span> tablename<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><ul><li><p><strong>explode</strong>()：函数中的参数传入的是arrary数据类型的列名。</p></li><li><p><strong>newcol</strong>()：是给转换成的列命名一个新的名字，用于代表转换之后的列名。</p></li><li><p><strong>tablename</strong>()：原表名。</p></li></ul><ol start="2"><li>用于<code>map</code>的语法如下：</li></ol><pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> explode<span class="token punctuation">(</span>mapcol<span class="token punctuation">)</span> <span class="token keyword">as</span> <span class="token punctuation">(</span>keyname<span class="token punctuation">,</span>valuename<span class="token punctuation">)</span> <span class="token keyword">from</span> tablename<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><ul><li><strong>explode()：</strong>函数中的参数传入的是map数据类型的列名。由于map是kay-value结构的，所以它在转换的时候会转换成两列，一列是kay转换而成的，一列是value转换而成的。</li><li><strong>keyname：</strong>表示key转换成的列名称，用于代表key转换之后的列名。</li><li><strong>valuename：</strong>表示value转换成的列名称，用于代表value转换之后的列名称。</li><li>注意：这两个值需要在as之后用括号括起来然后以逗号分隔。</li></ul><h2 id="Lateral-View"><a href="#Lateral-View" class="headerlink" title="Lateral View"></a>Lateral View</h2><p><strong>lateral view是Hive中提供给UDTF的结合，它可以解决UDTF不能添加额外的select列的问题。lateral view其实就是用来和想类似explode这种UDTF函数联用的，lateral view会将UDTF生成的结果放到一个虚拟表中，然后这个虚拟表会和输入行进行join来达到连接UDTF外的select字段的目的。</strong></p><ul><li>格式一</li></ul><pre class="line-numbers language-sql"><code class="language-sql">lateral <span class="token keyword">view</span> udtf<span class="token punctuation">(</span>expression<span class="token punctuation">)</span> tableAlias <span class="token keyword">as</span> columnAlias <span class="token punctuation">(</span><span class="token punctuation">,</span>columnAlias<span class="token punctuation">)</span><span class="token operator">*</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><ul><li><p><strong>lateral view</strong>在UDTF前使用，表示连接UDTF所分裂的字段。</p></li><li><p><strong>UDTF(expression)：</strong>使用的UDTF函数，例如explode()。</p></li><li><p><strong>tableAlias：</strong>表示UDTF函数转换的虚拟表的名称。</p></li><li><p><strong>columnAlias：</strong>表示虚拟表的虚拟字段名称，如果分裂之后有一个列，则写一个即可；如果分裂之后有多个列，按照列的顺序在括号中声明所有虚拟列名，以逗号隔开。</p></li><li><p>格式二</p></li></ul><pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">from</span> basetable <span class="token punctuation">(</span>lateral <span class="token keyword">view</span><span class="token punctuation">)</span><span class="token operator">*</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>在from子句中使用，一般和格式一搭配使用，这个格式只是说明了lateral view的使用位置。from子句后面也可以跟多个lateral view语句，使用空格间隔就可以了。</p><ul><li>格式三</li></ul><pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">from</span> basetable <span class="token punctuation">(</span>lateral <span class="token keyword">view</span> <span class="token keyword">outer</span><span class="token punctuation">)</span><span class="token operator">*</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>它比格式二只是多了一个outer，这个outer的作用是在UDTF转换列的时候将其中的空也给展示出来，UDTF默认是忽略输出空的，加上outer之后，会将空也输出，显示为NULL。这个功能是在Hive0.12是开始支持的。</p><h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ul><li>[<a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+LateralView]" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/Hive/LanguageManual+LateralView]</a>(<a href="https://link.zhihu.com/?target=https%3A//">https://link.zhihu.com/?target=https%3A//</a>   cwiki.apache.org/confluence/display/Hive/LanguageManual%2BLateralView)</li><li><a href="https://link.zhihu.com/?target=https%3A//msd.misuland.com/pd/3070888525579682904">https://msd.misuland.com/pd/307</a></li><li>[<a href="https://cloud.tencent.com/developer/article/1437884]" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1437884]</a></li></ul><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
-      
-      
-      <categories>
-          
-          <category> Hive </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Hive </tag>
-            
-            <tag> explode </tag>
             
         </tags>
       

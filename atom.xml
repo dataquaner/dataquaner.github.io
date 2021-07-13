@@ -70,6 +70,39 @@
   </entry>
   
   <entry>
+    <title>数据仓库开发工程师面经</title>
+    <link href="https://dataquaner.github.io/2021/07/07/shu-ju-cang-ku-kai-fa-gong-cheng-shi-mian-jing/"/>
+    <id>https://dataquaner.github.io/2021/07/07/shu-ju-cang-ku-kai-fa-gong-cheng-shi-mian-jing/</id>
+    <published>2021-07-07T01:25:00.000Z</published>
+    <updated>2021-07-13T00:44:07.927Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="1-过程拆解"><a href="#1-过程拆解" class="headerlink" title="1. 过程拆解"></a>1. 过程拆解</h2><p>面试还是有一些难度 的，主要三个部分：</p><ul><li>底层原理，源码理解。</li><li>项目相关，难点，仓库建模</li><li>现场秀sql</li></ul><h2 id="1-1-底层原理，源码理解"><a href="#1-1-底层原理，源码理解" class="headerlink" title="1.1 底层原理，源码理解"></a>1.1 底层原理，源码理解</h2><p>这一块主要就依据你简历技能那一栏，写的你擅长的技术。 </p><p>所以我觉得，写在那一栏的，一定是你用的很熟悉的，要么就是自己的亮点，能拿来说事的。不要自己知道一点点，或者只是听说过，就往上写，这基本是在给自己挖坑。</p><p>回答问题的技巧就是：不要硬照硬背，要灵活的结合实际经验来讲。</p><p>比如，要你讲spark内存模型，你就把网上的都照着一背遍，这没有亮点呀？ 对不对，完全可以结合一个实例来说：<a href="https://zhuanlan.zhihu.com/p/134135758" target="_blank" rel="noopener">从一个sql任务理解spark内存模型</a>  即把内存模型讲了，又讲了你是怎么通过理解这个内存模型并指导实际工作做了优化<del>~</del>  </p><p>我刚面完之后，有同事也要面，所以我就把面试题记录了一下。</p><p>题比较多，这里给列几个问题，感受一下，基本也都是比较常见的问题，就看怎么回答出自己的精彩了：</p><p> spark和hive：</p><ul><li>join 实现有几种呢，源码有研究过吗？ 底层是怎么实现的</li><li>shuffle形式有几种？都做哪些优化</li><li>是通过什么管理shuffle中的内存，磁盘 的 </li><li>sql编译过程有了解吗？（关于这块，我之前也有总结过很多文章 <a href="https://link.zhihu.com/?target=https%3A//mp.weixin.qq.com/s/oZjsQWQOaat49GbYrBpeLA">Hive源码系列（五）编译模块之整体介绍</a> <a href="https://link.zhihu.com/?target=https%3A//mp.weixin.qq.com/s/XHPCroTBO2xmlO-eFs_Q-Q">Hive源码系列（九）编译模块之语义解析 整体分析</a>）</li><li>讲讲谓词下推？（<a href="https://link.zhihu.com/?target=https%3A//mp.weixin.qq.com/s/ZwoAjkMlvAOoOI8Z-QNFsQ">从一个sql引发的hive谓词下推的全面复盘及源码分析（上）</a> <a href="https://link.zhihu.com/?target=https%3A//mp.weixin.qq.com/s/IW8dB-zRhCpN7OjFID2oNQ">从一个sql引发的hive谓词下推的全面复盘及源码分析（下）</a>）</li><li>full outer join原理</li><li>spark为什么比hive快</li><li>讲讲sparksql优化(<a href="https://link.zhihu.com/?target=https%3A//mp.weixin.qq.com/s/QfzcYnvd2gxox-9jl0JTIA">记录一次spark sql的优化过程</a> <a href="https://link.zhihu.com/?target=https%3A//mp.weixin.qq.com/s/nXqME4OrEecMqSAyn0D95g">spark sql多维分析优化——细节是魔鬼</a> <a href="https://link.zhihu.com/?target=https%3A//mp.weixin.qq.com/s/W7OxrwlTM165BbxrOYsiZg">spark sql多维分析优化——提高读取文件的并行度</a>)</li><li>讲讲RDD, DAG, Stage</li><li>说说groupByKey, reduceByKey </li><li>spark是怎么读取文件,分片的？</li><li>有没有遇到过spark读取文件，有一些task空跑的现象？</li><li>窗口函数中 几个rank函数有啥不同（<a href="https://link.zhihu.com/?target=https%3A//mp.weixin.qq.com/s/cSJFKEv9M1DKtayCsJL99A">spark、hive中窗口函数实现原理复盘</a> <a href="https://link.zhihu.com/?target=https%3A//mp.weixin.qq.com/s/WBryrbpHGO9jmzMp0e7jhw">Hive sql窗口函数源码分析</a> <a href="https://link.zhihu.com/?target=https%3A//mp.weixin.qq.com/s/kPvxpZEyja6LUOP1YQk0bA">sparksql比hivesql优化的点（窗口函数）</a>）</li><li>parquet文件和orc文件有啥不同</li><li>mr shuffle 是什么样子？具体原理是什么？跟spark有什么不同？</li><li>讲讲hive sql优化</li><li>hive 数据倾斜参数原理</li><li>讲讲spark内存模型？（<a href="https://link.zhihu.com/?target=https%3A//mp.weixin.qq.com/s/TUtDrX9GgdjxqIdOfevrvA">从一个sql任务理解spark内存模型</a> ）</li></ul><h2 id="1-2-项目相关，难点，仓库建模"><a href="#1-2-项目相关，难点，仓库建模" class="headerlink" title="1.2 项目相关，难点，仓库建模"></a>1.2 项目相关，难点，仓库建模</h2><p>关于项目这块，真的就很难说，因为不同的公司，项目也不一样，面对的问题也总不相同。 总体的原则就是一定要突出自己的亮点，先介绍项目大框架，再详细深入自己负责的模块。</p><p>关于仓库建模部分，不能只照搬照背理论，一定要结合实际案例说话。</p><p>项目</p><ul><li><p>说说项目中你做的比较有价值的东西</p></li><li><p>你说你做过字段血缘，难点是什么？怎么实现？（这个问题，是因为我项目中写了做字段血缘：<a href="https://link.zhihu.com/?target=https%3A//mp.weixin.qq.com/s/ufeZC32bdgdcMo-0WQK7-Q">数仓字段血缘解析实现—hive版</a>）</p><p>建模：</p></li><li><p>方法论，数据仓库怎么设计？ （后来针对这样的问题总结了一篇：<a href="https://link.zhihu.com/?target=https%3A//mp.weixin.qq.com/s/2kTtGQvszZ4eRhY-b317Bg">关于【你们数据仓库是怎么设计的】如何回答？</a>）</p></li><li><p>讲讲三范式</p></li><li><p>拉链表，缓慢变化维</p></li><li><p>给你一个新业务，怎么开展？</p></li><li><p>数据治理</p></li><li><p>数据质量，口径一致 </p></li></ul><p>有关这里的一些点，后续，我也准备逐个总结成文章，一方面为大家后面要面试的同学提供思路，另一方面也能提高自己</p><h2 id="1-3-现场秀sql"><a href="#1-3-现场秀sql" class="headerlink" title="1.3 现场秀sql"></a>1.3 现场秀sql</h2><p>现场秀sql是真的考察动手能力。</p><p>你要知道在那么紧张的情况下，要写满足各种需求的sql，并且写完后，还要讲出为什么这么写？ 还有没有更优化的办法？ 原理是什么等等，也不是件容易的事啊，如果平时sql功底不扎实，这个是很难搞定的。</p><p>花样写sql</p><ul><li>一般情况下，写出一个，然后，他就会问还有没有更优化的方式？</li><li>窗口函数，groupingsets cube这些 都会用到。有好多是计算滑动的那种</li><li>这个sql 在hive中起几个job，为什么是这么几个job？</li></ul><p>这个写sql的功夫真是只能平时多积累了，最不济，面试前，就像刷leetcode一样，刷一些sql题，也会有有很大作用。</p><p>不过sql题 与leetcode相比，简直不要简单太多</p><p>经典题目：</p><table><thead><tr><th>1. 写SQL（连表，然后group by） 公司部门表 b 有两个字段  人名name、部门department ;部门每月的成本。</th></tr></thead><tbody><tr><td>2. 现在有大学考试成绩如下表A：     id，subject，score     找出每一科都是这一科前30%的学生的id</td></tr><tr><td>3.给了两个表，有用户id和日期以及level属性，如何在不用join的前提下计算第二天相对第一天level上升的用户数</td></tr><tr><td>4.连续几天活跃的用户</td></tr></tbody></table><h2 id="综上："><a href="#综上：" class="headerlink" title="综上："></a>综上：</h2><p>回答问题的总体原则就是，先大体讲一下技术框架和技术点（这个主要是突出自己知识的广度），然后，再找几个细节和亮点，着重讲一下自己做了哪些事情，自己的有哪些好的想法，怎么去推动实施，效果怎么样（这个主要是突出自己的深入的地方）</p><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;1-过程拆解&quot;&gt;&lt;a href=&quot;#1-过程拆解&quot; class=&quot;headerlink&quot; title=&quot;1. 过程拆解&quot;&gt;&lt;/a&gt;1. 过程拆解&lt;/h2&gt;&lt;p&gt;面试还是有一些难度 的，主要三个部分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;底层原理，源码理解。&lt;/li&gt;
+&lt;li
+      
+    
+    </summary>
+    
+    
+      <category term="Job" scheme="https://dataquaner.github.io/categories/Job/"/>
+    
+    
+      <category term="面试必备" scheme="https://dataquaner.github.io/tags/%E9%9D%A2%E8%AF%95%E5%BF%85%E5%A4%87/"/>
+    
+      <category term="数据仓库" scheme="https://dataquaner.github.io/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+    
+      <category term="数据开发" scheme="https://dataquaner.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Hive函数之lateral view 和 explode的区别和使用</title>
     <link href="https://dataquaner.github.io/2021/06/01/hive-han-shu-zhi-lateral-view-he-explode-de-qu-bie-he-shi-yong/"/>
     <id>https://dataquaner.github.io/2021/06/01/hive-han-shu-zhi-lateral-view-he-explode-de-qu-bie-he-shi-yong/</id>
@@ -536,33 +569,6 @@
       <category term="Hadoop" scheme="https://dataquaner.github.io/tags/Hadoop/"/>
     
       <category term="Shell" scheme="https://dataquaner.github.io/tags/Shell/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【Hive日常问题】导入数据成功，查询显示NULL</title>
-    <link href="https://dataquaner.github.io/2020/05/06/hive-ri-chang-wen-ti-dao-ru-shu-ju-cheng-gong-cha-xun-xian-shi-null/"/>
-    <id>https://dataquaner.github.io/2020/05/06/hive-ri-chang-wen-ti-dao-ru-shu-ju-cheng-gong-cha-xun-xian-shi-null/</id>
-    <published>2020-05-06T13:40:00.000Z</published>
-    <updated>2020-05-06T11:17:26.029Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a><strong>问题描述</strong></h2><p>hive导入数据成功，但是查询结果为NULL：</p><pre class="line-numbers language-powershell"><code class="language-powershell">load <span class="token keyword">data</span> local inpath <span class="token string">'/user/hive/student.txt'</span> into table hive_test<span class="token punctuation">.</span>students<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><pre class="line-numbers language-powershell"><code class="language-powershell">Loading <span class="token keyword">data</span> to table hive_test<span class="token punctuation">.</span>studentsOK<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> hive_test<span class="token punctuation">.</span>students<span class="token punctuation">;</span>OK<span class="token boolean">NULL</span>    <span class="token boolean">NULL</span><span class="token boolean">NULL</span>    <span class="token boolean">NULL</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><h2 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h2><p>查其原因是创建表格时没有对导入的数据格式没有处理，比如每行数据以tab键隔开，以换行键结尾，就要以如下语句创建表格：</p><p>OK<br>NULL    NULL<br>NULL    NULL<br>查其原因是创建表格时没有对导入的数据格式没有处理，比如每行数据以tab键隔开，以换行键结尾，就要以如下语句创建表格：</p><pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> students<span class="token punctuation">(</span>id <span class="token keyword">int</span><span class="token punctuation">,</span> name string<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> students<span class="token punctuation">(</span>id <span class="token keyword">int</span><span class="token punctuation">,</span> name string<span class="token punctuation">)</span> <span class="token keyword">ROW</span> FORMAT DELIMITED <span class="token keyword">FIELDS</span> <span class="token keyword">TERMINATED BY</span> <span class="token string">' '</span> <span class="token keyword">LINES</span> <span class="token keyword">TERMINATED BY</span> <span class="token string">'\n'</span> STORED <span class="token keyword">AS</span> TEXTFILE<span class="token punctuation">;</span>OK<span class="token number">1</span>    sun<span class="token number">2</span>    lin<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;&lt;strong&gt;问题描述&lt;/strong&gt;&lt;/h2&gt;&lt;p&gt;hive导入数据成功，但是查询结果为NULL：&lt;/p&gt;
-&lt;pre class=&quot;line-
-      
-    
-    </summary>
-    
-    
-      <category term="Data Question" scheme="https://dataquaner.github.io/categories/Data-Question/"/>
-    
-    
-      <category term="Hive" scheme="https://dataquaner.github.io/tags/Hive/"/>
     
   </entry>
   
